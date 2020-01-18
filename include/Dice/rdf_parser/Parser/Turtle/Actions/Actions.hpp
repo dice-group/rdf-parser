@@ -1,0 +1,202 @@
+#ifndef RDF_PARSER_ACTIONS_HPP
+#define RDF_PARSER_ACTIONS_HPP
+
+#include "BasicActions.hpp"
+#include "Dice/rdf_parser/Parser/Turtle/States/State.hpp"
+
+/**
+Actions define how to deal with the parsed grammers during the parsing and allow to store information in the states.
+For more information about actions please check https://github.com/taocpp/PEGTL/blob/master/doc/Actions-and-States.md#
+
+This file contains the actions required for pasrsing RDF triples  in a whole file,stream or string.
+*/
+
+
+namespace rdf_parser::Turtle {
+    namespace Actions {
+
+        template<>
+        struct action<Grammer::statement> {
+            template<typename Input, typename Queue>
+            static void apply(const Input &in, States::State<Queue> &state) {
+
+                state.syncWithMainThread();
+
+            }
+        };
+
+        template<>
+        struct action<Grammer::prefixID> {
+            template<typename Input, typename Queue>
+            static void apply(const Input &in, States::State<Queue> &state) {
+                std::stringstream ss;
+                ss << in.string();
+                std::string prefix;
+                std::string ignore;
+                std::string value;
+
+                ss >> ignore; //read @prefix and ignore it
+                ss >> prefix; //read the prefix
+                ss >> value; //read the value
+                value.erase(0, 1);
+                value.erase(value.length() - 1, 1);
+
+                state.addPrefix(prefix, value);
+
+            }
+        };
+
+        template<>
+        struct action<Grammer::sparqlPrefix> {
+            template<typename Input, typename Queue>
+            static void apply(const Input &in, States::State<Queue> &state) {
+                std::stringstream ss;
+                ss << in.string();
+                std::string prefix;
+                std::string ignore;
+                std::string value;
+
+                ss >> ignore; //read PREFIX and ignore it
+                ss >> prefix; //read the prefix
+                ss >> value; //read the value
+                value.erase(0, 1);
+                value.erase(value.length() - 1, 1);
+
+                state.addPrefix(prefix, value);
+
+            }
+        };
+
+
+        template<>
+        struct action<Grammer::sparqlBase> {
+            template<typename Input, typename Queue>
+            static void apply(const Input &in, States::State<Queue> &state) {
+                std::stringstream ss;
+                ss << in.string();
+                std::string ignore;
+                std::string value;
+
+                ss >> ignore; //read PREFIX and ignore it
+                ss >> value; //read the value
+                value.erase(0, 1);
+                value.erase(value.length() - 1, 1);
+
+                state.setBase(value);
+            }
+        };
+
+        template<>
+        struct action<Grammer::triple> {
+            template<typename Input, typename Queue>
+            static void apply(const Input &in, States::State<Queue> &state) {
+                state.clearTripleParameters();
+
+            }
+        };
+
+        template<>
+        struct action<Grammer::tripleSeq1> {
+            template<typename Input, typename Queue>
+            static void apply(const Input &in, States::State<Queue> &state) {
+
+                state.proccessTripleSeq();
+
+            }
+        };
+
+        template<>
+        struct action<Grammer::tripleSeq2> {
+            template<typename Input, typename Queue>
+            static void apply(const Input &in, States::State<Queue> &state) {
+
+                //add the unlabeled blank node from BNPL as subject
+                state.setSubject(state.getFirst_BNPL());
+
+                state.proccessTripleSeq();
+
+            }
+        };
+
+
+        template<>
+        struct action<Grammer::subject> {
+            template<typename Input, typename Queue>
+            static void apply(const Input &in, States::State<Queue> &state) {
+                state.setSubject(state.getTerm());
+            }
+        };
+
+        template<>
+        struct action<Grammer::verb> {
+            template<typename Input, typename Queue>
+            static void apply(const Input &in, States::State<Queue> &state) {
+                state.proccessVerb();
+            }
+        };
+
+        template<>
+        struct action<Grammer::object> {
+            template<typename Input, typename Queue>
+            static void apply(const Input &in, States::State<Queue> &state) {
+                state.pushCurrentTermIntoBnpl_collection_list();
+            }
+        };
+
+
+        template<>
+        struct action<Grammer::collectionBegin> {
+            template<typename Input, typename Queue>
+            static void apply(const Input &in, States::State<Queue> &state) {
+                state.moveBnpl_collection_listIntoStack();
+            }
+        };
+
+        template<>
+        struct action<Grammer::collection> {
+            template<typename Input, typename Queue>
+            static void apply(const Input &in, States::State<Queue> &state) {
+                state.proccessCollection();
+            }
+        };
+
+        template<>
+        struct action<Grammer::blankNodePropertyListBegin> {
+            template<typename Input, typename Queue>
+            static void apply(const Input &in, States::State<Queue> &state) {
+                state.moveBnpl_collection_listIntoStack();
+            }
+        };
+
+        template<>
+        struct action<Grammer::blankNodePropertyList> {
+            template<typename Input, typename Queue>
+            static void apply(const Input &in, States::State<Queue> &state) {
+                state.proccessBlankNodePropertyList();
+            }
+        };
+
+
+        template<>
+        struct action<Grammer::predicateObjectListInner> {
+            template<typename Input, typename Queue>
+            static void apply(const Input &in, States::State<Queue> &state) {
+                state.proccessPredicateObjectListInner();
+            }
+        };
+
+
+        template<>
+        struct action<Grammer::turtleDoc> {
+            template<typename Input, typename Queue>
+            static void apply(const Input &in, States::State<Queue> &state) {
+                //Here parsingIsDone lock is set to true
+                state.setPasrsingIsDone();
+            }
+        };
+
+
+    }
+}
+
+#endif //RDF_PARSER_ACTIONS_HPP

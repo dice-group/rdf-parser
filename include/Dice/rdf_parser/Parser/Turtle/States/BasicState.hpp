@@ -1,0 +1,131 @@
+
+#ifndef RDF_PARSER_BASICSTATE_HPP
+#define RDF_PARSER_BASICSTATE_HPP
+
+
+/**
+States store information needed during and after the parsing.
+For more information about states please check https://github.com/taocpp/PEGTL/blob/master/doc/Actions-and-States.md#states
+
+*/
+
+
+
+#include <memory>
+#include <map>
+#include <string>
+#include <optional>
+
+#include "Dice/rdf_parser/RDF/Term.hpp"
+
+
+namespace {
+    using namespace rdf_parser::store::rdf;
+}
+
+
+namespace rdf_parser::Turtle {
+    namespace States {
+
+        /*
+         * BasicState defines the data structures realted to rdf term
+         */
+        class BasicState {
+        protected:
+
+            Term term;
+
+            //variables to deal with type and lan tags in literals
+            bool type_tag_found = false;
+            bool lang_tag_found = false;
+            std::string lan_tag;
+            std::string type_tag;
+            std::string literal_string;
+            std::string Blank_node_string;
+
+            //dealing with base directives
+            std::string base = "";
+
+            int latest_BN_label = 1;
+
+            std::map<std::string, std::string> prefix_map;
+
+
+        public:
+            inline Term &getTerm() { return term; }
+
+            inline void setTerm(Term term) { this->term = std::move(term); }
+
+            inline void setLan_tag(std::string lan_tag) { this->lan_tag = lan_tag; }
+
+            inline void setType_tag(std::string type_tag) { this->type_tag = type_tag; }
+
+
+            inline void setType_tag_found(bool found) {
+                this->type_tag_found = found;
+            }
+
+            inline void setLang_tag_found(bool found) {
+                this->lang_tag_found = found;
+            }
+
+            void proccessRdfLiteral() {
+                //check if this RdfLiteral has IRI part
+                if (type_tag_found == true) {
+                    //set it again to false
+                    type_tag_found = false;
+                    term = (Literal(literal_string, std::nullopt,
+                                    type_tag));
+                }
+                    //check if this RdfLiteral has langTag part
+                else if (lang_tag_found == true) {
+                    //set it again to false
+                    lang_tag_found = false;
+                    term = Literal(literal_string, lan_tag,
+                                   std::nullopt);
+                } else
+                    term = Literal(literal_string, std::nullopt,
+                                   std::nullopt);
+            }
+
+            std::string getType_tag() {
+                return type_tag;
+            }
+
+            std::string getBlank_node_string() {
+                return Blank_node_string;
+            }
+
+            inline void setLiteral_string(std::string literal_string) { this->literal_string = literal_string; }
+
+            inline void
+            setBlank_node_string(std::string Blank_node_string) { this->Blank_node_string = Blank_node_string; }
+
+            inline void setBase(std::string base) { this->base = base; }
+
+            std::string getBase() { return base; }
+
+            // create a unique label for a BlankNode
+            std::string createBlankNodeLabel() {
+                //TODO
+                return "b" + std::to_string(latest_BN_label++);
+            }
+
+            inline bool hasPrefix(std::string prefix) {
+                auto found = prefix_map.find(prefix);
+                if (found != prefix_map.end())
+                    return true;
+                return false;
+            }
+
+            inline std::string getPrefixValue(std::string prefix) {
+                auto found = prefix_map.find(prefix);
+                return found->second;
+
+            }
+        };
+    }
+}
+
+
+#endif //RDF_PARSER_BASICSTATE_HPP
