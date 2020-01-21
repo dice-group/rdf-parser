@@ -11,7 +11,7 @@ install conan, cmake and a C++17 compiler
 
 add conan remotes
 ```
-conan remote add conan "https://api.bintray.com/conan/conan/public-conan" ; conan remote add taocpp https://api.bintray.com/conan/taocpp/public-conan
+conan remote add conan "https://api.bintray.com/conan/conan/public-conan" ; conan remote add taocpp https://api.bintray.com/conan/taocpp/public-conan ; conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
  
 ```
 

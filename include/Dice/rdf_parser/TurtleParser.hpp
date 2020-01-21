@@ -38,7 +38,13 @@ namespace rdf_parser::Turtle {
         public:
             explicit Iterator(std::string content) :
                     turtle_parser_{std::move(content)},
-                    done_{false}, parser_done_{false} {};
+                    done_{false}, parser_done_{false} {
+                //check if there is at least one parsed triple
+                if (turtle_parser_.hasNextTriple())
+                    this->operator++();
+                else
+                    parser_done_ = true;
+            };
 
             void operator++() {
                 if (parser_done_) {
@@ -65,6 +71,14 @@ namespace rdf_parser::Turtle {
         Iterator begin() { return Iterator(content); }
 
         bool end() { return false; }
+
+        bool isContentParsable() {
+            if constexpr(std::is_same_v<ParserType, StringParser>)
+                return StringParser::isParsable(this->content);
+            else
+                return FileParser::isParsable(this->content);
+
+        }
     };
 
 }
