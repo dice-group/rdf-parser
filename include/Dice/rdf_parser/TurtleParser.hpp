@@ -43,7 +43,7 @@ namespace rdf_parser::Turtle {
                 if (turtle_parser_.hasNextTriple())
                     this->operator++();
                 else
-                    parser_done_= true;
+                    parser_done_ = true;
             };
 
             void operator++() {
@@ -73,6 +73,10 @@ namespace rdf_parser::Turtle {
         bool end() { return false; }
 
         bool isContentParsable() {
+            if (std::is_same<ParserType, StringParser>::value)
+                return StringParser::isParsable(this->content);
+            else
+                return FileParser::isParsable(this->content);
 
         }
     };
