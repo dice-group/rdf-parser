@@ -7,9 +7,14 @@ addons:
     packages:
       - gcc-7
       - g++-7
+
+before_script:
+  - conan remote add conan "https://api.bintray.com/conan/conan/public-conan" ; conan remote add taocpp https://api.bintray.com/conan/taocpp/public-conan
 script:
   - export CC=gcc-9
   - export CXX=g++-9
-  - cmake .
-  - make
-  - ./tests
+  - mkdir build
+  - cd build
+  - conan install .. --build=missing --settings compiler.libcxx="libstdc++11"
+  - cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release ..
+  - make -j
