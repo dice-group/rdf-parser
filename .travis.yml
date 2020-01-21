@@ -1,6 +1,6 @@
 dist: xenial
 language: cpp
-sudo: true
+sudo: require
 addons:
   apt:
     sources:
