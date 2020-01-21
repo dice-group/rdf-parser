@@ -1,10 +1,12 @@
 #include <gtest/gtest.h>
-//#include "TestTurtleParser.cpp"
 #include "TurtleOfficalExamplesTest.cpp"
-//#include "TurtleOfficialEvaluationTests.cpp"
+#include "TurtleOfficialPositiveTests.cpp"
+#include "TurtleOfficialNegativeTests.cpp"
+#include "TurtleOfficialEvaluationTests.cpp"
 //#include "TurtleOfficialNegativeEvaluationTests.cpp"
-//#include "TurtleOfficialPositiveTests.cpp"
-//#include "TurtleOfficialNegativeTests.cpp"
+
+//#include "TurtleParserFilesTests.cpp"
+#include "TermParserTests.cpp"
 
 int main(int argc, char **argv) {
     testing::InitGoogleTest(&argc, argv);

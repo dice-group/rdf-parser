@@ -7,7 +7,7 @@ using namespace rdf_parser::Turtle;
 }
 
 
-TEST(TestTurtleParser, EXAMPLE1) {
+TEST(TurtleOfficalExamplesTests, EXAMPLE1) {
     TurtleParser<StringParser> parser("@base <http://example.org/> .\n"
                           "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n"
                           "@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n"
@@ -37,7 +37,7 @@ TEST(TestTurtleParser, EXAMPLE1) {
 
 }
 
-TEST(TestTurtleParser, EXAMPLE2) {
+TEST(TurtleOfficalExamplesTests, EXAMPLE2) {
 
    TurtleParser<StringParser> parser(
             "<http://example.org/#spiderman> <http://www.perceive.net/schemas/relationship/enemyOf> <http://example.org/#green-goblin> .\n");
@@ -55,7 +55,7 @@ TEST(TestTurtleParser, EXAMPLE2) {
 
 }
 
-TEST(TestTurtleParser, EXAMPLE3) {
+TEST(TurtleOfficalExamplesTests, EXAMPLE3) {
 
    TurtleParser<StringParser> parser(
             "<http://example.org/#spiderman> <http://www.perceive.net/schemas/relationship/enemyOf> <http://example.org/#green-goblin> ;\n"
@@ -72,7 +72,7 @@ TEST(TestTurtleParser, EXAMPLE3) {
     }
 }
 
-TEST(TestTurtleParser, EXAMPLE4) {
+TEST(TurtleOfficalExamplesTests, EXAMPLE4) {
 
    TurtleParser<StringParser> parser(
             "<http://example.org/#spiderman> <http://www.perceive.net/schemas/relationship/enemyOf> <http://example.org/#green-goblin> .\n"
@@ -89,7 +89,7 @@ TEST(TestTurtleParser, EXAMPLE4) {
     }
 }
 
-TEST(TestTurtleParser, EXAMPLE5) {
+TEST(TurtleOfficalExamplesTests, EXAMPLE5) {
 
    TurtleParser<StringParser> parser(
             "<http://example.org/#spiderman> <http://xmlns.com/foaf/0.1/name> \"Spiderman\", \"Человек-паук\"@ru .");
@@ -105,7 +105,7 @@ TEST(TestTurtleParser, EXAMPLE5) {
     }
 }
 
-TEST(TestTurtleParser, EXAMPLE6) {
+TEST(TurtleOfficalExamplesTests, EXAMPLE6) {
 
    TurtleParser<StringParser> parser("<http://example.org/#spiderman> <http://xmlns.com/foaf/0.1/name> \"Spiderman\" .\n"
                           "<http://example.org/#spiderman> <http://xmlns.com/foaf/0.1/name> \"Человек-паук\"@ru .");
@@ -121,7 +121,7 @@ TEST(TestTurtleParser, EXAMPLE6) {
     }
 }
 
-TEST(TestTurtleParser, EXAMPLE7) {
+TEST(TurtleOfficalExamplesTests, EXAMPLE7) {
 
    TurtleParser<StringParser> parser("@prefix somePrefix: <http://www.perceive.net/schemas/relationship/> .\n"
                           "\n"
@@ -138,7 +138,7 @@ TEST(TestTurtleParser, EXAMPLE7) {
     }
 }
 
-TEST(TestTurtleParser, EXAMPLE8) {
+TEST(TurtleOfficalExamplesTests, EXAMPLE8) {
 
    TurtleParser<StringParser> parser("PREFIX somePrefix: <http://www.perceive.net/schemas/relationship/>\n"
                           "\n"
@@ -156,7 +156,7 @@ TEST(TestTurtleParser, EXAMPLE8) {
     }
 }
 
-TEST(TestTurtleParser, EXAMPLE9) {
+TEST(TurtleOfficalExamplesTests, EXAMPLE9) {
 
    TurtleParser<StringParser> parser(
             "<http://one.example/subject1> <http://one.example/predicate1> <http://one.example/object1> .\n"
@@ -186,7 +186,7 @@ TEST(TestTurtleParser, EXAMPLE9) {
     }
 }
 
-TEST(TestTurtleParser, EXAMPLE10) {
+TEST(TurtleOfficalExamplesTests, EXAMPLE10) {
 
    TurtleParser<StringParser> parser("@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n"
                           "\n"
@@ -205,7 +205,7 @@ TEST(TestTurtleParser, EXAMPLE10) {
     }
 }
 
-TEST(TestTurtleParser, EXAMPLE11) {
+TEST(TurtleOfficalExamplesTests, EXAMPLE11) {
 
    TurtleParser<StringParser> parser("@prefix show: <http://example.org/vocab/show/> .\n"
                           "show:218 show:blurb '''This is a multi-line  \n"
@@ -222,7 +222,7 @@ TEST(TestTurtleParser, EXAMPLE11) {
     }
 }
 
-TEST(TestTurtleParser, EXAMPLE12) {
+TEST(TurtleOfficalExamplesTests, EXAMPLE12) {
 
    TurtleParser<StringParser> parser(
             "@prefix : <http://example.org/elements> .                                                                              \n"
@@ -242,7 +242,7 @@ TEST(TestTurtleParser, EXAMPLE12) {
     }
 }
 
-TEST(TestTurtleParser, EXAMPLE13) {
+TEST(TurtleOfficalExamplesTests, EXAMPLE13) {
 
    TurtleParser<StringParser> parser("@prefix : <http://example.org/stats> .\n"
                           "<http://somecountry.example/census2007>\n"
@@ -259,7 +259,7 @@ TEST(TestTurtleParser, EXAMPLE13) {
     }
 }
 
-TEST(TestTurtleParser, EXAMPLE14) {
+TEST(TurtleOfficalExamplesTests, EXAMPLE14) {
 
    TurtleParser<StringParser> parser("@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n"
                           "\n"
@@ -277,7 +277,7 @@ TEST(TestTurtleParser, EXAMPLE14) {
     }
 }
 
-TEST(TestTurtleParser, EXAMPLE15) {
+TEST(TurtleOfficalExamplesTests, EXAMPLE15) {
 
    TurtleParser<StringParser> parser("@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n"
                           "\n"
@@ -294,7 +294,7 @@ TEST(TestTurtleParser, EXAMPLE15) {
     }
 }
 
-TEST(TestTurtleParser, EXAMPLE16) {
+TEST(TurtleOfficalExamplesTests, EXAMPLE16) {
 
    TurtleParser<StringParser> parser("@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n"
                           "\n"
@@ -315,7 +315,7 @@ TEST(TestTurtleParser, EXAMPLE16) {
     }
 }
 
-TEST(TestTurtleParser, EXAMPLE17) {
+TEST(TurtleOfficalExamplesTests, EXAMPLE17) {
 
    TurtleParser<StringParser> parser("_:a <http://xmlns.com/foaf/0.1/name> \"Alice\" .\n"
                           "_:a <http://xmlns.com/foaf/0.1/knows> _:b .\n"
@@ -335,7 +335,7 @@ TEST(TestTurtleParser, EXAMPLE17) {
     }
 }
 
-TEST(TestTurtleParser, EXAMPLE18) {
+TEST(TurtleOfficalExamplesTests, EXAMPLE18) {
 
    TurtleParser<StringParser> parser("@prefix : <http://example.org/foo> .\n"
                           ":subject :predicate ( :a :b :c ) .\n"
@@ -353,7 +353,7 @@ TEST(TestTurtleParser, EXAMPLE18) {
     }
 }
 
-TEST(TestTurtleParser, EXAMPLE19) {
+TEST(TurtleOfficalExamplesTests, EXAMPLE19) {
 
    TurtleParser<StringParser> parser("@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n"
                           "@prefix dc: <http://purl.org/dc/elements/1.1/> .\n"
@@ -377,7 +377,7 @@ TEST(TestTurtleParser, EXAMPLE19) {
     }
 }
 
-TEST(TestTurtleParser, EXAMPLE20) {
+TEST(TurtleOfficalExamplesTests, EXAMPLE20) {
 
    TurtleParser<StringParser> parser(
             "PREFIX : <http://example.org/stuff/1.0/>\n"
@@ -394,7 +394,7 @@ TEST(TestTurtleParser, EXAMPLE20) {
     }
 }
 
-TEST(TestTurtleParser, EXAMPLE21) {
+TEST(TurtleOfficalExamplesTests, EXAMPLE21) {
 
    TurtleParser<StringParser> parser("@prefix : <http://example.org/stuff/1.0/> .\n"
                           "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n"
@@ -415,7 +415,7 @@ TEST(TestTurtleParser, EXAMPLE21) {
     }
 }
 
-TEST(TestTurtleParser, EXAMPLE22) {
+TEST(TurtleOfficalExamplesTests, EXAMPLE22) {
 
    TurtleParser<StringParser> parser("@prefix : <http://example.org/stuff/1.0/> .\n"
                           "\n"
@@ -436,7 +436,7 @@ TEST(TestTurtleParser, EXAMPLE22) {
     }
 }
 
-TEST(TestTurtleParser, EXAMPLE23) {
+TEST(TurtleOfficalExamplesTests, EXAMPLE23) {
 
    TurtleParser<StringParser> parser("@prefix : <http://example.org/stuff/1.0/> .\n"
                           "(1 2.0 3E1) :p \"w\" .");
@@ -452,7 +452,7 @@ TEST(TestTurtleParser, EXAMPLE23) {
     }
 }
 
-TEST(TestTurtleParser, EXAMPLE24) {
+TEST(TurtleOfficalExamplesTests, EXAMPLE24) {
 
    TurtleParser<StringParser> parser("@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n"
                           "PREFIX : <http://example.org/stuff/1.0/> \n"
@@ -477,7 +477,7 @@ TEST(TestTurtleParser, EXAMPLE24) {
 }
 
 
-TEST(TestTurtleParser, EXAMPLE25) {
+TEST(TurtleOfficalExamplesTests, EXAMPLE25) {
 
    TurtleParser<StringParser> parser("PREFIX : <http://example.org/stuff/1.0/>\n"
                           "(1 [:p :q] ( 2 ) ) :p2 :q2 .");
@@ -493,7 +493,7 @@ TEST(TestTurtleParser, EXAMPLE25) {
     }
 }
 
-TEST(TestTurtleParser, EXAMPLE26) {
+TEST(TurtleOfficalExamplesTests, EXAMPLE26) {
 
    TurtleParser<StringParser> parser("@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n"
                           "PREFIX : <http://example.org/stuff/1.0/> \n"
