@@ -8,6 +8,8 @@ addons:
     packages:
       - gcc-7
       - g++-7
+env:
+  - COMPILER=g++-8
 
 before_script:
   - sudo apt install python3-pip
