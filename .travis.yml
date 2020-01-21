@@ -11,7 +11,7 @@ addons:
 
 before_script:
   - sudo apt install python3-pip
-  - pip install conan
+  - pip install conan --user
   - conan remote add conan "https://api.bintray.com/conan/conan/public-conan" ; conan remote add taocpp https://api.bintray.com/conan/taocpp/public-conan
 script:
   - export CC=gcc-9
