@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
-#include "TestTurtleParser.cpp"
-//#include "TurtleOfficalExamplesTest.cpp"
+//#include "TestTurtleParser.cpp"
+#include "TurtleOfficalExamplesTest.cpp"
 //#include "TurtleOfficialEvaluationTests.cpp"
 //#include "TurtleOfficialNegativeEvaluationTests.cpp"
 //#include "TurtleOfficialPositiveTests.cpp"
