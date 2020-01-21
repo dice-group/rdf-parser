@@ -1,26 +1,29 @@
 dist: xenial
 language: cpp
-sudo: require
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - gcc-7
-      - g++-7
-env:
-  - COMPILER=g++-8
 
-before_script:
-  - sudo apt install python3-pip
-  - pip install conan --user
-  - conan remote add conan "https://api.bintray.com/conan/conan/public-conan" ; conan remote add taocpp https://api.bintray.com/conan/taocpp/public-conan
-script:
-  - export CC=gcc-9
-  - export CXX=g++-9
-  - mkdir build
-  - cd build
-  - conan install .. --build=missing --settings compiler.libcxx="libstdc++11"
-  - cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release ..
-  - make -j
-  - ./bin/tests/tests
+matrix:
+  include:
+    - compiler: gcc
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc-9
+            - g++-9
+      env:
+        - COMPILER=g++-9
+
+      before_script:
+        - sudo apt install python3-pip
+        - pip install conan --user
+        - conan remote add conan "https://api.bintray.com/conan/conan/public-conan" ; conan remote add taocpp https://api.bintray.com/conan/taocpp/public-conan
+      script:
+        - export CC=gcc-9
+        - export CXX=g++-9
+        - mkdir build
+        - cd build
+        - conan install .. --build=missing --settings compiler.libcxx="libstdc++11"
+        - cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release ..
+        - make -j
+        - ./bin/tests/tests
