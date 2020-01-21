@@ -18,3 +18,4 @@ script:
   - conan install .. --build=missing --settings compiler.libcxx="libstdc++11"
   - cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release ..
   - make -j
+  - ./bin/tests/tests
