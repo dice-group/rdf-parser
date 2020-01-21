@@ -73,7 +73,7 @@ namespace rdf_parser::Turtle {
         bool end() { return false; }
 
         bool isContentParsable() {
-            if (std::is_same<ParserType, StringParser>::value)
+            if constexpr(std::is_same_v<ParserType, StringParser>)
                 return StringParser::isParsable(this->content);
             else
                 return FileParser::isParsable(this->content);
