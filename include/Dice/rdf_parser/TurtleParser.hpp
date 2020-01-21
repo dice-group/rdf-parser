@@ -38,7 +38,10 @@ namespace rdf_parser::Turtle {
         public:
             explicit Iterator(std::string content) :
                     turtle_parser_{std::move(content)},
-                    done_{false}, parser_done_{false} {};
+                    done_{false}, parser_done_{false}
+                    {
+                        this->operator++();
+                    };
 
             void operator++() {
                 if (parser_done_) {

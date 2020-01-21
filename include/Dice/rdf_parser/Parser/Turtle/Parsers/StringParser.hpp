@@ -48,11 +48,7 @@ namespace rdf_parser::Turtle {
                 throw e;
             }
 
-            //get the first triple
-            if (hasNextTriple())
-                nextTriple();
-            else
-                std::runtime_error("there is no triple to parse");
+
         }
 
         bool hasNextTriple() const override {

@@ -85,11 +85,6 @@ namespace rdf_parser::Turtle {
             parsingThread = std::make_unique<util::ScopedThread>(
                     std::thread(&CuncurrentStreamParser::startParsing, this, filename, bufferSize));
 
-            //get the first triple
-            if (hasNextTriple())
-                nextTriple();
-            else
-                std::runtime_error("there is no triple to parse");
         }
 
 
