@@ -19,6 +19,7 @@ matrix:
         - pip install conan --user
         - conan remote add conan-public "https://api.bintray.com/conan/conan/public-conan"
         - conan remote add taocpp "https://api.bintray.com/conan/taocpp/public-conan"
+        - conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
       script:
         - export CC=gcc-9
         - export CXX=g++-9
