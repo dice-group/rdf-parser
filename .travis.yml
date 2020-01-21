@@ -10,7 +10,7 @@ addons:
       - g++-7
 
 before_script:
-  - apt install python3-pip
+  - sudo apt install python3-pip
   - pip install conan
   - conan remote add conan "https://api.bintray.com/conan/conan/public-conan" ; conan remote add taocpp https://api.bintray.com/conan/taocpp/public-conan
 script:
