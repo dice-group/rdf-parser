@@ -13,6 +13,8 @@ matrix:
             - g++-9
       env:
         - COMPILER=g++-9
+        - export CC=gcc-9
+        - export CXX=g++-9
 
       before_script:
         - sudo apt install python3-pip
@@ -21,8 +23,6 @@ matrix:
         - conan remote add taocpp "https://api.bintray.com/conan/taocpp/public-conan"
         - conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
       script:
-        - export CC=gcc-9
-        - export CXX=g++-9
         - mkdir build
         - cd build
         - conan install .. --build=missing --settings compiler.libcxx="libstdc++11"
