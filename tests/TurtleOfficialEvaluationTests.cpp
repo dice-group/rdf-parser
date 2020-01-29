@@ -936,7 +936,7 @@ TEST(TurtleOfficialEvaluationTests, turtle_subm_22) {
    
 }
 
-TEST(TurtleOfficialEvaluationTests, turtle_subm_23) {
+TEST(TurtleOfficialEvaluationTests, DISABLED_turtle_subm_23) {
 
     TurtleParser<StringParser> turtleParser("# comment test\n"
                                             "@prefix : <http://example.org/#> .\n"
@@ -965,7 +965,7 @@ TEST(TurtleOfficialEvaluationTests, turtle_subm_23) {
    
 }
 
-TEST(TurtleOfficialEvaluationTests, turtle_subm_24) {
+TEST(TurtleOfficialEvaluationTests, DISABLED_turtle_subm_24) {
 
     TurtleParser<StringParser> turtleParser("# comment line with no final newline test\n"
                                             "@prefix : <http://example.org/#> .\n"
