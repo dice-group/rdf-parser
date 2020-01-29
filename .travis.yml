@@ -9,12 +9,9 @@ matrix:
           sources:
             - ubuntu-toolchain-r-test
           packages:
-            - gcc-9
             - g++-9
       env:
         - COMPILER=g++-9
-        - export CC=gcc-9
-        - export CXX=g++-9
 
       before_script:
         - sudo apt install python3-pip
