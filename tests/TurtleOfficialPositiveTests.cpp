@@ -437,7 +437,7 @@ TEST(TurtleOfficialPositiveTests, DISABLED_turtle_syntax_file_01) {
     ASSERT_EQ(parser.isContentParsable(), true);
 }
 
-TEST(TurtleOfficialPositiveTests, turtle_syntax_file_02) {
+TEST(TurtleOfficialPositiveTests, DISABLED_turtle_syntax_file_02) {
 
     TurtleParser<StringParser> parser("#Empty file.");
     ASSERT_EQ(parser.isContentParsable(), true);

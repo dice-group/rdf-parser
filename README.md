@@ -4,6 +4,8 @@ This is the RDF parser used by [Tentris](https://github.com/dice-group/tentris).
 
 It has buffered streaming support so that you can load files that are too big to fit in main memory. 
 
+Currently it is not fully supporting comments.it fails to parse comments in some senarios .
+
 ## how to build
 ### prerequisites
 
