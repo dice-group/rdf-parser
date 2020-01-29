@@ -301,7 +301,7 @@ namespace rdf_parser::store::rdf {
 template<>
 struct fmt::formatter<const rdf_parser::store::rdf::Term *> {
     template<typename ParseContext>
-    constexpr auto parse(ParseContext &ctx) { return ctx.out(); }
+    constexpr auto parse(ParseContext &ctx) { return ctx.begin(); }
 
     template<typename FormatContext>
     auto format(const rdf_parser::store::rdf::Term *p, FormatContext &ctx) {
@@ -315,7 +315,7 @@ struct fmt::formatter<const rdf_parser::store::rdf::Term *> {
 template<>
 struct fmt::formatter<rdf_parser::store::rdf::Term> {
     template<typename ParseContext>
-    constexpr auto parse(ParseContext &ctx) { return ctx.out(); }
+    constexpr auto parse(ParseContext &ctx) { return ctx.begin(); }
 
     template<typename FormatContext>
     auto format(const rdf_parser::store::rdf::Term &p, FormatContext &ctx) {
