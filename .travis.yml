@@ -26,6 +26,7 @@ matrix:
         - mkdir build
         - cd build
         - conan install .. --build=missing --settings compiler.libcxx="libstdc++11"
+        - Drdf_parser_BUILD_TESTS=ON
         - cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release ..
         - make -j
         - ./tests/bin/tests
