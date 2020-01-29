@@ -301,25 +301,25 @@ namespace rdf_parser::store::rdf {
 template<>
 struct fmt::formatter<const rdf_parser::store::rdf::Term *> {
     template<typename ParseContext>
-    constexpr auto parse(ParseContext &ctx) { return ctx.begin(); }
+    constexpr auto parse(ParseContext &ctx) { return ctx.out(); }
 
     template<typename FormatContext>
     auto format(const rdf_parser::store::rdf::Term *p, FormatContext &ctx) {
         if (p != nullptr)
-            return format_to(ctx.begin(), p->getIdentifier());
+            return format_to(ctx.out(), p->getIdentifier());
         else
-            return format_to(ctx.begin(), "");
+            return format_to(ctx.out(), "");
     }
 };
 
 template<>
 struct fmt::formatter<rdf_parser::store::rdf::Term> {
     template<typename ParseContext>
-    constexpr auto parse(ParseContext &ctx) { return ctx.begin(); }
+    constexpr auto parse(ParseContext &ctx) { return ctx.out(); }
 
     template<typename FormatContext>
     auto format(const rdf_parser::store::rdf::Term &p, FormatContext &ctx) {
-        return format_to(ctx.begin(), p.getIdentifier());
+        return format_to(ctx.out(), p.getIdentifier());
     }
 };
 
