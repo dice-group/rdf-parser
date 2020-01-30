@@ -92,8 +92,11 @@ namespace rdf_parser::Turtle {
                         int pos = type_tag.find(':');
                         std::string prefix = type_tag.substr(0, pos);
                         tag = type_tag.substr(pos + 1, type_tag.length());
-                        std::string mappedPrefix =getPrefixValue(prefix);
-                        tag = mappedPrefix + tag;
+                        if (hasPrefix(prefix)) {
+                            std::string mappedPrefix = getPrefixValue(prefix);
+                            tag = mappedPrefix + tag;
+                        } else
+                            tag = type_tag;
                     }
                     term = (Literal(literal_string, std::nullopt,
                                     tag));

@@ -159,7 +159,7 @@ namespace rdf_parser::Turtle {
 
                 if (state.hasPrefix(prefix)) {
                     std::string mappedPrefix = state.getPrefixValue(prefix);
-                    value = mappedPrefix + value;
+                    value = mappedPrefix +"/"+value;
                     state.setTerm(URIRef(value));
                     state.setIri_is_IRIREF(false);
                 } else {
@@ -240,7 +240,6 @@ namespace rdf_parser::Turtle {
                 ss << in.string();
                 std::string s;
                 s = ss.str();
-                s = '"' + s + '"';
 
                 state.setTerm(Literal(s, std::nullopt, state.getType_tag()));
             }
