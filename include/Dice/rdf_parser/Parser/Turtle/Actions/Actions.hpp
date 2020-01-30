@@ -25,66 +25,7 @@ namespace rdf_parser::Turtle {
             }
         };
 
-        template<>
-        struct action<Grammer::prefixID> {
-            template<typename Input, typename Queue>
-            static void apply(const Input &in, States::State<Queue> &state) {
-                std::stringstream ss;
-                ss << in.string();
-                std::string prefix;
-                std::string ignore;
-                std::string value;
 
-                ss >> ignore; //read @prefix and ignore it
-                ss >> prefix; //read the prefix
-                ss >> value; //read the value
-                value.erase(0, 1);
-                value.erase(value.length() - 1, 1);
-
-                state.addPrefix(prefix, value);
-
-            }
-        };
-
-        template<>
-        struct action<Grammer::sparqlPrefix> {
-            template<typename Input, typename Queue>
-            static void apply(const Input &in, States::State<Queue> &state) {
-                std::stringstream ss;
-                ss << in.string();
-                std::string prefix;
-                std::string ignore;
-                std::string value;
-
-                ss >> ignore; //read PREFIX and ignore it
-                ss >> prefix; //read the prefix
-                ss >> value; //read the value
-                value.erase(0, 1);
-                value.erase(value.length() - 1, 1);
-
-                state.addPrefix(prefix, value);
-
-            }
-        };
-
-
-        template<>
-        struct action<Grammer::sparqlBase> {
-            template<typename Input, typename Queue>
-            static void apply(const Input &in, States::State<Queue> &state) {
-                std::stringstream ss;
-                ss << in.string();
-                std::string ignore;
-                std::string value;
-
-                ss >> ignore; //read PREFIX and ignore it
-                ss >> value; //read the value
-                value.erase(0, 1);
-                value.erase(value.length() - 1, 1);
-
-                state.setBase(value);
-            }
-        };
 
         template<>
         struct action<Grammer::triple> {

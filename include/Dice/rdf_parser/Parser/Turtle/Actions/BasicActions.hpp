@@ -79,18 +79,108 @@ namespace rdf_parser::Turtle {
         };
 
         template<>
+        struct action<Grammer::prefixID> {
+            template<typename Input>
+            static void apply(const Input &in, States::BasicState &state) {
+                std::stringstream ss;
+                ss << in.string();
+                std::string prefix;
+                std::string ignore;
+                std::string value;
+
+                ss >> ignore; //read @prefix and ignore it
+                ss >> prefix; //read the prefix
+                ss >> value; //read the value
+                value.erase(0, 1);
+                value.erase(value.length() - 1, 1);
+
+                state.addPrefix(prefix, value);
+
+            }
+        };
+
+        template<>
+        struct action<Grammer::sparqlPrefix> {
+            template<typename Input>
+            static void apply(const Input &in, States::BasicState &state) {
+                std::stringstream ss;
+                ss << in.string();
+                std::string prefix;
+                std::string ignore;
+                std::string value;
+
+                ss >> ignore; //read PREFIX and ignore it
+                ss >> prefix; //read the prefix
+                ss >> value; //read the value
+                value.erase(0, 1);
+                value.erase(value.length() - 1, 1);
+
+                state.addPrefix(prefix, value);
+
+            }
+        };
+
+
+        template<>
+        struct action<Grammer::sparqlBase> {
+            template<typename Input>
+            static void apply(const Input &in, States::BasicState &state) {
+                std::stringstream ss;
+                ss << in.string();
+                std::string ignore;
+                std::string value;
+
+                ss >> ignore; //read PREFIX and ignore it
+                ss >> value; //read the value
+                value.erase(0, 1);
+                value.erase(value.length() - 1, 1);
+
+                state.setBase(value);
+            }
+        };
+
+        template<>
+        struct action<Grammer::PrefixedName> {
+            template<typename Input>
+            static void apply(const Input &in, States::BasicState &state) {
+                std::stringstream ss;
+                ss << in.string();
+                std::string statement;
+                std::string prefix;
+                std::string value;
+
+                ss >> statement; //read the whole statement
+                int pos = statement.find(':');
+                prefix = statement.substr(0, pos + 1);
+                value = statement.substr(pos + 1, statement.length());
+
+
+                if (state.hasPrefix(prefix)) {
+                    std::string mappedPrefix = state.getPrefixValue(prefix);
+                    value = mappedPrefix + value;
+                    state.setTerm(URIRef(value));
+                    state.setIri_is_IRIREF(false);
+                } else {
+                    throw std::runtime_error("undefined prefix");
+                }
+            };
+
+        };
+
+        template<>
         struct action<Grammer::IRIREF> {
             template<typename Input>
             static void apply(const Input &in, States::BasicState &state) {
                 std::stringstream ss;
                 ss << in.string();
                 std::string s;
-                s = ss.str().substr(1, ss.str().length() - 1);
+                s = ss.str().substr(1, ss.str().length() - 2);
                 //check for @base
                 if (not state.getBase().empty())
                     s = s.insert(1, state.getBase());
 
                 state.setTerm(URIRef(s));
+                state.setIri_is_IRIREF(true);
             }
         };
 
@@ -173,7 +263,12 @@ namespace rdf_parser::Turtle {
                 s = ss.str();
 
                 state.setType_tag_found(true);
-                state.setType_tag(s.substr(2));
+                //check if the iri is IRIREF or a PerfixedName
+                if (state.iriIsIRIREF())
+                    // set the Literal type tag without the "^^<" at the beginning amd without ">" at the end .
+                    state.setType_tag(s.substr(3, s.length() - 3 - 1));
+                else
+                    state.setType_tag(s.substr(2));
 
             }
         };
@@ -215,33 +310,6 @@ namespace rdf_parser::Turtle {
             }
         };
 
-        template<>
-        struct action<Grammer::PrefixedName> {
-            template<typename Input>
-            static void apply(const Input &in, States::BasicState &state) {
-                std::stringstream ss;
-                ss << in.string();
-                std::string statement;
-                std::string prefix;
-                std::string value;
-
-                ss >> statement; //read the whole statement
-                int pos = statement.find(':');
-                prefix = statement.substr(0, pos + 1);
-                value = statement.substr(pos + 1, statement.length());
-
-
-                if (state.hasPrefix(prefix)) {
-                    std::string mappedPrefix = state.getPrefixValue(prefix);
-                    value = '<' + mappedPrefix + value + '>';
-                    state.setTerm(URIRef(value));
-                } else {
-                    throw std::runtime_error("undefined prefix");
-                }
-            };
-
-
-        };
 
         template<>
         struct action<Grammer::verb_a> {

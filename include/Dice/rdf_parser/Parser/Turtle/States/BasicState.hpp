@@ -38,6 +38,7 @@ namespace rdf_parser::Turtle {
             //variables to deal with type and lan tags in literals
             bool type_tag_found = false;
             bool lang_tag_found = false;
+            bool iri_is_IRIREF;
             std::string lan_tag;
             std::string type_tag;
             std::string literal_string;
@@ -56,6 +57,11 @@ namespace rdf_parser::Turtle {
 
             inline void setTerm(Term term) { this->term = std::move(term); }
 
+
+            inline void addPrefix(std::string prefix, std::string value) {
+                prefix_map.insert(std::pair<std::string, std::string>(prefix, value));
+            }
+
             inline void setLan_tag(std::string lan_tag) { this->lan_tag = lan_tag; }
 
             inline void setType_tag(std::string type_tag) { this->type_tag = type_tag; }
@@ -69,13 +75,24 @@ namespace rdf_parser::Turtle {
                 this->lang_tag_found = found;
             }
 
+            inline void setIri_is_IRIREF(bool found) {
+                this->iri_is_IRIREF = found;
+            }
+
             void proccessRdfLiteral() {
                 //check if this RdfLiteral has IRI part
                 if (type_tag_found == true) {
+                    std::string tag;
                     //set it again to false
                     type_tag_found = false;
+                    //check if the type tag is iri or PREFIXED NAME and process it accordingly
+                    if (iriIsIRIREF()) {
+                        tag = type_tag;
+                    } else {
+                        tag = prefix_map[type_tag];
+                    }
                     term = (Literal(literal_string, std::nullopt,
-                                    type_tag));
+                                    tag));
                 }
                     //check if this RdfLiteral has langTag part
                 else if (lang_tag_found == true) {
@@ -90,6 +107,10 @@ namespace rdf_parser::Turtle {
 
             std::string getType_tag() {
                 return type_tag;
+            }
+
+            bool iriIsIRIREF() {
+                return iri_is_IRIREF;
             }
 
             std::string getBlank_node_string() {
