@@ -37,3 +37,26 @@ TEST(TermTests, parseStringTerm) {
 	ASSERT_EQ(full_typed.object().getIdentifier(), "\"text\"");
 	ASSERT_EQ(prefix_typed.object().getIdentifier(), "\"text\"");
 }
+
+
+TEST(TermTests, parseNumbers) {
+	TurtleParser<StringParser> parser("@prefix : <http://example.org/elements> .                                                                              \n"
+									  "<http://en.wikipedia.org/wiki/Helium>   "
+		    						  ":atomicNumber 2 ;"
+			  						  " :atomicMass 4.002602 ;"
+			                          " :specificGravity 1.663E-4 . ");
+	TurtleParser<StringParser>::Iterator iterator = parser.begin();
+	ASSERT_TRUE(bool(iterator));
+	const Triple &integerNumber = *iterator;
+	++iterator;
+	const Triple &decimalNumber = *iterator;
+	++iterator;
+	const Triple &doubleNumber = *iterator;
+
+	// check if they are correct
+	ASSERT_EQ(integerNumber.object().getIdentifier(), "\"2\"^^<xsd:integer>");
+	ASSERT_EQ(decimalNumber.object().getIdentifier(), "\"4.002602\"^^<xsd:decimal>");
+	ASSERT_EQ(doubleNumber.object().getIdentifier(), "\"1.663E-4\"^^<xsd:double>");
+}
+
+
