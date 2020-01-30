@@ -1,7 +1,7 @@
 #ifndef RDF_PARSER_TERM_HPP
 #define RDF_PARSER_TERM_HPP
 
-#include <string_view>
+
 #include <fmt/format.h>
 #include <absl/hash/hash.h>
 #include <stdexcept>
