@@ -323,6 +323,7 @@ struct fmt::formatter<rdf_parser::store::rdf::Term> {
     }
 };
 
+
 #include "Dice/rdf_parser/Parser/Turtle/States/BasicState.hpp"
 #include <tao/pegtl.hpp>
 #include "Dice/rdf_parser/Parser/Turtle/Grammer.hpp"
@@ -369,4 +370,4 @@ namespace rdf_parser::Turtle {
     }
 };
 
-#endif //RDF_PARSER_TERM_HPP
+#endif
