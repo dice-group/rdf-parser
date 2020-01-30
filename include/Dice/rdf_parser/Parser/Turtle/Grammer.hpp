@@ -262,7 +262,8 @@ namespace rdf_parser::Turtle::Grammer {
             sor<DOUBLE, DECIMAL, INTEGER> {
     };
 
-    struct turtleString
+    struct
+    turtleString
             : sor<STRING_LITERAL_LONG_QUOTE, STRING_LITERAL_LONG_SINGLE_QUOTE, STRING_LITERAL_SINGLE_QUOTE, STRING_LITERAL_QUOTE> {
     };
 

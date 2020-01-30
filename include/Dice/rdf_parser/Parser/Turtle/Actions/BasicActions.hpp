@@ -90,7 +90,7 @@ namespace rdf_parser::Turtle {
 
                 ss >> ignore; //read @prefix and ignore it
                 ss >> prefix; //read the prefix
-                prefix.erase(prefix.length()-1,1); // erase : at the end of the prefix
+                prefix.erase(prefix.length() - 1, 1); // erase : at the end of the prefix
                 ss >> value; //read the value
                 value.erase(0, 1);
                 value.erase(value.length() - 1, 1);
@@ -112,7 +112,7 @@ namespace rdf_parser::Turtle {
 
                 ss >> ignore; //read PREFIX and ignore it
                 ss >> prefix; //read the prefix
-                prefix.erase(prefix.length()-1,1); // erase : at the end of the prefix
+                prefix.erase(prefix.length() - 1, 1); // erase : at the end of the prefix
                 ss >> value; //read the value
                 value.erase(0, 1);
                 value.erase(value.length() - 1, 1);
@@ -154,7 +154,7 @@ namespace rdf_parser::Turtle {
                 ss >> statement; //read the whole statement
                 int pos = statement.find(':');
                 prefix = statement.substr(0, pos);
-                value = statement.substr(pos + 1, statement.length());
+                value = statement.substr(pos + 1, statement.length() - prefix.length());
 
 
                 if (state.hasPrefix(prefix)) {
@@ -297,7 +297,7 @@ namespace rdf_parser::Turtle {
                 std::stringstream ss;
                 ss << in.string();
                 std::string s;
-                s = ss.str().substr(1, ss.str().length() - 1);
+                s = ss.str().substr(1, ss.str().length() - 1 - 1);
                 state.setLiteral_string(s);
 
             }
