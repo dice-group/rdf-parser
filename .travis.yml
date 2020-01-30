@@ -13,6 +13,11 @@ matrix:
       env:
         - COMPILER=g++-9
 
+
+      cache:
+        directories:
+          - $HOME/.conan/data
+          -
       before_script:
         - sudo apt install python3-pip
         - pip install conan --user
