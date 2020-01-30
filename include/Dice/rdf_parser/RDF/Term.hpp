@@ -9,7 +9,6 @@
 #include <optional>
 #include <exception>
 #include <utility>
-#include <string_view>
 
 
 namespace rdf_parser::store::rdf {
