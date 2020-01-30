@@ -58,7 +58,7 @@ namespace rdf_parser::Turtle {
 
             void operator++(int) { operator++(); }
 
-            explicit operator bool() { return not done_; }
+            operator bool() { return not done_; }
 
             const Triple &operator*() { return turtle_parser_.getCurrentTriple(); }
         };
