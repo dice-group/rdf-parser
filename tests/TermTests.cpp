@@ -26,11 +26,11 @@ TEST(TermTests, parseStringTerm) {
 									  "<http://example.com/x> a \"text\"^^xsd:string. ");
 	TurtleParser<StringParser>::Iterator iterator = parser.begin();
 	ASSERT_TRUE(bool(iterator));
-	const Triple &plain = *iterator;
+	Triple plain = *iterator;
 	++iterator;
-	const Triple &full_typed = *iterator;
+	Triple full_typed = *iterator;
 	++iterator;
-	const Triple &prefix_typed = *iterator;
+	Triple prefix_typed = *iterator;
 
 	// check if they are correct
 	ASSERT_EQ(plain.object().getIdentifier(), "\"text\"");
@@ -47,11 +47,11 @@ TEST(TermTests, parseNumbers) {
 			                          " :specificGravity 1.663E-4 . ");
 	TurtleParser<StringParser>::Iterator iterator = parser.begin();
 	ASSERT_TRUE(bool(iterator));
-	const Triple &integerNumber = *iterator;
+	Triple integerNumber = *iterator;
 	++iterator;
-	const Triple &decimalNumber = *iterator;
+	Triple decimalNumber = *iterator;
 	++iterator;
-	const Triple &doubleNumber = *iterator;
+	Triple doubleNumber = *iterator;
 
 	// check if they are correct
 	ASSERT_EQ(integerNumber.object().getIdentifier(), "\"2\"^^<xsd:integer>");
