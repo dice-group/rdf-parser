@@ -71,9 +71,6 @@ namespace rdf_parser::Turtle {
             virtual void setPasrsingIsDone() {
             }
 
-            inline void addPrefix(std::string prefix, std::string value) {
-                prefix_map.insert(std::pair<std::string, std::string>(prefix, value));
-            }
 
 
             inline void clearTripleParameters() {

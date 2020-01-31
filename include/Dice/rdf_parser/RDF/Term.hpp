@@ -1,7 +1,7 @@
 #ifndef RDF_PARSER_TERM_HPP
 #define RDF_PARSER_TERM_HPP
 
-#include <string_view>
+
 #include <fmt/format.h>
 #include <absl/hash/hash.h>
 #include <stdexcept>
@@ -322,6 +322,7 @@ struct fmt::formatter<rdf_parser::store::rdf::Term> {
         return format_to(ctx.out(), p.getIdentifier());
     }
 };
+
 
 #include "Dice/rdf_parser/Parser/Turtle/States/BasicState.hpp"
 #include <tao/pegtl.hpp>

@@ -7,6 +7,7 @@
 
 //#include "TurtleParserFilesTests.cpp"
 #include "TermParserTests.cpp"
+#include "TermTests.cpp"
 
 int main(int argc, char **argv) {
     testing::InitGoogleTest(&argc, argv);
