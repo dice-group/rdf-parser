@@ -60,7 +60,7 @@ namespace rdf_parser::Turtle {
 
             operator bool() { return not done_; }
 
-            Triple operator*() { return turtle_parser_.getCurrentTriple(); }
+            const Triple &operator*() { return turtle_parser_.getCurrentTriple(); }
         };
 
 

@@ -370,4 +370,4 @@ namespace rdf_parser::Turtle {
     }
 };
 
-#endif
+#endif //RDF_PARSER_TERM_HPP

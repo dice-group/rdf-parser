@@ -20,7 +20,7 @@ matrix:
       cache:
         directories:
           - $HOME/.conan/data
-          -
+
       before_script:
         - sudo apt install python3-pip
         - pip install conan --user

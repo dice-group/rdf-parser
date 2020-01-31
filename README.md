@@ -95,6 +95,7 @@ int main()
  //or we can use: TurtleParser<>::Iterator it=Parser.begin();
  while (it){
          Triple triple= *it;
+         //or const Triple &integerNumber = *iterator; to get a const ref
          std::cout<<"subject :"<<triple.subject().getIdentifier()<<",predicit :"<<triple.predicate().getIdentifier()
          <<",object :"<<triple.object().getIdentifier()<<std::endl;
          it++;
