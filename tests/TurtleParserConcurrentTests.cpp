@@ -16,7 +16,9 @@ TEST(TurtleParserConcurrentTests,ntripleFileCon1) {
 }
 
 TEST(TurtleParserConcurrentTests,turtleFileCon1) {
-    TurtleParser<CuncurrentStreamParser> parser("datasets/dbpedia_2GB_subset.ttl");
-    ASSERT_EQ(parser.isContentParsable(), true);
+    TurtleParser<CuncurrentStreamParser> parser("../datasets/instance-types_transitive.ttl");
+    auto it= parser.begin();
+    while (it)
+        it++;
 
 }
