@@ -11,7 +11,8 @@ For more information about states please check https://github.com/taocpp/PEGTL/b
 #include <condition_variable>
 #include <mutex>
 #include <atomic>
-#include <tbb/concurrent_queue.h>
+//#include <tbb/concurrent_queue.h>
+#include <boost/lockfree/spsc_queue.hpp>
 
 #include "State.hpp"
 
@@ -22,7 +23,7 @@ namespace rdf_parser::Turtle {
          * ConcurrentState defines the data structures realted to the whole grammer (stores the parsed triples)
          * in a cunncurent data structure (intel concureent queue)
          */
-        template<typename T=tbb::concurrent_bounded_queue<Triple>>
+        template<typename T=boost::lockfree::spsc_queue<Triple>>
         class ConcurrentState : public State<T> {
 
         private:
@@ -57,7 +58,7 @@ namespace rdf_parser::Turtle {
             }
 
             inline void syncWithMainThread() override {
-                if (this->parsed_terms->size() > upperThrehold) {
+                if (this->parsed_terms->read_available() > upperThrehold) {
                     std::unique_lock<std::mutex> lk(*m);
                     *termCountWithinThreholds = false;
                     //set the parsing thread to sleep

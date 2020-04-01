@@ -6,6 +6,7 @@
 //#include "TurtleOfficialNegativeEvaluationTests.cpp"
 
 //#include "TurtleParserFilesTests.cpp"
+#include "TurtleParserConcurrentTests.cpp"
 #include "TermParserTests.cpp"
 #include "TermTests.cpp"
 

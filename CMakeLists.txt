@@ -24,10 +24,10 @@ target_link_libraries(rdf_parser INTERFACE  ${CONAN_LIBS})
 
 # testing
 option(rdf_parser_BUILD_TESTS "Build rdf_parser tests." OFF)
-if(rdf_parser_BUILD_TESTS)
+#if(rdf_parser_BUILD_TESTS)
     enable_testing()
     add_subdirectory(tests)
-endif()
+#endif()
 
 # require C++17
 target_compile_features(rdf_parser INTERFACE cxx_std_17)
