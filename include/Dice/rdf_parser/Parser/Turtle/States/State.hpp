@@ -9,6 +9,7 @@ For more information about states please check https://github.com/taocpp/PEGTL/b
 
 #include <stack>
 #include <queue>
+#include <Dice/rdf_parser/RDF/Triple.hpp>
 
 #include "BasicState.hpp"
 #include "Dice/rdf_parser/RDF/Triple.hpp"
