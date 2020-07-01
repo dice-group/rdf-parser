@@ -450,6 +450,27 @@ namespace rdf_parser::Turtle::Grammer {
             must<sor<RdfLiteral, BlankNode, iri>> {
     };
 
+    //The following grammers are not part of turtle.they are part of sparql language.but used here to make it
+    //possible to parse some sparql grammer which has very similar context to turtle.
+
+    struct varname :
+            seq<
+                sor<PN_CHARS_U,digit>,
+                star<sor<PN_CHARS_U,digit,utf8::one<0x00B7>,utf8::range<0x0300, 0x036F>,utf8::range<0x203F, 0x2040>>>
+                >{
+    };
+
+    struct var1 :
+            seq<one<'?'>,varname> {
+    };
+
+    struct var2 :
+            seq<one<'$'>,varname> {
+    };
+
+    struct var :
+            sor<var1,var2> {
+    };
 
 }
 
