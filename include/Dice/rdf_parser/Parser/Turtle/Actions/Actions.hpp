@@ -61,7 +61,7 @@ namespace rdf_parser::Turtle {
 
 
         template<>
-        struct action<Grammer::subject> {
+        struct action<Grammer::subject<>> {
             template<typename Input, typename Queue>
             static void apply(const Input &in, States::State<Queue> &state) {
                 state.setSubject(state.getTerm());
@@ -77,7 +77,7 @@ namespace rdf_parser::Turtle {
         };
 
         template<>
-        struct action<Grammer::object> {
+        struct action<Grammer::object<>> {
             template<typename Input, typename Queue>
             static void apply(const Input &in, States::State<Queue> &state) {
                 state.pushCurrentTermIntoBnpl_collection_list();
@@ -94,7 +94,7 @@ namespace rdf_parser::Turtle {
         };
 
         template<>
-        struct action<Grammer::collection> {
+        struct action<Grammer::collection<>> {
             template<typename Input, typename Queue>
             static void apply(const Input &in, States::State<Queue> &state) {
                 state.proccessCollection();

@@ -12,6 +12,8 @@ For more information about how to define grammers and rules using PEGTl please c
 namespace {
     using namespace tao::pegtl;
 }
+
+
 namespace rdf_parser::Turtle::Grammer {
 
 //      Terminals
@@ -323,14 +325,49 @@ namespace rdf_parser::Turtle::Grammer {
             sor<RdfLiteral, NumericLiteral, BooleanLiteral> {
     };
 
-    struct collection;
-    struct blankNodePropertyList;
-    struct object :
-            sor<iri, literal, BlankNode, collection, blankNodePropertyList> {
+    struct term :
+            must<sor<RdfLiteral, BlankNode, iri>> {
     };
 
+    //The following grammers are not part of turtle.they are part of sparql language.but used here to make it
+    //possible to parse some sparql grammer which has very similar context to turtle.
+
+    struct varname :
+            seq<
+                    sor<PN_CHARS_U,digit>,
+                    star<sor<PN_CHARS_U,digit,utf8::one<0x00B7>,utf8::range<0x0300, 0x036F>,utf8::range<0x203F, 0x2040>>>
+            >{
+    };
+
+    struct var1 :
+            seq<one<'?'>,varname> {
+    };
+
+    struct var2 :
+            seq<one<'$'>,varname> {
+    };
+
+    struct var :
+            sor<var1,var2> {
+    };
+
+    struct varOrTerm:
+            sor<var,term>{};
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    template<bool sparqlQuery=false>
+    struct collection;
+    struct blankNodePropertyList;
+    template<bool sparqlQuery=false>
+    struct object :
+            std::conditional_t<sparqlQuery,
+            sor<varOrTerm, collection<sparqlQuery>, blankNodePropertyList>,
+            sor<term, collection<sparqlQuery>, blankNodePropertyList>
+            >{};
+
     struct objectList :
-            seq<object, star<seq<ignored, one<','>, ignored, object>>> {
+            seq<object<>, star<seq<ignored, one<','>, ignored, object<>>>> {
     };
 
     struct predicate :
@@ -341,13 +378,13 @@ namespace rdf_parser::Turtle::Grammer {
             one<'('> {
     };
 
+    template<bool sparqlQuery>
     struct collection :
-            seq<collectionBegin,
-                    star<seq<ignored, object>>,
-                    ignored,
-                    one<')'>
-            > {
-    };
+                    seq<collectionBegin,
+                            star<seq<ignored, object<sparqlQuery>>>,
+                            ignored,
+                            one<')'>
+                    >{};
 
     struct verb_a :
             one<'a'> {
@@ -387,13 +424,14 @@ namespace rdf_parser::Turtle::Grammer {
             : seq<blankNodePropertyListBegin, ignored, predicateObjectList, ignored, one<']'>> {
     };
 
+    template<bool sparqlQuery=false>
     struct subject :
-            sor<iri, BlankNode, collection> {
+            sor<iri, BlankNode, collection<sparqlQuery>> {
     };
 
     struct tripleSeq1 :
             seq<
-                    subject,
+                    subject<>,
                     ignored,
                     predicateObjectList
             > {
@@ -446,31 +484,8 @@ namespace rdf_parser::Turtle::Grammer {
             > {
     };
 
-    struct term :
-            must<sor<RdfLiteral, BlankNode, iri>> {
-    };
 
-    //The following grammers are not part of turtle.they are part of sparql language.but used here to make it
-    //possible to parse some sparql grammer which has very similar context to turtle.
 
-    struct varname :
-            seq<
-                sor<PN_CHARS_U,digit>,
-                star<sor<PN_CHARS_U,digit,utf8::one<0x00B7>,utf8::range<0x0300, 0x036F>,utf8::range<0x203F, 0x2040>>>
-                >{
-    };
-
-    struct var1 :
-            seq<one<'?'>,varname> {
-    };
-
-    struct var2 :
-            seq<one<'$'>,varname> {
-    };
-
-    struct var :
-            sor<var1,var2> {
-    };
 
 }
 
