@@ -24,14 +24,14 @@ namespace rdf_parser::Turtle::PartialGrammerParsers {
 
     public:
 
-        static std::shared_ptr<std::queue<Triple>> ParseSparqlCollection(std::string text) {
+        static std::shared_ptr<std::queue<SparqlQuery::TriplePatternElement>> ParseSparqlCollection(std::string text) {
             try {
-                using namespace tao::pegtl;
-                string_input input(text, "the collection");
-                std::shared_ptr<std::queue<Triple>> parsedTerms;
-                States::State<std::queue<Triple>> state(parsedTerms);
-                parse<Grammer::collection<true>, Actions::action>(input, state);
-                return std::move(parsedTerms);
+//                using namespace tao::pegtl;
+//                string_input input(text, "the collection");
+//                std::shared_ptr<std::queue<SparqlQuery::TriplePatternElement>> parsedTerms;
+//                States::State<true,std::queue<SparqlQuery::TriplePatternElement>> state(parsedTerms);
+//                parse<Grammer::collection<true>, Actions::action>(input, state);
+//                return std::move(parsedTerms);
             }
             catch (std::exception &e) {
                 throw e;

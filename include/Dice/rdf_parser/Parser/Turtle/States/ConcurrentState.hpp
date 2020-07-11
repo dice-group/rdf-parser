@@ -23,8 +23,8 @@ namespace rdf_parser::Turtle {
          * ConcurrentState defines the data structures realted to the whole grammer (stores the parsed triples)
          * in a cunncurent data structure (intel concureent queue)
          */
-        template<typename T=boost::lockfree::spsc_queue<Triple>>
-        class ConcurrentState : public State<T> {
+        template<bool sparqlQuery,typename T=boost::lockfree::spsc_queue< std::conditional_t<sparqlQuery,SparqlQuery::VarOrTerm ,Term>>>
+        class ConcurrentState : public State<sparqlQuery,T> {
 
         private:
             //Defines  threhold for triples in the Queue(should be assigned by the constructor)
@@ -46,7 +46,7 @@ namespace rdf_parser::Turtle {
                                      std::shared_ptr<std::atomic_bool> termCountWithinThreholds,
                                      std::shared_ptr<std::atomic_bool> termsCountIsNotEmpty,
                                      std::shared_ptr<std::atomic_bool> parsingIsDone)
-                    : State<T>(parsingQueue) {
+                    : State<sparqlQuery,T>(parsingQueue) {
                 this->upperThrehold = upperThrehold;
                 this->cv = cv;
                 this->m = m;
@@ -58,7 +58,7 @@ namespace rdf_parser::Turtle {
             }
 
             inline void syncWithMainThread() override {
-                if (this->parsed_terms->read_available() > upperThrehold) {
+                if (this->parsed_elements->read_available() > upperThrehold) {
                     std::unique_lock<std::mutex> lk(*m);
                     *termCountWithinThreholds = false;
                     //set the parsing thread to sleep
@@ -67,16 +67,16 @@ namespace rdf_parser::Turtle {
                 }
             }
 
-            inline void insertTriple(Triple triple) override {
+            inline void insertTriple(std::conditional_t<sparqlQuery,SparqlQuery::TriplePatternElement ,Triple> triple) override {
                 if (*termsCountIsNotEmpty == false) {
                     {
                         std::lock_guard<std::mutex> lk(*m2);
                         *termsCountIsNotEmpty = true;
                     }
-                    this->parsed_terms->push(std::move(triple));
+                    this->parsed_elements->push(std::move(triple));
                     cv2->notify_one();
                 } else {
-                    this->parsed_terms->push(std::move(triple));
+                    this->parsed_elements->push(std::move(triple));
                 }
             }
 

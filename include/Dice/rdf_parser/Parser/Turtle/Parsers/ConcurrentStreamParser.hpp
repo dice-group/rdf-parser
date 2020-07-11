@@ -50,13 +50,13 @@ namespace rdf_parser::Turtle {
         void startParsing(std::string filename, std::size_t bufferSize) {
             try {
 
-                States::ConcurrentState<boost::lockfree::spsc_queue<Triple,boost::lockfree::capacity<100000>>> state(parsedTerms,
+                States::ConcurrentState<false,boost::lockfree::spsc_queue<Triple,boost::lockfree::capacity<100000>>> state(parsedTerms,
                                                                                    upperThrehold, cv,
                                                                                    m, cv2, m2,
                                                                                    termCountWithinThreholds,
                                                                                    termsCountIsNotEmpty,
                                                                                    parsingIsDone);
-                parse<Grammer::grammer, Actions::action>(istream_input(stream, bufferSize, filename), state);
+                parse<Grammer::grammer<>, Actions::action>(istream_input(stream, bufferSize, filename), state);
             }
             catch (std::exception &e) {
                 throw e;

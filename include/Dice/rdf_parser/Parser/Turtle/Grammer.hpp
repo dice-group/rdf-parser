@@ -358,16 +358,18 @@ namespace rdf_parser::Turtle::Grammer {
 
     template<bool sparqlQuery=false>
     struct collection;
+    template<bool sparqlQuery=false>
     struct blankNodePropertyList;
     template<bool sparqlQuery=false>
     struct object :
             std::conditional_t<sparqlQuery,
-            sor<varOrTerm, collection<sparqlQuery>, blankNodePropertyList>,
-            sor<term, collection<sparqlQuery>, blankNodePropertyList>
+            sor<varOrTerm, collection<sparqlQuery>, blankNodePropertyList<sparqlQuery>>,
+            sor<term, collection<sparqlQuery>, blankNodePropertyList<sparqlQuery>>
             >{};
 
+    template<bool sparqlQuery=false>
     struct objectList :
-            seq<object<>, star<seq<ignored, one<','>, ignored, object<>>>> {
+            seq<object<sparqlQuery>, star<seq<ignored, one<','>, ignored, object<sparqlQuery>>>> {
     };
 
     struct predicate :
@@ -394,13 +396,15 @@ namespace rdf_parser::Turtle::Grammer {
             sor<predicate, verb_a> {
     };
 
+    template<bool sparqlQuery=false>
     struct predicateObjectListInner :
-            seq<verb, ignored, objectList> {
+            seq<verb, ignored, objectList<sparqlQuery>> {
     };
 
+    template<bool sparqlQuery>
     struct predicateObjectList :
             seq<
-                    predicateObjectListInner,
+                    predicateObjectListInner<sparqlQuery>,
                     star<
                             seq<
                                     ignored,
@@ -408,7 +412,7 @@ namespace rdf_parser::Turtle::Grammer {
                                     opt<
                                             seq<
                                                     ignored,
-                                                    predicateObjectListInner
+                                                    predicateObjectListInner<sparqlQuery>
                                             >
                                     >
                             >
@@ -420,8 +424,9 @@ namespace rdf_parser::Turtle::Grammer {
             one<'['> {
     };
 
+    template<bool sparqlQuery>
     struct blankNodePropertyList
-            : seq<blankNodePropertyListBegin, ignored, predicateObjectList, ignored, one<']'>> {
+            : seq<blankNodePropertyListBegin, ignored, predicateObjectList<sparqlQuery>, ignored, one<']'>> {
     };
 
     template<bool sparqlQuery=false>
@@ -429,57 +434,65 @@ namespace rdf_parser::Turtle::Grammer {
             sor<iri, BlankNode, collection<sparqlQuery>> {
     };
 
+    template<bool sparqlQuery=false>
     struct tripleSeq1 :
             seq<
                     subject<>,
                     ignored,
-                    predicateObjectList
+                    predicateObjectList<sparqlQuery>
             > {
     };
 
+    template<bool sparqlQuery=false>
     struct tripleSeq2 :
             seq<
-                    blankNodePropertyList,
+                    blankNodePropertyList<sparqlQuery>,
                     ignored,
-                    opt<predicateObjectList>
+                    opt<predicateObjectList<sparqlQuery>>
             > {
     };
 
+    template<bool sparqlQuery=false>
     struct triple :
             sor<
-                    tripleSeq1, tripleSeq2> {
+                    tripleSeq1<sparqlQuery>, tripleSeq2<sparqlQuery>> {
     };
 
+    template<bool sparqlQuery=false>
     struct tripleExtended :
             seq<
-                    triple, ignored, one<'.'>
+                    triple<sparqlQuery>, ignored, one<'.'>
             > {
     };
 
+    template<bool sparqlQuery=false>
     struct statement :
             sor<
-                    tripleExtended,
+                    tripleExtended<sparqlQuery>,
                     directive
             > {
     };
 
+    template<bool sparqlQuery=false>
     struct statementsCollection :
-            sor<rep<10, seq<ignored, statement>>, seq<ignored, statement>> {
+            sor<rep<10, seq<ignored, statement<sparqlQuery>>>, seq<ignored, statement<sparqlQuery>>> {
     };
 
 
+    template<bool sparqlQuery=false>
     struct turtleDoc :
             seq<
                     plus<
-                            seq<ignored, statement>
+                            seq<ignored, statement<sparqlQuery>>
                     >, ignored
             > {
     };
 
 
+    template<bool sparqlQuery=false>
     struct grammer :
             sor<
-                    must<turtleDoc, eof>,
+                    must<turtleDoc<sparqlQuery>, eof>,
                     seq<ignored, eof>
             > {
     };

@@ -40,7 +40,7 @@ namespace rdf_parser::Turtle {
                 std::ifstream infile(filename);
                 read_input file(filename);
                 States::State<> state(parsedTerms);
-                parse<Grammer::grammer, Actions::action>(file, state);
+                parse<Grammer::grammer<>, Actions::action>(file, state);
 
             }
             catch (std::exception &e) {
@@ -72,7 +72,7 @@ namespace rdf_parser::Turtle {
             try {
                 std::ifstream infile(filename);
                 read_input file(filename);
-                parse<Grammer::grammer>(file);
+                parse<Grammer::grammer<>>(file);
                 return true;
             }
             catch (std::exception &e) {
