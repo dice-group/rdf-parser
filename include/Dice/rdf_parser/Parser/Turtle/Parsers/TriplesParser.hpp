@@ -15,10 +15,12 @@ namespace {
 }
 namespace rdf_parser::Turtle {
 
+    template<bool sparqlQuery=false>
     class TriplesParser {
     protected:
 
-        Triple current_triple;
+        TriplesParser(){;};
+        std::shared_ptr<std::conditional_t<sparqlQuery,SparqlQuery::TriplePatternElement ,Triple>> current_triple;
 
 
     public:
@@ -36,7 +38,7 @@ namespace rdf_parser::Turtle {
         /**
          * get the current triple
          */
-        const Triple &getCurrentTriple() {
+        const  std::conditional_t<sparqlQuery,SparqlQuery::TriplePatternElement ,Triple> &getCurrentTriple() {
             return current_triple;
         }
 

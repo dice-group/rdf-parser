@@ -8,9 +8,9 @@ namespace {
 
 
 TEST(TermTests, parseIRI) {
-	TurtleParser<StringParser> parser("@prefix pref: <http://example.com/> . "
+	TurtleParser<StringParser<>> parser("@prefix pref: <http://example.com/> . "
 									  "<http://example.com/x> a pref:x.");
-	TurtleParser<StringParser>::Iterator iterator = parser.begin();
+	TurtleParser<StringParser<>>::Iterator iterator = parser.begin();
 	ASSERT_TRUE(bool(iterator));
 	const Triple &triple = *iterator;
 	// check if the non-prefix IRI is correct
@@ -20,11 +20,11 @@ TEST(TermTests, parseIRI) {
 }
 
 TEST(TermTests, parseStringTerm) {
-	TurtleParser<StringParser> parser("@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . "
+	TurtleParser<StringParser<>> parser("@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . "
 									  "<http://example.com/x> a \"text\". "
 									  "<http://example.com/x> a \"text\"^^<http://www.w3.org/2001/XMLSchema#string>. "
 									  "<http://example.com/x> a \"text\"^^xsd:string. ");
-	TurtleParser<StringParser>::Iterator iterator = parser.begin();
+	TurtleParser<StringParser<>>::Iterator iterator = parser.begin();
 	ASSERT_TRUE(bool(iterator));
 	Triple plain = *iterator;
 	++iterator;
@@ -40,12 +40,12 @@ TEST(TermTests, parseStringTerm) {
 
 
 TEST(TermTests, parseNumbers) {
-	TurtleParser<StringParser> parser("@prefix : <http://example.org/elements> .                                                                              \n"
+	TurtleParser<StringParser<>> parser("@prefix : <http://example.org/elements> .                                                                              \n"
 									  "<http://en.wikipedia.org/wiki/Helium>   "
 		    						  ":atomicNumber 2 ;"
 			  						  " :atomicMass 4.002602 ;"
 			                          " :specificGravity 1.663E-4 . ");
-	TurtleParser<StringParser>::Iterator iterator = parser.begin();
+	TurtleParser<StringParser<>>::Iterator iterator = parser.begin();
 	ASSERT_TRUE(bool(iterator));
 	Triple integerNumber = *iterator;
 	++iterator;

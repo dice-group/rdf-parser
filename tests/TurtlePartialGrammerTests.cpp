@@ -13,3 +13,16 @@ TEST(PatrialGrammerTest, parseSparqlCollection) {
 //    ASSERT_EQ(t2, true);
     ASSERT_EQ(1, true);
 }
+
+
+TEST(PatrialGrammerTest, parseSparqslCollection) {
+
+     rdf_parser::Turtle::TurtleParser<StringParser<true>> parser("(1 'ff' '$r' 'q' 2  )") ;
+    auto it= parser.begin();
+    while (it)
+        it++;
+//    bool t2=rdf_parser::Turtle::TermParser::isTermParsable("\" hello \'hello\'  \"");
+//    ASSERT_EQ(t1, true);
+//    ASSERT_EQ(t2, true);
+    ASSERT_EQ(1, true);
+}

@@ -28,10 +28,11 @@ namespace rdf_parser::Turtle {
     /*
      *
      */
-    class CuncurrentStreamParser : public TriplesParser {
+    template<bool sparqlQuery=false>
+    class CuncurrentStreamParser : public TriplesParser<sparqlQuery> {
 
     private:
-        std::shared_ptr<boost::lockfree::spsc_queue<Triple,boost::lockfree::capacity<100000>>> parsedTerms;
+        std::shared_ptr<boost::lockfree::spsc_queue<std::conditional_t<sparqlQuery,SparqlQuery::TriplePatternElement ,Triple> ,boost::lockfree::capacity<100000>>> parsedTerms;
         unsigned int upperThrehold;
         unsigned int lowerThrehold;
 
@@ -88,7 +89,7 @@ namespace rdf_parser::Turtle {
 
 
         void nextTriple() override {
-            parsedTerms->pop(current_triple);
+            parsedTerms->pop(this->current_triple);
             if (parsedTerms->read_available() < lowerThrehold) {
                 {
                     std::lock_guard<std::mutex> lk(*m);

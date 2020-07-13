@@ -20,13 +20,14 @@ namespace {
 
 namespace rdf_parser::Turtle {
 
-    class FileParser : public TriplesParser {
+    template<bool sparqlQuery=false>
+    class FileParser : public TriplesParser<sparqlQuery> {
 
     private:
         /**
          * a queue for storing parsed triples .
          */
-        std::shared_ptr<std::queue<Triple>> parsedTerms;
+        std::shared_ptr<std::queue<std::conditional_t<sparqlQuery,SparqlQuery::TriplePatternElement ,Triple>>> parsedTerms;
 
     public:
 
@@ -59,7 +60,7 @@ namespace rdf_parser::Turtle {
         }
 
         void nextTriple() override {
-            current_triple = parsedTerms->front();
+            this->current_triple = parsedTerms->front();
             parsedTerms->pop();
 
         }

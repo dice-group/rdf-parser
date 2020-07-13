@@ -16,7 +16,7 @@
 #include "Dice/rdf_parser/Parser/Turtle/Parsers/StreamParser.hpp"
 
 namespace rdf_parser::Turtle {
-    template<class ParserType=CuncurrentStreamParser>
+    template<class ParserType=CuncurrentStreamParser<false>>
     class TurtleParser {
 
 
@@ -74,9 +74,9 @@ namespace rdf_parser::Turtle {
 
         bool isContentParsable() {
             if constexpr(std::is_same_v<ParserType, StringParser>)
-                return StringParser::isParsable(this->content);
+                return StringParser<>::isParsable(this->content);
             else
-                return FileParser::isParsable(this->content);
+                return FileParser<>::isParsable(this->content);
 
         }
     };
