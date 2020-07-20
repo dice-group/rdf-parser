@@ -37,16 +37,16 @@ namespace rdf_parser::Turtle {
 
         template<>
         struct action<Grammer::UCHAR> {
-            template<typename Input>
-            static void apply(const Input &in, States::BasicState<> &state) {
+           template<typename Input,bool SparqlQuery>
+            static void apply(const Input &in, States::BasicState<SparqlQuery> &state) {
                 //std::cout << in.string();
             }
         };
 
         template<>
         struct action<Grammer::PN_PREFIX> {
-            template<typename Input>
-            static void apply(const Input &in, States::BasicState<> &state) {
+           template<typename Input,bool SparqlQuery>
+            static void apply(const Input &in, States::BasicState<SparqlQuery> &state) {
                 //std::cout << in.string();
             }
         };
@@ -54,16 +54,16 @@ namespace rdf_parser::Turtle {
 
         template<>
         struct action<Grammer::PN_LOCAL> {
-            template<typename Input>
-            static void apply(const Input &in, States::BasicState<> &state) {
+           template<typename Input,bool SparqlQuery>
+            static void apply(const Input &in, States::BasicState<SparqlQuery> &state) {
                 //std::cout << "PN_LOCAL" << in.string() << std::endl;
             }
         };
 
         template<>
         struct action<Grammer::base> {
-            template<typename Input>
-            static void apply(const Input &in, States::BasicState<> &state) {
+           template<typename Input,bool SparqlQuery>
+            static void apply(const Input &in, States::BasicState<SparqlQuery> &state) {
                 std::stringstream ss;
                 ss << in.string();
                 std::string ignore;
@@ -80,8 +80,8 @@ namespace rdf_parser::Turtle {
 
         template<>
         struct action<Grammer::prefixID> {
-            template<typename Input>
-            static void apply(const Input &in, States::BasicState<> &state) {
+           template<typename Input,bool SparqlQuery>
+            static void apply(const Input &in, States::BasicState<SparqlQuery> &state) {
                 std::stringstream ss;
                 ss << in.string();
                 std::string prefix;
@@ -102,8 +102,8 @@ namespace rdf_parser::Turtle {
 
         template<>
         struct action<Grammer::sparqlPrefix> {
-            template<typename Input>
-            static void apply(const Input &in, States::BasicState<> &state) {
+           template<typename Input,bool SparqlQuery>
+            static void apply(const Input &in, States::BasicState<SparqlQuery> &state) {
                 std::stringstream ss;
                 ss << in.string();
                 std::string prefix;
@@ -125,8 +125,8 @@ namespace rdf_parser::Turtle {
 
         template<>
         struct action<Grammer::sparqlBase> {
-            template<typename Input>
-            static void apply(const Input &in, States::BasicState<> &state) {
+           template<typename Input,bool SparqlQuery>
+            static void apply(const Input &in, States::BasicState<SparqlQuery> &state) {
                 std::stringstream ss;
                 ss << in.string();
                 std::string ignore;
@@ -143,8 +143,8 @@ namespace rdf_parser::Turtle {
 
         template<>
         struct action<Grammer::PrefixedName> {
-            template<typename Input>
-            static void apply(const Input &in, States::BasicState<> &state) {
+           template<typename Input,bool SparqlQuery>
+            static void apply(const Input &in, States::BasicState<SparqlQuery> &state) {
                 std::stringstream ss;
                 ss << in.string();
                 std::string statement;
@@ -171,8 +171,8 @@ namespace rdf_parser::Turtle {
 
         template<>
         struct action<Grammer::IRIREF> {
-            template<typename Input>
-            static void apply(const Input &in, States::BasicState<> &state) {
+           template<typename Input,bool SparqlQuery>
+            static void apply(const Input &in, States::BasicState<SparqlQuery> &state) {
                 std::stringstream ss;
                 ss << in.string();
                 std::string s;
@@ -188,16 +188,16 @@ namespace rdf_parser::Turtle {
 
         template<>
         struct action<Grammer::ANON> {
-            template<typename Input>
-            static void apply(const Input &in, States::BasicState<> &state) {
+           template<typename Input,bool SparqlQuery>
+            static void apply(const Input &in, States::BasicState<SparqlQuery> &state) {
                 state.setBlank_node_string(state.createBlankNodeLabel());
             };
         };
 
         template<>
         struct action<Grammer::BooleanLiteral> {
-            template<typename Input>
-            static void apply(const Input &in, States::BasicState<> &state) {
+           template<typename Input,bool SparqlQuery>
+            static void apply(const Input &in, States::BasicState<SparqlQuery> &state) {
                 std::stringstream ss;
                 ss << in.string();
                 std::string s;
@@ -210,32 +210,32 @@ namespace rdf_parser::Turtle {
 
         template<>
         struct action<Grammer::DOUBLE> {
-            template<typename Input>
-            static void apply(const Input &in, States::BasicState<> &state) {
+           template<typename Input,bool SparqlQuery>
+            static void apply(const Input &in, States::BasicState<SparqlQuery> &state) {
                 state.setType_tag("xsd:double");
             }
         };
 
         template<>
         struct action<Grammer::DECIMAL> {
-            template<typename Input>
-            static void apply(const Input &in, States::BasicState<> &state) {
+           template<typename Input,bool SparqlQuery>
+            static void apply(const Input &in, States::BasicState<SparqlQuery> &state) {
                 state.setType_tag("xsd:decimal");
             }
         };
 
         template<>
         struct action<Grammer::INTEGER> {
-            template<typename Input>
-            static void apply(const Input &in, States::BasicState<> &state) {
+           template<typename Input,bool SparqlQuery>
+            static void apply(const Input &in, States::BasicState<SparqlQuery> &state) {
                 state.setType_tag("xsd:integer");
             }
         };
 
         template<>
         struct action<Grammer::NumericLiteral> {
-            template<typename Input>
-            static void apply(const Input &in, States::BasicState<> &state) {
+           template<typename Input,bool SparqlQuery>
+            static void apply(const Input &in, States::BasicState<SparqlQuery> &state) {
                 std::stringstream ss;
                 ss << in.string();
                 std::string s;
@@ -247,16 +247,16 @@ namespace rdf_parser::Turtle {
 
         template<>
         struct action<Grammer::RdfLiteral> {
-            template<typename Input>
-            static void apply(const Input &in, States::BasicState<> &state) {
+           template<typename Input,bool SparqlQuery>
+            static void apply(const Input &in, States::BasicState<SparqlQuery> &state) {
                 state.proccessRdfLiteral();
             }
         };
 
         template<>
         struct action<Grammer::RdfLiteralTypeTag> {
-            template<typename Input>
-            static void apply(const Input &in, States::BasicState<> &state) {
+           template<typename Input,bool SparqlQuery>
+            static void apply(const Input &in, States::BasicState<SparqlQuery> &state) {
 
                 std::stringstream ss;
                 ss << in.string();
@@ -276,8 +276,8 @@ namespace rdf_parser::Turtle {
 
         template<>
         struct action<Grammer::LANGTAG> {
-            template<typename Input>
-            static void apply(const Input &in, States::BasicState<> &state) {
+           template<typename Input,bool SparqlQuery>
+            static void apply(const Input &in, States::BasicState<SparqlQuery> &state) {
                 std::stringstream ss;
                 ss << in.string();
                 std::string s;
@@ -291,8 +291,8 @@ namespace rdf_parser::Turtle {
 
         template<>
         struct action<Grammer::turtleString> {
-            template<typename Input>
-            static void apply(const Input &in, States::BasicState<> &state) {
+           template<typename Input,bool SparqlQuery>
+            static void apply(const Input &in, States::BasicState<SparqlQuery> &state) {
                 std::stringstream ss;
                 ss << in.string();
                 std::string s;
@@ -305,8 +305,8 @@ namespace rdf_parser::Turtle {
 
         template<>
         struct action<Grammer::BlankNode> {
-            template<typename Input>
-            static void apply(const Input &in, States::BasicState<> &state) {
+           template<typename Input,bool SparqlQuery>
+            static void apply(const Input &in, States::BasicState<SparqlQuery> &state) {
                 state.setElement(BNode(state.getBlank_node_string()));
             }
         };
@@ -314,8 +314,8 @@ namespace rdf_parser::Turtle {
 
         template<>
         struct action<Grammer::verb_a> {
-            template<typename Input>
-            static void apply(const Input &in, States::BasicState<> &state) {
+           template<typename Input,bool SparqlQuery>
+            static void apply(const Input &in, States::BasicState<SparqlQuery> &state) {
                 std::string fixedURI = "<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>";
                 state.setElement(URIRef(fixedURI));
             };
@@ -324,8 +324,8 @@ namespace rdf_parser::Turtle {
 
         template<>
         struct action<Grammer::BLANK_NODE_LABEL> {
-            template<typename Input>
-            static void apply(const Input &in, States::BasicState<> &state) {
+           template<typename Input,bool SparqlQuery>
+            static void apply(const Input &in, States::BasicState<SparqlQuery> &state) {
                 std::stringstream ss;
                 ss << in.string();
                 std::string s;
@@ -338,8 +338,8 @@ namespace rdf_parser::Turtle {
 
         template<>
         struct action<Grammer::term> {
-            template<typename Input>
-            static void apply(const Input &in, States::BasicState<> &state) {
+           template<typename Input,bool SparqlQuery>
+            static void apply(const Input &in, States::BasicState<SparqlQuery> &state) {
                 //Here parsingIsDone lock is set to true
             }
         };
