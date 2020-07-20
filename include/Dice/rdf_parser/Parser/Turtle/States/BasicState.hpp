@@ -40,7 +40,7 @@ namespace rdf_parser::Turtle {
             }
         protected:
 
-            std::conditional_t<sparqlQuery,SparqlQuery::VarOrTerm ,Term> element;
+            std::shared_ptr<std::conditional_t<sparqlQuery,SparqlQuery::VarOrTerm ,Term>> element;
 
             //variables to deal with type and lan tags in literals
             bool type_tag_found = false;
@@ -60,9 +60,9 @@ namespace rdf_parser::Turtle {
 
 
         public:
-            inline std::conditional_t<sparqlQuery,SparqlQuery::VarOrTerm ,Term> &getElement() { return element; }
+            inline std::conditional_t<sparqlQuery,SparqlQuery::VarOrTerm ,Term> &getElement() { return *element; }
 
-            inline void setElement(std::conditional_t<sparqlQuery,SparqlQuery::VarOrTerm ,Term> element) { this->element = std::move(element); }
+            inline void setElement(std::conditional_t<sparqlQuery,SparqlQuery::VarOrTerm ,Term> element) { *(this->element) = std::move(element); }
 
 
             inline void addPrefix(std::string prefix, std::string value) {
@@ -105,17 +105,17 @@ namespace rdf_parser::Turtle {
                         } else
                             tag = type_tag;
                     }
-                    element = (Literal(literal_string, std::nullopt,
+                    *element = (Literal(literal_string, std::nullopt,
                                     tag));
                 }
                     //check if this RdfLiteral has langTag part
                 else if (lang_tag_found == true) {
                     //set it again to false
                     lang_tag_found = false;
-                    element = Literal(literal_string, lan_tag,
+                    *element = Literal(literal_string, lan_tag,
                                    std::nullopt);
                 } else
-                    element = Literal(literal_string, std::nullopt,
+                    *element = Literal(literal_string, std::nullopt,
                                    std::nullopt);
             }
 

@@ -17,14 +17,23 @@ namespace rdf_parser::SparqlQuery {
         std::array<VarOrTerm, 3> triplePattern;
 
     public:
+
+        TriplePatternElement() {};
         explicit TriplePatternElement(VarOrTerm element1, VarOrTerm element2, VarOrTerm element3) : triplePattern{
                 element1, element2, element3} {};
 
-        VarOrTerm getFirstElement() { return triplePattern.at(0); };
 
-        VarOrTerm getSecondElement() { return triplePattern.at(1); };
+        VarOrTerm subject() { return triplePattern.at(0); };
 
-        VarOrTerm getThirdElement() { return triplePattern.at(2); };
+        VarOrTerm predicate() { return triplePattern.at(1); };
+
+        VarOrTerm object() { return triplePattern.at(2); };
+
+        void setSubject(VarOrTerm subject) { triplePattern.at(0)=subject;};
+
+        void setPredicate(VarOrTerm predicate) {triplePattern.at(1)=predicate;};
+
+        void setObject(VarOrTerm object) { triplePattern.at(2)=object;};
     };
 }
 #endif //SPARQL_QUERYGRAPH_TRIPLEPATTERNELEMENT_HPP

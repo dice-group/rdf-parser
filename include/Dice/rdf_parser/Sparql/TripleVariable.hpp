@@ -9,6 +9,8 @@ namespace rdf_parser::SparqlQuery {
         bool is_anonym;
 
     public:
+
+        TripleVariable(){};
         explicit TripleVariable(std::string var_name, bool anonym = false) : name{std::move(var_name)},
                                                                              is_anonym{anonym} {}
 
@@ -26,6 +28,14 @@ namespace rdf_parser::SparqlQuery {
 
         inline bool operator>(const TripleVariable &rhs) const {
             return name > rhs.name;
+        }
+
+        inline void setName(std::string name){
+            this->name=name;
+        }
+
+        inline void setIs_anonym(bool is_anonym){
+            this->is_anonym=is_anonym;
         }
 
     };

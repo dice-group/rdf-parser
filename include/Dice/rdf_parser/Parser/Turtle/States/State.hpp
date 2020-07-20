@@ -100,25 +100,25 @@ namespace rdf_parser::Turtle {
             }
 
             void proccessCollection() {
-                std::vector<Triple> LocalParsedTerms;
+                std::vector<std::conditional_t<sparqlQuery,SparqlQuery::TriplePatternElement ,Triple>> LocalParsedTerms;
                 URIRef first("rdf:first");
                 URIRef rest("rdf:rest");
                 URIRef nil("rdf:nil");
                 if (bnpl_collection_list.size() == 0) {
                     BNode unlabeledNode(this->createBlankNodeLabel());
-                    Triple triple(unlabeledNode, first, nil);
+                    std::conditional_t<sparqlQuery,SparqlQuery::TriplePatternElement ,Triple> triple(unlabeledNode, first, nil);
                     LocalParsedTerms.push_back(triple);
-                    this->element= unlabeledNode;
+                    *(this->element)= unlabeledNode;
                 } else {
                     bool lastElement = true;
                     for (auto object = bnpl_collection_list.rbegin();
                          object != bnpl_collection_list.rend(); object++) {
                         BNode unlabeledNode(this->createBlankNodeLabel());
-                        Triple triple1;
+                        std::conditional_t<sparqlQuery,SparqlQuery::TriplePatternElement ,Triple> triple1;
                         triple1.setSubject(unlabeledNode);
                         triple1.setPredicate(rest);
 
-                        Triple triple2(unlabeledNode, first, *object);
+                        std::conditional_t<sparqlQuery,SparqlQuery::TriplePatternElement ,Triple> triple2(unlabeledNode, first, *object);
                         //case 1 :last element :
                         if (lastElement) {
                             lastElement = false;
@@ -127,7 +127,7 @@ namespace rdf_parser::Turtle {
                         } else {
                             triple1.setObject((LocalParsedTerms[LocalParsedTerms.size() - 1]).subject());
                         }
-                        this->element = unlabeledNode;
+                        *(this->element) = unlabeledNode;
                         LocalParsedTerms.push_back(triple1);
                         LocalParsedTerms.push_back(triple2);
 
@@ -146,11 +146,11 @@ namespace rdf_parser::Turtle {
                 //create new Blank Node as subject
                 BNode unlabeledNode(this->createBlankNodeLabel());
                 //add the the unlabeledNode to object list
-                this->element = unlabeledNode;
+                *(this->element) = unlabeledNode;
                 auto verbobjectPairList = verb_object_pair_list;
                 //go through all the VerbObject pairs and make triples out of them with the unlabeled subject
                 for (auto &pair:verbobjectPairList) {
-                    Triple triple(unlabeledNode, pair.first, pair.second);
+                    std::conditional_t<sparqlQuery,SparqlQuery::TriplePatternElement ,Triple> triple(unlabeledNode, pair.first, pair.second);
                     insertTriple(triple);
                 }
                 verb_object_pair_list.clear();
@@ -180,7 +180,7 @@ namespace rdf_parser::Turtle {
             inline void proccessTripleSeq() {
                 //add the subject to each pair in verbObjectsList and create a triple out of that
                 for (auto &pair:verb_object_pair_list) {
-                    Triple triple(subject, pair.first, pair.second);
+                    std::conditional_t<sparqlQuery,SparqlQuery::TriplePatternElement ,Triple> triple(subject, pair.first, pair.second);
                     //add the created triple into the store
                     insertTriple(triple);
                 }

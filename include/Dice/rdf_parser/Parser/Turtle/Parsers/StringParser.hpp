@@ -41,7 +41,7 @@ namespace rdf_parser::Turtle {
         StringParser(std::string text) {
             try {
                 string_input input(text, "the text");
-                States::State<> state(parsedTerms);
+                States::State<sparqlQuery> state(parsedTerms);
                 parse<Grammer::grammer<>, Actions::action>(input, state);
 
             }
@@ -61,7 +61,7 @@ namespace rdf_parser::Turtle {
         }
 
         void nextTriple() override {
-            this->current_triple = parsedTerms->front();
+            *(this->current_triple) = parsedTerms->front();
             parsedTerms->pop();
 
         }

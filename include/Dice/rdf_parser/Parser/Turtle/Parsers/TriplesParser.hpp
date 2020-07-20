@@ -38,8 +38,8 @@ namespace rdf_parser::Turtle {
         /**
          * get the current triple
          */
-        const  std::conditional_t<sparqlQuery,SparqlQuery::TriplePatternElement ,Triple> &getCurrentTriple() {
-            return current_triple;
+        const  std::conditional_t<sparqlQuery,SparqlQuery::TriplePatternElement ,Triple> getCurrentTriple() {
+            return *current_triple;
         }
 
 
