@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-//#include "TurtleOfficalExamplesTest.cpp"
+#include "TurtleOfficalExamplesTest.cpp"
 //#include "TurtleOfficialPositiveTests.cpp"
 //#include "TurtleOfficialNegativeTests.cpp"
 //#include "TurtleOfficialEvaluationTests.cpp"

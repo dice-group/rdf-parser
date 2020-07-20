@@ -42,7 +42,7 @@ namespace rdf_parser::Turtle {
             try {
                 string_input input(text, "the text");
                 States::State<sparqlQuery> state(parsedTerms);
-                parse<Grammer::grammer<>, Actions::action>(input, state);
+                parse<Grammer::grammer<sparqlQuery>, Actions::action>(input, state);
 
             }
             catch (std::exception &e) {

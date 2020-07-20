@@ -36,7 +36,7 @@ namespace rdf_parser::Turtle {
         public:
             BasicState()
             {
-                ;
+                element=std::make_shared<std::conditional_t<sparqlQuery,SparqlQuery::VarOrTerm ,Term>>();
             }
         protected:
 

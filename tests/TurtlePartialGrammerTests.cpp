@@ -17,7 +17,7 @@ TEST(PatrialGrammerTest, parseSparqlCollection) {
 
 TEST(PatrialGrammerTest, parseSparqslCollection) {
 
-     rdf_parser::Turtle::TurtleParser<StringParser<true>> parser("(1 'ff' '$r' 'q' 2  )") ;
+    rdf_parser::Turtle::TurtleParser<StringParser<>> parser("(1 'ff' '$r' 'q' 2  )") ;
     auto it= parser.begin();
     while (it)
         it++;

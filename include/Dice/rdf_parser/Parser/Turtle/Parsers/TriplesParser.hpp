@@ -19,7 +19,8 @@ namespace rdf_parser::Turtle {
     class TriplesParser {
     protected:
 
-        TriplesParser(){;};
+        TriplesParser(){
+            current_triple=std::make_shared<std::conditional_t<sparqlQuery,SparqlQuery::TriplePatternElement ,Triple>>();};
         std::shared_ptr<std::conditional_t<sparqlQuery,SparqlQuery::TriplePatternElement ,Triple>> current_triple;
 
 
