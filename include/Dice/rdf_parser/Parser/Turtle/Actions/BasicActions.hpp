@@ -345,6 +345,20 @@ namespace rdf_parser::Turtle {
         };
 
 
+        template<>
+        struct action<Grammer::var> {
+            template<typename Input,bool SparqlQuery>
+            static void apply(const Input &in, States::BasicState<SparqlQuery> &state) {
+                std::stringstream ss;
+                ss << in.string();
+                std::string s;
+                s = ss.str().substr(1,ss.str().length()-1);
+                state.setElement(SparqlQuery::TripleVariable(s));
+                ;
+            }
+        };
+
+
 
     }
 }

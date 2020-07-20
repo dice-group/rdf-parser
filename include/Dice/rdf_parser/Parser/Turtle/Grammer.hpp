@@ -499,6 +499,14 @@ namespace rdf_parser::Turtle::Grammer {
     };
 
 
+    struct triplesBlock :
+            sor<
+                    must<turtleDoc<sparqlQuery>, eof>,
+                    seq<ignored, eof>
+            > {
+    };
+
+
 
 
 }

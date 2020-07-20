@@ -7,7 +7,7 @@
 
 TEST(PatrialGrammerTest, parseSparqlCollection) {
 
-    auto a=rdf_parser::Turtle::PartialGrammerParsers::CollectionParser::ParseSparqlCollection("(1 'ff' '$r' 'q' 2  )");
+    auto a=rdf_parser::Turtle::PartialGrammerParsers::CollectionParser::ParseSparqlCollection("(1 ?x 3 4)");
 //    bool t2=rdf_parser::Turtle::TermParser::isTermParsable("\" hello \'hello\'  \"");
 //    ASSERT_EQ(t1, true);
 //    ASSERT_EQ(t2, true);
