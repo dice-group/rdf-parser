@@ -89,7 +89,7 @@ namespace rdf_parser::Turtle {
 
 
         void nextTriple() override {
-            parsedTerms->pop(this->current_triple);
+            parsedTerms->pop(*(this->current_triple));
             if (parsedTerms->read_available() < lowerThrehold) {
                 {
                     std::lock_guard<std::mutex> lk(*m);
