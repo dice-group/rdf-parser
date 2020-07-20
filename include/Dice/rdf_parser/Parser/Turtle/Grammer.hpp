@@ -325,6 +325,7 @@ namespace rdf_parser::Turtle::Grammer {
             sor<RdfLiteral, NumericLiteral, BooleanLiteral> {
     };
 
+
     struct term :
             must<sor<RdfLiteral, BlankNode, iri>> {
     };
@@ -401,7 +402,7 @@ namespace rdf_parser::Turtle::Grammer {
             seq<verb, ignored, objectList<sparqlQuery>> {
     };
 
-    template<bool sparqlQuery>
+    template<bool sparqlQuery= false>
     struct predicateObjectList :
             seq<
                     predicateObjectListInner<sparqlQuery>,
@@ -437,7 +438,7 @@ namespace rdf_parser::Turtle::Grammer {
     template<bool sparqlQuery=false>
     struct tripleSeq1 :
             seq<
-                    subject<>,
+                    subject<sparqlQuery>,
                     ignored,
                     predicateObjectList<sparqlQuery>
             > {

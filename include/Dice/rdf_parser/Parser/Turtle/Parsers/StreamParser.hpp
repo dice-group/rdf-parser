@@ -67,7 +67,7 @@ namespace rdf_parser::Turtle {
                 read_input file(filename);
                 parsedTerms = std::make_shared<std::queue<Triple>>();
                 States::State<> state(parsedTerms);
-                parse<Grammer::grammer<>, Actions::action>(istream_input(stream, bufferSize, filename), state);
+                parse<Grammer::grammer<sparqlQuery>, Actions::action>(istream_input(stream, bufferSize, filename), state);
 
             }
             catch (std::exception &e) {

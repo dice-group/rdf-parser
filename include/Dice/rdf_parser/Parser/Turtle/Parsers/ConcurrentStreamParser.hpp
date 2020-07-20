@@ -57,7 +57,7 @@ namespace rdf_parser::Turtle {
                                                                                    termCountWithinThreholds,
                                                                                    termsCountIsNotEmpty,
                                                                                    parsingIsDone);
-                parse<Grammer::grammer<>, Actions::action>(istream_input(stream, bufferSize, filename), state);
+                parse<Grammer::grammer<sparqlQuery>, Actions::action>(istream_input(stream, bufferSize, filename), state);
             }
             catch (std::exception &e) {
                 throw e;
