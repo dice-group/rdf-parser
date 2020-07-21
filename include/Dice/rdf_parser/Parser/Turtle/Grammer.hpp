@@ -459,54 +459,57 @@ namespace rdf_parser::Turtle::Grammer {
                     tripleSeq1<sparqlQuery>, tripleSeq2<sparqlQuery>> {
     };
 
-    template<bool sparqlQuery=false>
+
     struct tripleExtended :
             seq<
-                    triple<sparqlQuery>, ignored, one<'.'>
+                    triple<false>, ignored, one<'.'>
             > {
     };
 
-    template<bool sparqlQuery=false>
     struct statement :
             sor<
-                    tripleExtended<sparqlQuery>,
+                    tripleExtended,
                     directive
             > {
     };
 
-    template<bool sparqlQuery=false>
+
     struct statementsCollection :
-            sor<rep<10, seq<ignored, statement<sparqlQuery>>>, seq<ignored, statement<sparqlQuery>>> {
+            sor<rep<10, seq<ignored, statement>>, seq<ignored, statement>> {
     };
 
 
-    template<bool sparqlQuery=false>
     struct turtleDoc :
             seq<
                     plus<
-                            seq<ignored, statement<sparqlQuery>>
+                            seq<ignored, statement>
                     >, ignored
+            > {
+    };
+
+
+    struct triplesBlock :
+            seq<
+                    triple<true>, ignored,opt<
+                                             sor<
+                                               seq<triplesBlock,ignored,one<'.'>>,
+                                               one<'.'>
+                                                >
+                                             >
             > {
     };
 
 
     template<bool sparqlQuery=false>
     struct grammer :
-            sor<
-                    must<turtleDoc<sparqlQuery>, eof>,
-                    seq<ignored, eof>
-            > {
-    };
-
-
-    struct triplesBlock :
-            sor<
-                    must<turtleDoc<sparqlQuery>, eof>,
-                    seq<ignored, eof>
-            > {
-    };
-
-
+            std::conditional_t<sparqlQuery,
+                                must<triplesBlock, eof>,
+                                sor<
+                                        must<turtleDoc, eof>,
+                                        seq<ignored, eof>
+                                >
+                              >
+                              {};
 
 
 }

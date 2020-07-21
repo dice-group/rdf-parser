@@ -31,7 +31,7 @@ namespace rdf_parser::Turtle {
         };
 
         template<>
-        struct action<Grammer::tripleExtended<>> : tao::pegtl::discard_input {
+        struct action<Grammer::tripleExtended> : tao::pegtl::discard_input {
         };
 
 

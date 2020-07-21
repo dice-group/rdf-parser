@@ -16,7 +16,7 @@ namespace rdf_parser::Turtle {
     namespace Actions {
 
         template<>
-        struct action<Grammer::statement<>> {
+        struct action<Grammer::statement> {
             template<typename Input, typename Queue,bool SparqlQuery>
             static void apply(const Input &in, States::State<SparqlQuery,Queue> &state) {
 
@@ -128,7 +128,7 @@ namespace rdf_parser::Turtle {
 
 
         template<>
-        struct action<Grammer::turtleDoc<>> {
+        struct action<Grammer::turtleDoc> {
             template<typename Input, typename Queue,bool SparqlQuery>
             static void apply(const Input &in, States::State<SparqlQuery,Queue> &state) {
                 //Here parsingIsDone lock is set to true
