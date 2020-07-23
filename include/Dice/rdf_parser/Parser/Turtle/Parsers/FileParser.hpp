@@ -73,7 +73,7 @@ namespace rdf_parser::Turtle {
             try {
                 std::ifstream infile(filename);
                 read_input file(filename);
-                parse<Grammer::grammer<>>(file);
+                parse<Grammer::grammer<sparqlQuery>>(file);
                 return true;
             }
             catch (std::exception &e) {

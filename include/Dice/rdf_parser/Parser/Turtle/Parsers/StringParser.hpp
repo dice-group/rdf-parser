@@ -72,7 +72,7 @@ namespace rdf_parser::Turtle {
         static bool isParsable(const std::string &input) {
             try {
                 string_input in(input, "the text");
-                parse<Grammer::grammer<>>(in);
+                parse<Grammer::grammer<sparqlQuery>>(in);
                 return true;
             }
             catch (std::exception &e) {

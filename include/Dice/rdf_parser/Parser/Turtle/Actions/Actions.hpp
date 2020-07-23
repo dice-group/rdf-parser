@@ -69,7 +69,7 @@ namespace rdf_parser::Turtle {
         };
 
         template<>
-        struct action<Grammer::verb> {
+        struct action<Grammer::verb<>> {
             template<typename Input, typename Queue,bool SparqlQuery>
             static void apply(const Input &in, States::State<SparqlQuery,Queue> &state) {
                 state.proccessVerb();

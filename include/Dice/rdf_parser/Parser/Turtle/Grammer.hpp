@@ -393,13 +393,14 @@ namespace rdf_parser::Turtle::Grammer {
             one<'a'> {
     };
 
+    template<bool sparqlQuery=false>
     struct verb :
-            sor<predicate, verb_a> {
+            sor<std::conditional_t<sparqlQuery,sor<var,predicate>,predicate>, verb_a> {
     };
 
     template<bool sparqlQuery=false>
     struct predicateObjectListInner :
-            seq<verb, ignored, objectList<sparqlQuery>> {
+            seq<verb<sparqlQuery>, ignored, objectList<sparqlQuery>> {
     };
 
     template<bool sparqlQuery= false>
@@ -432,8 +433,10 @@ namespace rdf_parser::Turtle::Grammer {
 
     template<bool sparqlQuery=false>
     struct subject :
-            sor<iri, BlankNode, collection<sparqlQuery>> {
-    };
+            std::conditional_t<sparqlQuery,
+                               varOrTerm,
+                               sor<iri, BlankNode, collection<false>>
+                               >{};
 
     template<bool sparqlQuery=false>
     struct tripleSeq1 :
@@ -490,13 +493,15 @@ namespace rdf_parser::Turtle::Grammer {
 
     struct triplesBlock :
             seq<
-                    triple<true>, ignored,opt<
-                                             sor<
-                                               seq<triplesBlock,ignored,one<'.'>>,
-                                               one<'.'>
-                                                >
-                                             >
-            > {
+                    triple<true>, ignored
+//                    ,opt<
+//                                             sor<
+//                                               seq<triplesBlock,ignored,one<'.'>>,
+//                                               one<'.'>
+//                                                >
+//                                             >
+            >
+            {
     };
 
 
