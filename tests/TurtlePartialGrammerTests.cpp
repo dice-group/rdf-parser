@@ -8,10 +8,13 @@
 
 TEST(PatrialGrammerTest, parseSparqslCollectison) {
 
-    rdf_parser::Turtle::TurtleParser<StringParser<true>> parser("?x foaf:name  ?name ") ;
+    rdf_parser::Turtle::TurtleParser<true,StringParser<true>> parser("?x <sad>  ?name ") ;
     auto it= parser.begin();
     while (it)
+    {
+        auto x=*it;
         it++;
+    }
 //    bool t2=rdf_parser::Turtle::TermParser::isTermParsable("\" hello \'hello\'  \"");
 //    ASSERT_EQ(t1, true);
 //    ASSERT_EQ(t2, true);
@@ -20,7 +23,11 @@ TEST(PatrialGrammerTest, parseSparqslCollectison) {
 
 TEST(PatrialGrammerTest, F1) {
 
-    rdf_parser::Turtle::TurtleParser<StringParser<true>> parser("?g dc:publisher ?who") ;
-    bool x=parser.isContentParsable();
-    ASSERT_EQ(x, true);
+    rdf_parser::Turtle::TurtleParser<true,StringParser<true>> parser("?g <sad> ?who") ;
+    auto it= parser.begin();
+    while (it)
+    {
+        auto x=*it;
+        it++;
+    }
 }

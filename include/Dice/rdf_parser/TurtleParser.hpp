@@ -16,7 +16,7 @@
 #include "Dice/rdf_parser/Parser/Turtle/Parsers/StreamParser.hpp"
 
 namespace rdf_parser::Turtle {
-    template<class ParserType=CuncurrentStreamParser<false>>
+    template<bool sparqlQuery=false,class ParserType=CuncurrentStreamParser<sparqlQuery>>
     class TurtleParser {
 
 
@@ -60,7 +60,7 @@ namespace rdf_parser::Turtle {
 
             operator bool() { return not done_; }
 
-            const Triple &operator*() { return turtle_parser_.getCurrentTriple(); }
+            const std::conditional_t<sparqlQuery,SparqlQuery::TriplePatternElement ,Triple>  &operator*() { return turtle_parser_.getCurrentTriple(); }
         };
 
 
@@ -74,10 +74,8 @@ namespace rdf_parser::Turtle {
 
 
         bool isContentParsable() {
-            if constexpr(std::is_same_v<ParserType, StringParser<true>>)
+            if constexpr(std::is_same_v<ParserType, StringParser<sparqlQuery>>)
                 return StringParser<true>::isParsable(this->content);
-            else if constexpr(std::is_same_v<ParserType, StringParser<false>>)
-                return StringParser<false>::isParsable(this->content);
             else
                 return FileParser<false>::isParsable(this->content);
 
