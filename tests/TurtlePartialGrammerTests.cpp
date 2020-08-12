@@ -1,9 +1,10 @@
 
 #include <gtest/gtest.h>
-#include <Dice/rdf_parser/Parser/Turtle/PartialGrammerParsers/CollectionParser.hpp>
+#include <Dice/rdf_parser/Parser/Turtle/Parsers/StringParser.hpp>
+#include <Dice/rdf_parser/TurtleParser.hpp>
 
 
-
+using namespace rdf_parser::Turtle;
 
 
 TEST(PatrialGrammerTest, parseSparqslCollectison) {
