@@ -57,6 +57,8 @@ namespace rdf_parser::Turtle {
 
         }
 
+
+
         ~StreamParser() override {
             stream.close();
         }

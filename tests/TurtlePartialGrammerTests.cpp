@@ -32,3 +32,16 @@ TEST(PatrialGrammerTest, F1) {
         it++;
     }
 }
+
+TEST(PatrialGrammerTest, AddedprefixTest) {
+
+    std::map<std::string,std::string> prefixes;
+    prefixes.insert(std::pair<std::string,std::string>("foaf","http://xmlns.com/foaf/0.1/"));
+    rdf_parser::Turtle::TurtleParser<true,StringParser<true>> parser("?x foaf:name ?name",prefixes) ;
+    auto it= parser.begin();
+    while (it)
+    {
+        auto x=*it;
+        it++;
+    }
+}

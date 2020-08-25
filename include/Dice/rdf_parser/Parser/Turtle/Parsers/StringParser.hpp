@@ -30,7 +30,6 @@ namespace rdf_parser::Turtle {
          * a queue for storing parsed triples .
          */
         std::shared_ptr<std::queue<std::conditional_t<sparqlQuery,SparqlQuery::TriplePatternElement ,Triple>>> parsedTerms;
-
     public:
 
         /**
@@ -42,6 +41,28 @@ namespace rdf_parser::Turtle {
             try {
                 string_input input(text, "the text");
                 States::State<sparqlQuery> state(parsedTerms);
+                parse<Grammer::grammer<sparqlQuery>, Actions::action>(input, state);
+
+            }
+            catch (std::exception &e) {
+                throw e;
+            }
+
+
+        }
+
+        /**
+        * The constructor start the parsing.if the input is not valid it will throws and exception.
+        * it also invoke nextTriple to have the first triple ready for using .
+        * @param text the string to parse
+        * @param prefix_map defines prefixes to be added before parsing
+        */
+        StringParser(std::string text,std::map<std::string, std::string> prefix_map) {
+            try {
+                string_input input(text, "the text");
+                States::State<sparqlQuery> state(parsedTerms);
+                for(auto pair : prefix_map)
+                    state.addPrefix(pair.first,pair.second);
                 parse<Grammer::grammer<sparqlQuery>, Actions::action>(input, state);
 
             }
@@ -65,6 +86,7 @@ namespace rdf_parser::Turtle {
             parsedTerms->pop();
 
         }
+
 
         /**
          * checks whether a string is valid rdf turtle file
