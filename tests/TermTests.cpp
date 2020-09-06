@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <Dice/rdf_parser/TurtleParser.hpp>
+#include <Dice/rdf_parser/Parser/Turtle/Parsers/StringParser.hpp>
 
 namespace {
 	using namespace rdf_parser::Turtle;
@@ -8,9 +8,9 @@ namespace {
 
 
 TEST(TermTests, parseIRI) {
-	TurtleParser<false,StringParser<>> parser("@prefix pref: <http://example.com/> . "
+	StringParser<> parser("@prefix pref: <http://example.com/> . "
 									  "<http://example.com/x> a pref:x.");
-	TurtleParser<false,StringParser<>>::Iterator iterator = parser.begin();
+	StringParser<>::Iterator iterator = parser.begin();
 	ASSERT_TRUE(bool(iterator));
 	const Triple &triple = *iterator;
 	// check if the non-prefix IRI is correct
@@ -20,11 +20,11 @@ TEST(TermTests, parseIRI) {
 }
 
 TEST(TermTests, parseStringTerm) {
-	TurtleParser<false,StringParser<>> parser("@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . "
+	StringParser<> parser("@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . "
 									  "<http://example.com/x> a \"text\". "
 									  "<http://example.com/x> a \"text\"^^<http://www.w3.org/2001/XMLSchema#string>. "
 									  "<http://example.com/x> a \"text\"^^xsd:string. ");
-	TurtleParser<false,StringParser<>>::Iterator iterator = parser.begin();
+	StringParser<>::Iterator iterator = parser.begin();
 	ASSERT_TRUE(bool(iterator));
 	Triple plain = *iterator;
 	++iterator;
@@ -40,12 +40,12 @@ TEST(TermTests, parseStringTerm) {
 
 
 TEST(TermTests, parseNumbers) {
-	TurtleParser<false,StringParser<>> parser("@prefix : <http://example.org/elements> .                                                                              \n"
+	StringParser<> parser("@prefix : <http://example.org/elements> .                                                                              \n"
 									  "<http://en.wikipedia.org/wiki/Helium>   "
 		    						  ":atomicNumber 2 ;"
 			  						  " :atomicMass 4.002602 ;"
 			                          " :specificGravity 1.663E-4 . ");
-	TurtleParser<false,StringParser<>>::Iterator iterator = parser.begin();
+	StringParser<>::Iterator iterator = parser.begin();
 	ASSERT_TRUE(bool(iterator));
 	Triple integerNumber = *iterator;
 	++iterator;

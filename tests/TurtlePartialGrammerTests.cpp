@@ -1,7 +1,9 @@
 
 #include <gtest/gtest.h>
 #include <Dice/rdf_parser/Parser/Turtle/Parsers/StringParser.hpp>
-#include <Dice/rdf_parser/TurtleParser.hpp>
+#include <Dice/rdf_parser/Parser/Turtle/Parsers/ConcurrentStreamParser.hpp>
+#include <Dice/rdf_parser/Parser/Turtle/Parsers/FileParser.hpp>
+#include <Dice/rdf_parser/Parser/Turtle/Parsers/StreamParser.hpp>
 
 
 using namespace rdf_parser::Turtle;
@@ -9,7 +11,7 @@ using namespace rdf_parser::Turtle;
 
 TEST(PatrialGrammerTest, parseSparqslCollectison) {
 
-    rdf_parser::Turtle::TurtleParser<true,StringParser<true>> parser("?x <sad>  ?name ") ;
+    rdf_parser::Turtle::StringParser<true> parser("?x <sad>  ?name ") ;
     auto it= parser.begin();
     while (it)
     {
@@ -24,7 +26,7 @@ TEST(PatrialGrammerTest, parseSparqslCollectison) {
 
 TEST(PatrialGrammerTest, F1) {
 
-    rdf_parser::Turtle::TurtleParser<true,StringParser<true>> parser("?g <sad> ?who") ;
+    rdf_parser::Turtle::StringParser<true> parser("?g <sad> ?who") ;
     auto it= parser.begin();
     while (it)
     {
@@ -37,7 +39,7 @@ TEST(PatrialGrammerTest, AddedprefixTest) {
 
     std::map<std::string,std::string> prefixes;
     prefixes.insert(std::pair<std::string,std::string>("foaf","http://xmlns.com/foaf/0.1/"));
-    rdf_parser::Turtle::TurtleParser<true,StringParser<true>> parser("?x foaf:name ?name",prefixes) ;
+    rdf_parser::Turtle::StringParser<true> parser("?x foaf:name ?name",prefixes) ;
     auto it= parser.begin();
     while (it)
     {

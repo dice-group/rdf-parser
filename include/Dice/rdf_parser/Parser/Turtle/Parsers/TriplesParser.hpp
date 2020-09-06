@@ -17,6 +17,7 @@ namespace rdf_parser::Turtle {
 
     template<bool sparqlQuery=false>
     class TriplesParser {
+
     protected:
 
         TriplesParser(){
@@ -26,6 +27,40 @@ namespace rdf_parser::Turtle {
 
     public:
 
+        class Iterator {
+
+        private:
+            bool done_;
+            bool parser_done_;
+
+        public:
+            explicit Iterator() :
+                    done_{false}, parser_done_{false} {
+                //check if there is at least one parsed triple
+                if (this->hasNextTriple())
+                    this->operator++();
+                else
+                    parser_done_ = true;
+            };
+
+
+            void operator++() {
+                if (parser_done_) {
+                    done_ = true;
+                } else {
+                    this->nextTriple();
+                    if (not this->hasNextTriple())
+                        parser_done_ = true;
+                }
+            }
+
+            void operator++(int) { operator++(); }
+
+            operator bool() { return not done_; }
+
+            const std::conditional_t<sparqlQuery, SparqlQuery::TriplePatternElement, Triple> &
+            operator*() { return this->getCurrentTriple(); }
+        };
         /**
          * process to the next parsed triple.
          */
@@ -47,7 +82,11 @@ namespace rdf_parser::Turtle {
         virtual ~TriplesParser() {};
 
 
+        Iterator begin(){
+            return Iterator();
+        }
 
+        bool end() { return false; }
 
 
     };

@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <Dice/rdf_parser/TurtleParser.hpp>
+#include <Dice/rdf_parser/Parser/Turtle/Parsers/ConcurrentStreamParser.hpp>
 
 namespace {
     using namespace rdf_parser::Turtle;
@@ -8,7 +8,7 @@ namespace {
 
 
 TEST(TurtleParserConcurrentTests,ntripleFileCon1) {
-    TurtleParser<false,CuncurrentStreamParser<>> parser("../datasets/instances-labels.nt");
+    CuncurrentStreamParser<> parser("../datasets/instances-labels.nt");
     auto it= parser.begin();
     while (it)
         it++;
@@ -16,7 +16,7 @@ TEST(TurtleParserConcurrentTests,ntripleFileCon1) {
 }
 
 TEST(TurtleParserConcurrentTests,turtleFileCon1) {
-    TurtleParser<false,CuncurrentStreamParser<>> parser("../datasets/instance-types_transitive.ttl");
+    CuncurrentStreamParser<> parser("../datasets/instance-types_transitive.ttl");
     auto it= parser.begin();
     while (it)
         it++;

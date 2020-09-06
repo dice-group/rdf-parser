@@ -38,6 +38,7 @@ namespace rdf_parser::Turtle {
 
     public:
 
+
         /**
          * The constructor start the parsing.if the input is not valid it will throws and exception.
          * it also invoke nextTriple to have the first triple ready for using .

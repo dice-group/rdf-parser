@@ -32,6 +32,7 @@ namespace rdf_parser::Turtle {
         std::shared_ptr<std::queue<std::conditional_t<sparqlQuery,SparqlQuery::TriplePatternElement ,Triple>>> parsedTerms;
     public:
 
+
         /**
          * The constructor start the parsing.if the input is not valid it will throws and exception.
          * it also invoke nextTriple to have the first triple ready for using .
@@ -114,6 +115,7 @@ namespace rdf_parser::Turtle {
             auto duration = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
             return duration;
         }
+
     };
 }
 
