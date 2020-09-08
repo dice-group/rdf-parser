@@ -82,6 +82,9 @@ namespace rdf_parser::Turtle {
             }
         }
 
+        TriplesParser<>::Iterator begin(){
+            return Iterator(this);
+        }
 
         /**
          * calculate the time for parsing a rdf turtle file.

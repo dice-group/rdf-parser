@@ -8,6 +8,9 @@
  * It parse the string one time and put the parsed triples in a std::queue
  */
 
+
+class Iterator;
+
 #include <chrono>
 
 #include "TriplesParser.hpp"
@@ -30,6 +33,7 @@ namespace rdf_parser::Turtle {
          * a queue for storing parsed triples .
          */
         std::shared_ptr<std::queue<std::conditional_t<sparqlQuery,SparqlQuery::TriplePatternElement ,Triple>>> parsedTerms;
+
     public:
 
 
@@ -103,6 +107,12 @@ namespace rdf_parser::Turtle {
             }
 
         }
+
+        Iterator begin(){
+            return Iterator(this);
+        }
+
+
 
         /**
          * calculate the time for parsing a rdf turtle string.

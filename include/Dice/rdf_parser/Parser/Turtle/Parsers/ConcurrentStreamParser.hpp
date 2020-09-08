@@ -128,6 +128,10 @@ namespace rdf_parser::Turtle {
 
             };
         };
+
+        TriplesParser<>::Iterator begin(){
+            return Iterator(this);
+        }
     };
 }
 

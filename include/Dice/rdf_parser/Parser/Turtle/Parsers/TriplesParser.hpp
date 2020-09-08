@@ -12,6 +12,7 @@
 namespace {
     using namespace rdf_parser::store::rdf;
 
+
 }
 namespace rdf_parser::Turtle {
 
@@ -32,12 +33,13 @@ namespace rdf_parser::Turtle {
         private:
             bool done_;
             bool parser_done_;
+            TriplesParser* triplesParser;
 
         public:
-            explicit Iterator() :
+            explicit Iterator(TriplesParser* triplesParser) :
                     done_{false}, parser_done_{false} {
                 //check if there is at least one parsed triple
-                if (this->hasNextTriple())
+                if (triplesParser->hasNextTriple())
                     this->operator++();
                 else
                     parser_done_ = true;
@@ -48,8 +50,8 @@ namespace rdf_parser::Turtle {
                 if (parser_done_) {
                     done_ = true;
                 } else {
-                    this->nextTriple();
-                    if (not this->hasNextTriple())
+                    triplesParser->nextTriple();
+                    if (not triplesParser->hasNextTriple())
                         parser_done_ = true;
                 }
             }
@@ -59,8 +61,11 @@ namespace rdf_parser::Turtle {
             operator bool() { return not done_; }
 
             const std::conditional_t<sparqlQuery, SparqlQuery::TriplePatternElement, Triple> &
-            operator*() { return this->getCurrentTriple(); }
+            operator*() { return triplesParser->getCurrentTriple(); }
         };
+
+    public:
+
         /**
          * process to the next parsed triple.
          */
@@ -82,9 +87,7 @@ namespace rdf_parser::Turtle {
         virtual ~TriplesParser() {};
 
 
-        Iterator begin(){
-            return Iterator();
-        }
+        virtual Iterator begin()=0;
 
         bool end() { return false; }
 

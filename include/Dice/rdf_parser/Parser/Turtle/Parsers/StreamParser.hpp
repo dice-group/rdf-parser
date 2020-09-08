@@ -90,6 +90,10 @@ namespace rdf_parser::Turtle {
             return not parsedTerms->empty();
         }
 
+        TriplesParser<>::Iterator begin(){
+            return Iterator(this);
+        }
+
     };
 }
 
