@@ -9,7 +9,6 @@
  */
 
 
-class Iterator;
 
 #include <chrono>
 
@@ -25,7 +24,7 @@ namespace rdf_parser::Turtle {
 
 
     template<bool sparqlQuery=false>
-    class StringParser : public TriplesParser<sparqlQuery> {
+    class StringParser : public TriplesParser<StringParser<sparqlQuery>,sparqlQuery> {
 
 
     private:
@@ -108,8 +107,8 @@ namespace rdf_parser::Turtle {
 
         }
 
-        Iterator begin(){
-            return Iterator(this);
+         Iterator<StringParser<sparqlQuery>,sparqlQuery> begin_implementation(){
+            return Iterator<StringParser<sparqlQuery>,sparqlQuery>(this);
         }
 
 

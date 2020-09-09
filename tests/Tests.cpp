@@ -6,9 +6,9 @@
 //#include "TurtleOfficialNegativeEvaluationTests.cpp"
 
 //#include "TurtleParserFilesTests.cpp"
-#include "TurtleParserConcurrentTests.cpp"
-#include "TermParserTests.cpp"
-#include "TermTests.cpp"
+//#include "TurtleParserConcurrentTests.cpp"
+//#include "TermParserTests.cpp"
+//#include "TermTests.cpp"
 #include "TurtlePartialGrammerTests.cpp"
 
 int main(int argc, char **argv) {
