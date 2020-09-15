@@ -68,11 +68,11 @@ namespace rdf_parser::Turtle {
     private:
         bool done_;
         bool parser_done_;
-        TriplesParser<Derived,sparqlQuery> *triplesParser;
+		Derived *triplesParser = nullptr;
 
     public:
-        explicit Iterator(TriplesParser<Derived,sparqlQuery> *triplesParser) :
-                done_{false}, parser_done_{false} {
+        explicit Iterator(Derived *triplesParser) :
+                done_{false}, parser_done_{false}, triplesParser{triplesParser} {
             //check if there is at least one parsed triple
             if (triplesParser->hasNextTriple())
                 this->operator++();
