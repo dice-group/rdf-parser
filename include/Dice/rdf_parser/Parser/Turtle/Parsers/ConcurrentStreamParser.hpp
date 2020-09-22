@@ -29,7 +29,7 @@ namespace rdf_parser::Turtle {
      *
      */
     template<bool sparqlQuery=false>
-    class CuncurrentStreamParser : public TriplesParser<CuncurrentStreamParser<sparqlQuery>,sparqlQuery> {
+    class CuncurrentStreamParser : public TriplesParser<CuncurrentStreamParser,sparqlQuery> {
 
     private:
         std::shared_ptr<boost::lockfree::spsc_queue<std::conditional_t<sparqlQuery,SparqlQuery::TriplePatternElement ,Triple> ,boost::lockfree::capacity<100000>>> parsedTerms;
@@ -129,8 +129,8 @@ namespace rdf_parser::Turtle {
             };
         };
 
-        Iterator<CuncurrentStreamParser<sparqlQuery>,sparqlQuery> begin_implementation(){
-            return Iterator<CuncurrentStreamParser<sparqlQuery>,sparqlQuery>(this);
+        Iterator<CuncurrentStreamParser,sparqlQuery> begin_implementation(){
+            return Iterator<CuncurrentStreamParser,sparqlQuery>(this);
         }
     };
 }

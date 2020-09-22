@@ -21,7 +21,7 @@ namespace {
 namespace rdf_parser::Turtle {
 
     template<bool sparqlQuery=false>
-    class FileParser : public TriplesParser<FileParser<sparqlQuery>,sparqlQuery> {
+    class FileParser : public TriplesParser<FileParser,sparqlQuery> {
 
     private:
         /**
@@ -82,8 +82,8 @@ namespace rdf_parser::Turtle {
             }
         }
 
-        Iterator<FileParser<sparqlQuery>,sparqlQuery> begin_implementation(){
-            return Iterator<FileParser<sparqlQuery>,sparqlQuery>(this);
+        Iterator<FileParser,sparqlQuery> begin_implementation(){
+            return Iterator<FileParser,sparqlQuery>(this);
         }
 
         /**

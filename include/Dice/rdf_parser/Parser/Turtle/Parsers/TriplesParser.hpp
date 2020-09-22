@@ -16,10 +16,10 @@ namespace {
 }
 namespace rdf_parser::Turtle {
 
-    template<class Derived,bool sparqlQuery>
+    template<template<bool> class Derived,bool sparqlQuery>
     class Iterator;
 
-    template<class Derived,bool sparqlQuery = false>
+    template<template<bool> class Derived,bool sparqlQuery = false>
     class TriplesParser {
 
     protected:
@@ -56,23 +56,23 @@ namespace rdf_parser::Turtle {
 
         Iterator<Derived,sparqlQuery> begin()
         {
-            return static_cast<Derived*>(this)->begin_implementation();
+            return static_cast<Derived<sparqlQuery>*>(this)->begin_implementation();
         }
 
         bool end() { return false; }
 
     };
 
-    template<class Derived,bool sparqlQuery = false>
+    template<template<bool>class Derived,bool sparqlQuery = false>
     class Iterator {
 
     private:
         bool done_;
         bool parser_done_;
-		Derived *triplesParser = nullptr;
+		Derived<sparqlQuery> *triplesParser = nullptr;
 
     public:
-        explicit Iterator(Derived *triplesParser) :
+        explicit Iterator(Derived<sparqlQuery> *triplesParser) :
                 done_{false}, parser_done_{false}, triplesParser{triplesParser} {
             //check if there is at least one parsed triple
             if (triplesParser->hasNextTriple())

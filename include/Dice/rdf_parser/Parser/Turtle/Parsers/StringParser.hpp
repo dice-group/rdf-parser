@@ -24,7 +24,7 @@ namespace rdf_parser::Turtle {
 
     //ToDO change it everywhere
     template<bool sparqlQuery=false>
-    class StringParser : public TriplesParser<StringParser<sparqlQuery>,sparqlQuery> {
+    class StringParser : public TriplesParser<StringParser,sparqlQuery> {
 
 
     private:
@@ -107,8 +107,8 @@ namespace rdf_parser::Turtle {
 
         }
 
-         Iterator<StringParser<sparqlQuery>,sparqlQuery> begin_implementation(){
-            return Iterator<StringParser<sparqlQuery>,sparqlQuery>(this);
+         Iterator<StringParser,sparqlQuery> begin_implementation(){
+            return Iterator<StringParser,sparqlQuery>(this);
         }
 
 
