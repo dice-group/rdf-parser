@@ -39,7 +39,23 @@ TEST(PatrialGrammerTest, AddedprefixTest) {
 
     std::map<std::string,std::string> prefixes;
     prefixes.insert(std::pair<std::string,std::string>("foaf","http://xmlns.com/foaf/0.1/"));
-    rdf_parser::Turtle::StringParser<true> parser("?x foaf:name ?name",prefixes) ;
+    rdf_parser::Turtle::StringParser<true> parser("?x foaf:name ?name .",prefixes) ;
+    auto it= parser.begin();
+    while (it)
+    {
+        auto x=*it;
+        it++;
+    }
+}
+
+TEST(PatrialGrammerTest, AddedprefixTest2) {
+
+    std::map<std::string,std::string> prefixes;
+    //prefixes.insert(std::pair<std::string,std::string>("","http://example.org/book/"));
+    prefixes.insert(std::pair<std::string,std::string>("dc","http://purl.org/dc/elements/1.1/"));
+    prefixes.insert(std::pair<std::string,std::string>("ns","http://example.org/ns#"));
+    rdf_parser::Turtle::StringParser<true> parser("?book dc:title ?title ;\n"
+                                                  "         ns:price ?price .",prefixes) ;
     auto it= parser.begin();
     while (it)
     {

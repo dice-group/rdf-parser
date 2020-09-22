@@ -493,17 +493,20 @@ namespace rdf_parser::Turtle::Grammer {
 
     struct triplesBlock :
             seq<
-                    triple<true>, ignored
-//                    ,opt<
-//                                             sor<
-//                                               seq<triplesBlock,ignored,one<'.'>>,
-//                                               one<'.'>
-//                                                >
-//                                             >
+                    triple<true>, ignored,
+//                    opt<one<'.'>>
+
+                    opt<
+                                             seq<
+                                              sor<
+                                               seq<one<';'>,ignored,triplesBlock,ignored,one<'.'>>,
+                                               one<'.'>
+                                                >
+                                              >,
+                                              ignored>
             >
             {
     };
-
 
     template<bool sparqlQuery=false>
     struct grammer :
