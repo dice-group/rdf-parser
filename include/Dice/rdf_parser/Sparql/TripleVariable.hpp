@@ -1,6 +1,6 @@
 
-#ifndef SPARQL_QUERY_TRIPLEVARIABLE_HPP
-#define SPARQL_QUERY_TRIPLEVARIABLE_HPP
+#ifndef RDF_PARSER_SPARQL_TRIPLEVARIABLE_HPP
+#define RDF_PARSER_SPARQL_TRIPLEVARIABLE_HPP
 
 namespace rdf_parser::SparqlQuery {
     class TripleVariable {
@@ -38,6 +38,15 @@ namespace rdf_parser::SparqlQuery {
             this->is_anonym=is_anonym;
         }
 
+        std::string getName()
+        {
+            return name;
+        }
+
+        bool isAnon(){
+            return is_anonym;
+        }
+
     };
 }
-#endif //SPARQL_QUERY_TRIPLEVARIABLE_HPP
+#endif //RDF_PARSER_SPARQL_TRIPLEVARIABLE_HPP

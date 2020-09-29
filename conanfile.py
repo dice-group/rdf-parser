@@ -3,7 +3,7 @@ from conans import ConanFile, CMake
 
 class RDFParser(ConanFile):
     name = "rdf-parser"
-    version = "0.10"
+    version = "0.11"
     author = "DICE Group <info@dice-research.org>"
     description = "RDF parser used by [Tentris](https://github.com/dice-group/tentris). It uses [PEGTL](https://github.com/taocpp/PEGTL), Parsing Expression Grammar Library, to parse RDF files (currently supported: ntriple, turtle). "
     homepage = "https://github.com/dice-group/rdf-parser"

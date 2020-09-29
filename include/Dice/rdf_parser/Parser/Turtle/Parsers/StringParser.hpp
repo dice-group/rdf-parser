@@ -20,9 +20,8 @@ namespace {
 }
 
 
-namespace rdf_parser::Turtle {
+namespace rdf_parser::Turtle::parsers {
 
-    //ToDO change it everywhere
     template<bool sparqlQuery=false>
     class StringParser : public TriplesParser<StringParser,sparqlQuery> {
 

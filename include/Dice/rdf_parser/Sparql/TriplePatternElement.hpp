@@ -2,8 +2,8 @@
 // Created by fakhr on 29.04.20.
 //
 
-#ifndef SPARQL_QUERYGRAPH_TRIPLEPATTERNELEMENT_HPP
-#define SPARQL_QUERYGRAPH_TRIPLEPATTERNELEMENT_HPP
+#ifndef RDF_PARSER_SPARQL_TRIPLEPATTERNELEMENT_HPP
+#define RDF_PARSER_SPARQL_TRIPLEPATTERNELEMENT_HPP
 
 #include <variant>
 
@@ -36,4 +36,4 @@ namespace rdf_parser::SparqlQuery {
         void setObject(VarOrTerm object) { triplePattern.at(2)=object;};
     };
 }
-#endif //SPARQL_QUERYGRAPH_TRIPLEPATTERNELEMENT_HPP
+#endif //RDF_PARSER_SPARQL_TRIPLEPATTERNELEMENT_HPP

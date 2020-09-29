@@ -23,7 +23,7 @@ namespace {
     using namespace tao::pegtl;
 }
 
-namespace rdf_parser::Turtle {
+namespace rdf_parser::Turtle::parsers {
 
     /*
      *

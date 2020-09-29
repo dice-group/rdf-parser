@@ -18,7 +18,7 @@ namespace {
     using namespace tao::pegtl;
 }
 
-namespace rdf_parser::Turtle {
+namespace rdf_parser::Turtle::parsers {
 
     template<bool sparqlQuery=false>
     class FileParser : public TriplesParser<FileParser,sparqlQuery> {

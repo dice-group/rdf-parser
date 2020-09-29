@@ -14,7 +14,7 @@ namespace {
 
 
 }
-namespace rdf_parser::Turtle {
+namespace rdf_parser::Turtle::parsers {
 
     template<template<bool> class Derived,bool sparqlQuery>
     class Iterator;

@@ -37,10 +37,10 @@ TEST(PatrialGrammerTest, F1) {
 
 TEST(PatrialGrammerTest, AddedprefixTest) {
 
-    std::map<std::string,std::string> prefixes;
+    std::map<std::string,ringParser<true> parser("?x foaf:name ?name .",prefixes) ;
+    auto it= parser.beginstd::string> prefixes;
     prefixes.insert(std::pair<std::string,std::string>("foaf","http://xmlns.com/foaf/0.1/"));
-    rdf_parser::Turtle::StringParser<true> parser("?x foaf:name ?name .",prefixes) ;
-    auto it= parser.begin();
+    rdf_parser::Turtle::St();
     while (it)
     {
         auto x=*it;
