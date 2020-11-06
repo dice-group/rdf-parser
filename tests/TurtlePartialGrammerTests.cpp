@@ -11,7 +11,7 @@ using namespace rdf_parser::Turtle;
 
 TEST(PatrialGrammerTest, parseSparqslCollectison) {
 
-    rdf_parser::Turtle::StringParser<true> parser("?x <sad>  ?name ") ;
+    rdf_parser::Turtle::parsers::StringParser<true> parser("?x <sad>  ?name ") ;
     auto it= parser.begin();
     while (it)
     {
@@ -26,7 +26,7 @@ TEST(PatrialGrammerTest, parseSparqslCollectison) {
 
 TEST(PatrialGrammerTest, F1) {
 
-    rdf_parser::Turtle::StringParser<true> parser("?g <sad> ?who") ;
+    rdf_parser::Turtle::parsers::StringParser<true> parser("?g <sad> ?who") ;
     auto it= parser.begin();
     while (it)
     {
@@ -37,10 +37,10 @@ TEST(PatrialGrammerTest, F1) {
 
 TEST(PatrialGrammerTest, AddedprefixTest) {
 
-    std::map<std::string,ringParser<true> parser("?x foaf:name ?name .",prefixes) ;
-    auto it= parser.beginstd::string> prefixes;
+    std::map<std::string,std::string > prefixes;
     prefixes.insert(std::pair<std::string,std::string>("foaf","http://xmlns.com/foaf/0.1/"));
-    rdf_parser::Turtle::St();
+    rdf_parser::Turtle::parsers::StringParser<true> parser("?x foaf:name ?name .",prefixes) ;
+    auto it= parser.begin();
     while (it)
     {
         auto x=*it;
@@ -54,7 +54,7 @@ TEST(PatrialGrammerTest, AddedprefixTest2) {
     //prefixes.insert(std::pair<std::string,std::string>("","http://example.org/book/"));
     prefixes.insert(std::pair<std::string,std::string>("dc","http://purl.org/dc/elements/1.1/"));
     prefixes.insert(std::pair<std::string,std::string>("ns","http://example.org/ns#"));
-    rdf_parser::Turtle::StringParser<true> parser("?book dc:title ?title ;\n"
+    rdf_parser::Turtle::parsers::StringParser<true> parser("?book dc:title ?title ;\n"
                                                   "         ns:price ?price .",prefixes) ;
     auto it= parser.begin();
     while (it)
@@ -62,4 +62,18 @@ TEST(PatrialGrammerTest, AddedprefixTest2) {
         auto x=*it;
         it++;
     }
+}
+
+
+TEST(PatrialGrammerTest, tripleBlock) {
+
+
+rdf_parser::Turtle::parsers::StringParser<true> parser("?x <http://xmlns.com/foaf/0.1/knows> ?y .\n"
+                                                       "?x <http://xmlns.com/foaf/0.1/name> ?nameX . ") ;
+auto it= parser.begin();
+while (it)
+{
+auto x=*it;
+it++;
+}
 }

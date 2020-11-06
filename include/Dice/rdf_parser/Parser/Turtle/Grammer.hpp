@@ -493,18 +493,15 @@ namespace rdf_parser::Turtle::Grammer {
 
     struct triplesBlock :
             seq<
-                    triple<true>, ignored,
-//                    opt<one<'.'>>
+                          triple<true>,
+                          ignored,
+                          sor<
+                              seq<one<'.'>,ignored,triplesBlock>,
+                              seq<one<'.'>,ignored>,
+                              success
+                             >
+                      >
 
-                    opt<
-                                             seq<
-                                              sor<
-                                               seq<one<';'>,ignored,triplesBlock,ignored,one<'.'>>,
-                                               one<'.'>
-                                                >
-                                              >,
-                                              ignored>
-            >
             {
     };
 
