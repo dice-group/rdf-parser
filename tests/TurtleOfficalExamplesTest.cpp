@@ -224,7 +224,7 @@ TEST(TurtleOfficalExamplesTests, EXAMPLE11) {
 
 TEST(TurtleOfficalExamplesTests, EXAMPLE12) {
 
-   rdf_parser::Turtle::parsers::StringParser parser(
+   rdf_parser::Turtle::parsers::StringParser<> parser(
             "@prefix : <http://example.org/elements> .                                                                              \n"
             "<http://en.wikipedia.org/wiki/Helium>                                                                                  \n"
             "    :atomicNumber 2 ;                                                                                    \n"

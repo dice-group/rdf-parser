@@ -43,7 +43,8 @@ namespace rdf_parser::Turtle::Grammer {
     };
 
     struct HEX :
-            ranges<'a', 'z', 'A', 'Z', '0', '9'> {
+            //ToDo
+            ranges<'a', 'f', 'A', 'F', '0', '9'> {
     };
 
     struct PERCENT :
@@ -327,7 +328,7 @@ namespace rdf_parser::Turtle::Grammer {
 
 
     struct term :
-            must<sor<RdfLiteral, BlankNode, iri>> {
+            must<sor<literal, BlankNode, iri>> {
     };
 
     //The following grammers are not part of turtle.they are part of sparql language.but used here to make it

@@ -10,8 +10,10 @@ namespace {
 TEST(TurtleParserConcurrentTests,ntripleFileCon1) {
     CuncurrentStreamParser<> parser("../datasets/instances-labels.nt");
     auto it= parser.begin();
-    while (it)
+    while (it) {
         it++;
+        //Do something
+    }
 
 }
 
