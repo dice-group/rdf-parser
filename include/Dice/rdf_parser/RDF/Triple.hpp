@@ -44,5 +44,4 @@ namespace rdf_parser::store::rdf {
     };
 }
 
-
 #endif //RDF_PARSER_TRIPLE_HPP

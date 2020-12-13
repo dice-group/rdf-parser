@@ -12,13 +12,23 @@
 namespace {
     using namespace rdf_parser::store::rdf;
 
+
 }
-namespace rdf_parser::Turtle {
+namespace rdf_parser::Turtle::parsers {
 
+    template<template<bool> class Derived,bool sparqlQuery>
+    class Iterator;
+
+    template<template<bool> class Derived,bool sparqlQuery = false>
     class TriplesParser {
-    protected:
 
-        Triple current_triple;
+    protected:
+    	using element_type = std::conditional_t<sparqlQuery, SparqlQuery::TriplePatternElement, Triple>;
+
+        explicit TriplesParser() {
+            current_triple = std::make_shared<element_type>();
+        };
+        std::shared_ptr<element_type> current_triple;
 
 
     public:
@@ -36,18 +46,64 @@ namespace rdf_parser::Turtle {
         /**
          * get the current triple
          */
-        const Triple &getCurrentTriple() {
-            return current_triple;
+        const element_type &getCurrentTriple() {
+            return *current_triple;
         }
 
 
         virtual ~TriplesParser() {};
 
 
+        Iterator<Derived,sparqlQuery> begin()
+        {
+            return static_cast<Derived<sparqlQuery>*>(this)->begin_implementation();
+        }
+
+        bool end() { return false; }
+
+    };
+
+    template<template<bool>class Derived,bool sparqlQuery = false>
+    class Iterator {
+
+    private:
+        bool done_;
+        bool parser_done_;
+		Derived<sparqlQuery> *triplesParser = nullptr;
+
+    public:
+        explicit Iterator(Derived<sparqlQuery> *triplesParser) :
+                done_{false}, parser_done_{false}, triplesParser{triplesParser} {
+            //check if there is at least one parsed triple
+            if (triplesParser->hasNextTriple())
+                this->operator++();
+            else
+                parser_done_ = true;
+        };
+
+
+        void operator++() {
+            if (parser_done_) {
+                done_ = true;
+            } else {
+                triplesParser->nextTriple();
+                if (not triplesParser->hasNextTriple())
+                    parser_done_ = true;
+            }
+        }
+
+        void operator++(int) { operator++(); }
+
+        operator bool() { return not done_; }
+
+        const std::conditional_t<sparqlQuery, SparqlQuery::TriplePatternElement, Triple> &
+        operator*() { return triplesParser->getCurrentTriple(); }
+    };
 
 
     };
-}
+
+
 
 
 #endif //RDF_PARSER_TRIPLESPARSER_HPP

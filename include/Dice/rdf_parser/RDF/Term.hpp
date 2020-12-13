@@ -343,7 +343,7 @@ namespace rdf_parser::Turtle {
                 string_input input(text, "the text");
                 States::BasicState state;
                 parse<Grammer::term, Actions::action>(input, state);
-                return std::move(state.getTerm());
+                return std::move(state.getElement());
             }
             catch (std::exception &e) {
                 throw e;

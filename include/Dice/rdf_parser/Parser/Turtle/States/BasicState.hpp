@@ -17,6 +17,7 @@ For more information about states please check https://github.com/taocpp/PEGTL/b
 #include <optional>
 
 #include "Dice/rdf_parser/RDF/Term.hpp"
+#include "Dice/rdf_parser/Sparql/TriplePatternElement.hpp"
 
 
 namespace {
@@ -30,10 +31,16 @@ namespace rdf_parser::Turtle {
         /*
          * BasicState defines the data structures realted to rdf term
          */
+        template<bool sparqlQuery=false>
         class BasicState {
+        public:
+            BasicState()
+            {
+                element=std::make_shared<std::conditional_t<sparqlQuery,SparqlQuery::VarOrTerm ,Term>>();
+            }
         protected:
 
-            Term term;
+            std::shared_ptr<std::conditional_t<sparqlQuery,SparqlQuery::VarOrTerm ,Term>> element;
 
             //variables to deal with type and lan tags in literals
             bool type_tag_found = false;
@@ -53,9 +60,9 @@ namespace rdf_parser::Turtle {
 
 
         public:
-            inline Term &getTerm() { return term; }
+            inline std::conditional_t<sparqlQuery,SparqlQuery::VarOrTerm ,Term> &getElement() { return *element; }
 
-            inline void setTerm(Term term) { this->term = std::move(term); }
+            inline void setElement(std::conditional_t<sparqlQuery,SparqlQuery::VarOrTerm ,Term> element) { *(this->element) = std::move(element); }
 
 
             inline void addPrefix(std::string prefix, std::string value) {
@@ -98,17 +105,17 @@ namespace rdf_parser::Turtle {
                         } else
                             tag = type_tag;
                     }
-                    term = (Literal(literal_string, std::nullopt,
+                    *element = (Literal(literal_string, std::nullopt,
                                     tag));
                 }
                     //check if this RdfLiteral has langTag part
                 else if (lang_tag_found == true) {
                     //set it again to false
                     lang_tag_found = false;
-                    term = Literal(literal_string, lan_tag,
+                    *element = Literal(literal_string, lan_tag,
                                    std::nullopt);
                 } else
-                    term = Literal(literal_string, std::nullopt,
+                    *element = Literal(literal_string, std::nullopt,
                                    std::nullopt);
             }
 
@@ -151,6 +158,11 @@ namespace rdf_parser::Turtle {
                 return found->second;
 
             }
+
+//            std::string processVar(std::string var)
+//            {
+//
+//            }
         };
     }
 }

@@ -17,16 +17,17 @@ namespace {
 }
 
 
-namespace rdf_parser::Turtle {
+namespace rdf_parser::Turtle::parsers {
 
 
-    class StreamParser : public TriplesParser {
+    template<bool sparqlQuery=false>
+    class StreamParser : public TriplesParser<StreamParser,sparqlQuery> {
 
     private:
         /**
         * a queue for storing parsed triples .
         */
-        std::shared_ptr<std::queue<Triple>> parsedTerms;
+        std::shared_ptr<std::queue<std::conditional_t<sparqlQuery,SparqlQuery::TriplePatternElement ,Triple>>> parsedTerms;
 
         /**
          * defines the size of the stream buffer
@@ -36,6 +37,7 @@ namespace rdf_parser::Turtle {
         std::ifstream stream;
 
     public:
+
 
         /**
          * The constructor start the parsing.if the input is not valid it will throws and exception.
@@ -47,7 +49,7 @@ namespace rdf_parser::Turtle {
                 read_input file(filename);
                 parsedTerms = std::make_shared<std::queue<Triple>>();
                 States::State<> state(parsedTerms);
-                parse<Grammer::grammer, Actions::action>(istream_input(stream, defaultBufferSize, filename), state);
+                parse<Grammer::grammer<>, Actions::action>(istream_input(stream, defaultBufferSize, filename), state);
 
             }
             catch (std::exception &e) {
@@ -55,6 +57,8 @@ namespace rdf_parser::Turtle {
             }
 
         }
+
+
 
         ~StreamParser() override {
             stream.close();
@@ -66,7 +70,7 @@ namespace rdf_parser::Turtle {
                 read_input file(filename);
                 parsedTerms = std::make_shared<std::queue<Triple>>();
                 States::State<> state(parsedTerms);
-                parse<Grammer::grammer, Actions::action>(istream_input(stream, bufferSize, filename), state);
+                parse<Grammer::grammer<sparqlQuery>, Actions::action>(istream_input(stream, bufferSize, filename), state);
 
             }
             catch (std::exception &e) {
@@ -76,7 +80,7 @@ namespace rdf_parser::Turtle {
 
 
         void nextTriple() override {
-            current_triple = parsedTerms->front();
+            this->current_triple = parsedTerms->front();
             parsedTerms->pop();
 
         }
@@ -84,6 +88,10 @@ namespace rdf_parser::Turtle {
 
         bool hasNextTriple() const override {
             return not parsedTerms->empty();
+        }
+
+        Iterator<StreamParser,sparqlQuery> begin_implementation(){
+            return Iterator<StreamParser,sparqlQuery>(this);
         }
 
     };

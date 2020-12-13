@@ -23,15 +23,16 @@ namespace {
     using namespace tao::pegtl;
 }
 
-namespace rdf_parser::Turtle {
+namespace rdf_parser::Turtle::parsers {
 
     /*
      *
      */
-    class CuncurrentStreamParser : public TriplesParser {
+    template<bool sparqlQuery=false>
+    class CuncurrentStreamParser : public TriplesParser<CuncurrentStreamParser,sparqlQuery> {
 
     private:
-        std::shared_ptr<tbb::concurrent_bounded_queue<Triple>> parsedTerms;
+        std::shared_ptr<boost::lockfree::spsc_queue<std::conditional_t<sparqlQuery,SparqlQuery::TriplePatternElement ,Triple> ,boost::lockfree::capacity<100000>>> parsedTerms;
         unsigned int upperThrehold;
         unsigned int lowerThrehold;
 
@@ -50,13 +51,13 @@ namespace rdf_parser::Turtle {
         void startParsing(std::string filename, std::size_t bufferSize) {
             try {
 
-                States::ConcurrentState<tbb::concurrent_bounded_queue<Triple>> state(parsedTerms,
-                                                                                     upperThrehold, cv,
-                                                                                     m, cv2, m2,
-                                                                                     termCountWithinThreholds,
-                                                                                     termsCountIsNotEmpty,
-                                                                                     parsingIsDone);
-                parse<Grammer::grammer, Actions::action>(istream_input(stream, bufferSize, filename), state);
+                States::ConcurrentState<false,boost::lockfree::spsc_queue<Triple,boost::lockfree::capacity<100000>>> state(parsedTerms,
+                                                                                   upperThrehold, cv,
+                                                                                   m, cv2, m2,
+                                                                                   termCountWithinThreholds,
+                                                                                   termsCountIsNotEmpty,
+                                                                                   parsingIsDone);
+                parse<Grammer::grammer<sparqlQuery>, Actions::action>(istream_input(stream, bufferSize, filename), state);
             }
             catch (std::exception &e) {
                 throw e;
@@ -73,7 +74,7 @@ namespace rdf_parser::Turtle {
                 stream{filename},
                 upperThrehold(queueCapacity),
                 lowerThrehold(queueCapacity / 10),
-                parsedTerms{std::make_shared<tbb::concurrent_bounded_queue<Triple>>()},
+                parsedTerms{std::make_shared<boost::lockfree::spsc_queue<Triple,boost::lockfree::capacity<100000>>>()},
                 cv{std::make_shared<std::condition_variable>()},
                 m{std::make_shared<std::mutex>()},
                 cv2{std::make_shared<std::condition_variable>()},
@@ -81,16 +82,15 @@ namespace rdf_parser::Turtle {
                 termCountWithinThreholds{std::make_shared<std::atomic_bool>(false)},
                 termsCountIsNotEmpty{std::make_shared<std::atomic_bool>(false)},
                 parsingIsDone{std::make_shared<std::atomic_bool>(false)} {
-            parsedTerms->set_capacity(queueCapacity);
             parsingThread = std::make_unique<util::ScopedThread>(
                     std::thread(&CuncurrentStreamParser::startParsing, this, filename, bufferSize));
 
         }
 
 
-         void nextTriple() override {
-            parsedTerms->pop(current_triple);
-            if (parsedTerms->size() < lowerThrehold) {
+        void nextTriple() override {
+            parsedTerms->pop(*(this->current_triple));
+            if (parsedTerms->read_available() < lowerThrehold) {
                 {
                     std::lock_guard<std::mutex> lk(*m);
                     *termCountWithinThreholds = true;
@@ -101,7 +101,7 @@ namespace rdf_parser::Turtle {
         }
 
         bool hasNextTriple() const override {
-            if (parsedTerms->size() != 0) {
+            if (parsedTerms->read_available() != 0) {
                 return true;
             } else {
 
@@ -114,7 +114,7 @@ namespace rdf_parser::Turtle {
                     *termsCountIsNotEmpty = false;
                     cv2->wait(lk, [&] { return termsCountIsNotEmpty->load(); });
 
-                    if (parsedTerms->size() != 0)
+                    if (parsedTerms->read_available() != 0)
                         return true;
 
                     else if (*parsingIsDone) {
@@ -128,6 +128,10 @@ namespace rdf_parser::Turtle {
 
             };
         };
+
+        Iterator<CuncurrentStreamParser,sparqlQuery> begin_implementation(){
+            return Iterator<CuncurrentStreamParser,sparqlQuery>(this);
+        }
     };
 }
 

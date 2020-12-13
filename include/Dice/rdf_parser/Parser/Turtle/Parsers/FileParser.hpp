@@ -18,17 +18,19 @@ namespace {
     using namespace tao::pegtl;
 }
 
-namespace rdf_parser::Turtle {
+namespace rdf_parser::Turtle::parsers {
 
-    class FileParser : public TriplesParser {
+    template<bool sparqlQuery=false>
+    class FileParser : public TriplesParser<FileParser,sparqlQuery> {
 
     private:
         /**
          * a queue for storing parsed triples .
          */
-        std::shared_ptr<std::queue<Triple>> parsedTerms;
+        std::shared_ptr<std::queue<std::conditional_t<sparqlQuery,SparqlQuery::TriplePatternElement ,Triple>>> parsedTerms;
 
     public:
+
 
         /**
          * The constructor start the parsing.if the input is not valid it will throws and exception.
@@ -40,7 +42,7 @@ namespace rdf_parser::Turtle {
                 std::ifstream infile(filename);
                 read_input file(filename);
                 States::State<> state(parsedTerms);
-                parse<Grammer::grammer, Actions::action>(file, state);
+                parse<Grammer::grammer<sparqlQuery>, Actions::action>(file, state);
 
             }
             catch (std::exception &e) {
@@ -59,7 +61,7 @@ namespace rdf_parser::Turtle {
         }
 
         void nextTriple() override {
-            current_triple = parsedTerms->front();
+            this->current_triple = parsedTerms->front();
             parsedTerms->pop();
 
         }
@@ -72,7 +74,7 @@ namespace rdf_parser::Turtle {
             try {
                 std::ifstream infile(filename);
                 read_input file(filename);
-                parse<Grammer::grammer>(file);
+                parse<Grammer::grammer<sparqlQuery>>(file);
                 return true;
             }
             catch (std::exception &e) {
@@ -80,6 +82,9 @@ namespace rdf_parser::Turtle {
             }
         }
 
+        Iterator<FileParser,sparqlQuery> begin_implementation(){
+            return Iterator<FileParser,sparqlQuery>(this);
+        }
 
         /**
          * calculate the time for parsing a rdf turtle file.
