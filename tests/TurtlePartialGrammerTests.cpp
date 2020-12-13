@@ -9,24 +9,9 @@
 using namespace rdf_parser::Turtle;
 
 
-TEST(PatrialGrammerTest, parseSparqslCollectison) {
-
-    rdf_parser::Turtle::parsers::StringParser<true> parser("?x <sad>  ?name ") ;
-    auto it= parser.begin();
-    while (it)
-    {
-        auto x=*it;
-        it++;
-    }
-//    bool t2=rdf_parser::Turtle::TermParser::isTermParsable("\" hello \'hello\'  \"");
-//    ASSERT_EQ(t1, true);
-//    ASSERT_EQ(t2, true);
-    ASSERT_EQ(1, true);
-}
-
 TEST(PatrialGrammerTest, F1) {
 
-    rdf_parser::Turtle::parsers::StringParser<true> parser("?g <sad> ?who") ;
+    rdf_parser::Turtle::parsers::StringParser<true> parser("?g <sad> ?who . ") ;
     auto it= parser.begin();
     while (it)
     {
