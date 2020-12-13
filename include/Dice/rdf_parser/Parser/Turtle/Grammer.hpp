@@ -328,7 +328,7 @@ namespace rdf_parser::Turtle::Grammer {
 
 
     struct term :
-            must<sor<literal, BlankNode, iri>> {
+            sor<literal, BlankNode, iri> {
     };
 
     //The following grammers are not part of turtle.they are part of sparql language.but used here to make it
@@ -464,15 +464,16 @@ namespace rdf_parser::Turtle::Grammer {
     };
 
 
+    template<bool sparqlQuery=false>
     struct tripleExtended :
             seq<
-                    triple<false>, ignored, one<'.'>
+                    triple<sparqlQuery>, ignored, one<'.'>
             > {
     };
 
     struct statement :
             sor<
-                    tripleExtended,
+                    tripleExtended<false>,
                     directive
             > {
     };
@@ -494,22 +495,17 @@ namespace rdf_parser::Turtle::Grammer {
 
     struct triplesBlock :
             seq<
-                          triple<true>,
-                          ignored,
-                          sor<
-                              seq<one<'.'>,ignored,triplesBlock>,
-                              seq<one<'.'>,ignored>,
-                              success
-                             >
-                      >
-
-            {
+                    plus<
+                            seq<ignored, tripleExtended<true>>
+                    >, ignored
+            > {
     };
+
 
     template<bool sparqlQuery=false>
     struct grammer :
             std::conditional_t<sparqlQuery,
-                                must<triplesBlock, eof>,
+                    must<triplesBlock,eof>,
                                 sor<
                                         must<turtleDoc, eof>,
                                         seq<ignored, eof>

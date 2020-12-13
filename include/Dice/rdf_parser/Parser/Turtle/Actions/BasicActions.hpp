@@ -30,9 +30,10 @@ namespace rdf_parser::Turtle {
         struct action<Grammer::directive> : tao::pegtl::discard_input {
         };
 
-        template<>
-        struct action<Grammer::tripleExtended> : tao::pegtl::discard_input {
+        template<bool SparqlQuery>
+        struct action<Grammer::tripleExtended<SparqlQuery>> : tao::pegtl::discard_input {
         };
+
 
 
         template<>

@@ -77,3 +77,16 @@ auto x=*it;
 it++;
 }
 }
+
+TEST(PatrialGrammerTest, tripleBlock2) {
+
+    std::map<std::string,std::string> prefixes;
+    prefixes.insert(std::pair<std::string,std::string>("ex","http://example.org/"));
+    rdf_parser::Turtle::parsers::StringParser<true> parser("?buch ex:hatVerlag <http://springer.com/Verlag> . ?buch ex:titel ?title . ?buch ex:autor ?autor . ",prefixes) ;
+    auto it= parser.begin();
+    while (it)
+    {
+        auto x=*it;
+        it++;
+    }
+}
