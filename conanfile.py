@@ -11,7 +11,7 @@ class RDFParser(ConanFile):
     license = "AGPL"
     topics = ("dice-group", "RDF", "parser", "semantic web", "turtle", "ntriple")
     settings = "build_type", "compiler", "os", "arch"
-    requires = "boost/1.71.0@conan/stable", "pegtl/2.8.1@taocpp/stable", "gtest/1.8.1@bincrafters/stable", "fmt/6.0.0@bincrafters/stable", "abseil/20181200@bincrafters/stable"
+    requires = "boost/1.71.0", "taocpp-pegtl/3.0.0", "gtest/1.8.1", "fmt/6.0.0", "abseil/20200923.2"
     generators = "cmake", "cmake_find_package", "cmake_paths"
     exports = "LICENSE"
     exports_sources = "include/*", "CMakeLists.txt", "cmake/dummy-config.cmake.in"
