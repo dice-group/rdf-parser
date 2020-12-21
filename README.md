@@ -1,10 +1,11 @@
 # Tentris RDF Parser
 
-This is the RDF parser used by [Tentris](https://github.com/dice-group/tentris). It uses [PEGTL](https://github.com/taocpp/PEGTL), Parsing Expression Grammar Library, to parse RDF files (currently supported: ntriple, turtle). 
+This is the RDF parser used by [Tentris](https://github.com/dice-group/tentris). It uses [PEGTL](https://github.com/taocpp/PEGTL), Parsing Expression Grammar Library, to parse RDF files (currently supported: ntriple, turtle).
+ It also supports parsing the triplesBlock part of Sparql queries.
 
 It has buffered streaming support so that you can load files that are too big to fit in main memory. 
 
-Currently it is not fully supporting comments.it fails to parse comments in some senarios .
+Currently it is not fully supporting comments.it fails to parse comments in some scenarios .
 
 ## how to build
 ### prerequisites
@@ -28,7 +29,8 @@ make -j
 
 
 ### conan 
-**TODO: update this as soon as it is published**
+
+recipe : rdf-parser/0.11@dice-group/stable
 ```
 conan remote add dice "https://api.bintray.com/conan/dice-group/tentris"
 
@@ -39,7 +41,7 @@ conan remote add dice "https://api.bintray.com/conan/dice-group/tentris"
 ### Introduction
 
 A header-only library designed to allow efficient and controlled parsing for RDF languages.
-Currently it supports ntriples and turtle languages .
+Currently it supports ntriples and turtle languages, as well as triplesBlock part of sparql queries.
 It uses tao's PEGTL library for parsing.
 
 ### Usage

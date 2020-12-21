@@ -160,7 +160,7 @@ namespace rdf_parser::Turtle {
 
                 if (state.hasPrefix(prefix)) {
                     std::string mappedPrefix = state.getPrefixValue(prefix);
-                    value = mappedPrefix +"/"+value;
+                    value = mappedPrefix +value;
                     state.setElement(URIRef(value));
                     state.setIri_is_IRIREF(false);
                 } else {
