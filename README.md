@@ -46,9 +46,10 @@ It uses tao's PEGTL library for parsing.
 
 ### Usage
 
-The library is easy to use, for parsing turtle or ntriples include the header `<Dice/rdf_parser/TurtleParser.hpp>` and use the class `TurtleParser<>` (which is a wrapper to use any parser type) for parsing. 
-`TurtleParser` accept one template parameter which determine the parser type (more information about that on the next section), and it's constructor accept one string parameter which is either the string which is the document to be parsed in case of `StringParser` or the filename of the file that contains the document to be parsed.
-
+The library is easy to use, for parsing turtle or ntriples include the header for the required parser.
+for example, to use the ConcurrentStreamParser, include `<Dice/rdf_parser/TurtleParser.hpp>` 
+each parser accepts one bool template parameter which determine wether to parse sparqlQuery's TriplesBlock or a rdf (true for sparqlQuery's and false for a rdf), and it's constructor accept one mandatory string parameter which is either the string which is the document to be parsed in case of `StringParser` or the filename of the file that contains the document to be parsed.
+Another optional parameter is a map of predefined prefixes.
 Example :
 ```c++
 TurtleParser<FileParser> turtleParser("datasets/g.nt");
@@ -79,28 +80,63 @@ There are four types of parsers which can be used:
 for storing the parsed triples. Therefore, the already parsed triples can be accessed during the parsing process. It is the default template parameter for `TurtleParser`.
 And it is the recommended parser to use for large files or streams and for simultaneous parsing and accessing to the already parsed triples.
 
-### Example
-Here we create a full example for parsing a turtle file. It is by default using the `ConcurrentStreamParser`. We assuming there is an turtle file at `datasets/dataset1.ttl`. The file is parsed and the triples are printed to `std::out`.
+### Examples
+
+1-Here we create a full example for parsing a turtle file. we use here the `ConcurrentStreamParser`. We assuming there is an turtle file at `datasets/dataset1.ttl`. The file is parsed and the triples are printed to `std::out`.
 
 ```c++
-#include <Dice/rdf_parser/TurtleParser.hpp>
+#include <Dice/rdf_parser/Parser/Turtle/Parsers/ConcurrentStreamParser.hpp>
 
 namespace {
-    using namespace rdf_parser::Turtle;
+    using namespace rdf_parser::Turtle::parsers;
     using namespace rdf_parser::store::rdf;
 }
 
 int main()
 {
- TurtleParser<> Parser("datasets/dataset1.ttl");
+ CuncurrentStreamParser<> parser("datasets/dataset1.ttl");
  auto it=Parser.begin();
- //or we can use: TurtleParser<>::Iterator it=Parser.begin();
+ //or we can use: CuncurrentStreamParser<>::Iterator it=Parser.begin();
  while (it){
          Triple triple= *it;
-         //or const Triple &integerNumber = *iterator; to get a const ref
-         std::cout<<"subject :"<<triple.subject().getIdentifier()<<",predicit :"<<triple.predicate().getIdentifier()
-         <<",object :"<<triple.object().getIdentifier()<<std::endl;
+         std::cout << triple.subject().getIdentifier() << " "
+                   << triple.predicate().getIdentifier() << " "
+                   << triple.object().getIdentifier()
+                   << std::endl;
          it++;
      }
+}
+```
+
+2-Here we create a full example for The tripleBlock part of SparqlQuery Using the StringParser.
+
+```c++
+#include <Dice/rdf_parser/Parser/Turtle/Parsers/StringParser.hpp>
+ 
+namespace {
+    using namespace rdf_parser::Turtle::parsers;
+    using namespace  rdf_parser::SparqlQuery;
+}
+int main()
+{
+//create a map of prefixes
+std::map<std::string,std::string> prefixes;
+prefixes.insert(std::pair<std::string,std::string>("wde","http://www.wikidata.org/entity/"));
+prefixes.insert(std::pair<std::string,std::string>("wdt","http://www.wikidata.org/prop/direct/"));
+
+// create the parser with 2 parameters: the query and the prefixes map
+StringParser<true> parser("?var1 <http://www.wikidata.org/prop/P463> _:b0 . _:b0 <http://www.wikidata.org/prop/statement/P463> wde:Q202479 ; <http://www.wikidata.org/prop/qualifier/P580> ?var2 .",prefixes) ;
+
+//get an iterator 
+auto it= parser.begin();
+
+while (it)
+{
+    TriplePatternElement triplePatternElement=*it;
+    VarOrTerm subject=TriplePatternElement.subject();
+    VarOrTerm subject=TriplePatternElement.predicate();
+    VarOrTerm subject=TriplePatternElement.object();
+    it++;
+}
 }
 ```
