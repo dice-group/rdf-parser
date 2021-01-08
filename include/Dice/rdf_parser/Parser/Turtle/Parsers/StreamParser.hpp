@@ -21,7 +21,7 @@ namespace rdf_parser::Turtle::parsers {
 
 
     template<bool sparqlQuery=false>
-    class StreamParser : public TriplesParser<StreamParser,sparqlQuery> {
+    class StreamParser : public TriplesParser<StreamParser<>,sparqlQuery> {
 
     private:
         /**

@@ -13,6 +13,7 @@
 #include <thread>
 #include <utility>
 #include <iostream>
+#include <exception>
 
 #include "TriplesParser.hpp"
 #include "Dice/rdf_parser/util/scoped_thread.hpp"
@@ -28,11 +29,10 @@ namespace rdf_parser::Turtle::parsers {
     /*
      *
      */
-    template<bool sparqlQuery=false>
-    class CuncurrentStreamParser : public TriplesParser<CuncurrentStreamParser,sparqlQuery> {
+    class CuncurrentStreamParser : public TriplesParser<CuncurrentStreamParser,false> {
 
     private:
-        std::shared_ptr<boost::lockfree::spsc_queue<std::conditional_t<sparqlQuery,SparqlQuery::TriplePatternElement ,Triple> ,boost::lockfree::capacity<100000>>> parsedTerms;
+        std::shared_ptr<boost::lockfree::spsc_queue<std::conditional_t<false,SparqlQuery::TriplePatternElement ,Triple> ,boost::lockfree::capacity<100000>>> parsedTerms;
         unsigned int upperThrehold;
         unsigned int lowerThrehold;
 
@@ -57,10 +57,10 @@ namespace rdf_parser::Turtle::parsers {
                                                                                    termCountWithinThreholds,
                                                                                    termsCountIsNotEmpty,
                                                                                    parsingIsDone);
-                parse<Grammer::grammer<sparqlQuery>, Actions::action>(istream_input(stream, bufferSize, filename), state);
+                parse<Grammer::grammer<false>, Actions::action>(istream_input(stream, bufferSize, filename), state);
             }
             catch (std::exception &e) {
-                throw e;
+                throw std::exception(e);
             }
         }
 
@@ -129,8 +129,8 @@ namespace rdf_parser::Turtle::parsers {
             };
         };
 
-        Iterator<CuncurrentStreamParser,sparqlQuery> begin_implementation(){
-            return Iterator<CuncurrentStreamParser,sparqlQuery>(this);
+        Iterator<CuncurrentStreamParser,false> begin_implementation(){
+            return Iterator<CuncurrentStreamParser,false>(this);
         }
     };
 }

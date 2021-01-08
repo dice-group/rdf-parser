@@ -224,7 +224,7 @@ TEST(TurtleOfficalExamplesTests, EXAMPLE11) {
 
 TEST(TurtleOfficalExamplesTests, EXAMPLE12) {
 
-   rdf_parser::Turtle::parsers::StringParser<> parser(
+   rdf_parser::Turtle::parsers::StringParser  parser(
             "@prefix : <http://example.org/elements> .                                                                              \n"
             "<http://en.wikipedia.org/wiki/Helium>                                                                                  \n"
             "    :atomicNumber 2 ;                                                                                    \n"
@@ -495,7 +495,7 @@ TEST(TurtleOfficalExamplesTests, EXAMPLE25) {
 
 TEST(TurtleOfficalExamplesTests, EXAMPLE26) {
 
-   rdf_parser::Turtle::parsers::StringParser<> parser("@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n"
+   rdf_parser::Turtle::parsers::StringParser  parser("@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n"
                           "PREFIX : <http://example.org/stuff/1.0/> \n"
                           "    _:b0  rdf:first  1 ;\n"
                           "          rdf:rest   _:b1 .\n"

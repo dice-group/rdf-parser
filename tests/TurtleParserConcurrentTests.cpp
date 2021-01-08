@@ -8,7 +8,7 @@ namespace {
 
 
 TEST(TurtleParserConcurrentTests,ntripleFileCon1) {
-    CuncurrentStreamParser<> parser("../datasets/instances-labels.nt");
+    CuncurrentStreamParser parser("../datasets/instances-labels.nt");
     auto it= parser.begin();
     while (it) {
         it++;
@@ -18,7 +18,7 @@ TEST(TurtleParserConcurrentTests,ntripleFileCon1) {
 }
 
 TEST(TurtleParserConcurrentTests,turtleFileCon1) {
-    CuncurrentStreamParser<> parser("../datasets/instance-types_transitive.ttl");
+    CuncurrentStreamParser parser("../datasets/instance-types_transitive.ttl");
     auto it= parser.begin();
     while (it)
         it++;
