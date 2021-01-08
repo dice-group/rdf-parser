@@ -2,7 +2,7 @@
 #include <Dice/rdf_parser/Parser/Turtle/Parsers/ConcurrentStreamParser.hpp>
 
 namespace {
-    using namespace rdf_parser::Turtle;
+    using namespace rdf_parser::Turtle::parsers;
     using namespace rdf_parser::store::rdf;
 }
 

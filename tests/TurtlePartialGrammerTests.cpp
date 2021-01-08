@@ -87,6 +87,9 @@ TEST(PatrialGrammerTest, BlankNodes) {
     while (it)
     {
         auto x=*it;
+        rdf_parser::SparqlQuery::VarOrTerm object=x.object();
+        rdf_parser::SparqlQuery::VarOrTerm predicate=x.predicate();
+        rdf_parser::SparqlQuery::VarOrTerm subject=x.subject();
         it++;
     }
 }
