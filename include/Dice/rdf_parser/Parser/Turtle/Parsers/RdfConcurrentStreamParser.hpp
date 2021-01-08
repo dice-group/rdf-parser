@@ -2,7 +2,7 @@
 #define RDF_PARSER_TURTLEPEGTLCONCURRENTSTREAMPARSER_HPP
 
 /**
- * CuncurrentStreamParser is responsible for parsing triples from stream sources.
+ * CuncurrentStreamParser is responsible for parsing Rdfs from stream sources.
  * It also creates its own thread for parsing.
  * It is also responsible for synchronizing between the parsing thread and the triples queue
  * It parse a file as a stream and put the parsed triples increasingly in a tbb::concurrent_bounded_queue
@@ -13,8 +13,9 @@
 #include <thread>
 #include <utility>
 #include <iostream>
+#include <exception>
 
-#include "TriplesParser.hpp"
+#include "AbstractParser.hpp"
 #include "Dice/rdf_parser/util/scoped_thread.hpp"
 #include "Dice/rdf_parser/Parser/Turtle/Actions/Actions.hpp"
 #include "Dice/rdf_parser/Parser/Turtle/States/ConcurrentState.hpp"
@@ -28,11 +29,10 @@ namespace rdf_parser::Turtle::parsers {
     /*
      *
      */
-    template<bool sparqlQuery=false>
-    class CuncurrentStreamParser : public TriplesParser<CuncurrentStreamParser,sparqlQuery> {
+    class RdfConcurrentStreamParser : public AbstractParser<RdfConcurrentStreamParser,false> {
 
     private:
-        std::shared_ptr<boost::lockfree::spsc_queue<std::conditional_t<sparqlQuery,SparqlQuery::TriplePatternElement ,Triple> ,boost::lockfree::capacity<100000>>> parsedTerms;
+        std::shared_ptr<boost::lockfree::spsc_queue<Triple,boost::lockfree::capacity<100000>>> parsedTerms;
         unsigned int upperThrehold;
         unsigned int lowerThrehold;
 
@@ -57,19 +57,19 @@ namespace rdf_parser::Turtle::parsers {
                                                                                    termCountWithinThreholds,
                                                                                    termsCountIsNotEmpty,
                                                                                    parsingIsDone);
-                parse<Grammer::grammer<sparqlQuery>, Actions::action>(istream_input(stream, bufferSize, filename), state);
+                parse<Grammer::grammer<false>, Actions::action>(istream_input(stream, bufferSize, filename), state);
             }
             catch (std::exception &e) {
-                throw e;
+                throw std::exception(e);
             }
         }
 
-        ~CuncurrentStreamParser() override {
+        ~RdfConcurrentStreamParser() override {
             stream.close();
         }
 
 
-        CuncurrentStreamParser(std::string filename, std::size_t bufferSize = 1024 * 1024,
+        RdfConcurrentStreamParser(std::string filename, std::size_t bufferSize = 1024 * 1024,
                                unsigned int queueCapacity = 100000) :
                 stream{filename},
                 upperThrehold(queueCapacity),
@@ -83,7 +83,7 @@ namespace rdf_parser::Turtle::parsers {
                 termsCountIsNotEmpty{std::make_shared<std::atomic_bool>(false)},
                 parsingIsDone{std::make_shared<std::atomic_bool>(false)} {
             parsingThread = std::make_unique<util::ScopedThread>(
-                    std::thread(&CuncurrentStreamParser::startParsing, this, filename, bufferSize));
+                    std::thread(&RdfConcurrentStreamParser::startParsing, this, filename, bufferSize));
 
         }
 
@@ -129,8 +129,9 @@ namespace rdf_parser::Turtle::parsers {
             };
         };
 
-        Iterator<CuncurrentStreamParser,sparqlQuery> begin_implementation(){
-            return Iterator<CuncurrentStreamParser,sparqlQuery>(this);
+
+        Iterator<RdfConcurrentStreamParser,false> begin_implementation(){
+            return Iterator<RdfConcurrentStreamParser,false>(this);
         }
     };
 }

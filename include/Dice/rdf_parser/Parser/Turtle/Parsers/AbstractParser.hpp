@@ -1,6 +1,5 @@
-
-#ifndef RDF_PARSER_TRIPLESPARSER_HPP
-#define RDF_PARSER_TRIPLESPARSER_HPP
+#ifndef RDF_PARSER_ABSTRACTPARSER_HPP
+#define RDF_PARSER_ABSTRACTPARSER_HPP
 
 #include "Dice/rdf_parser/RDF/Triple.hpp"
 
@@ -16,16 +15,16 @@ namespace {
 }
 namespace rdf_parser::Turtle::parsers {
 
-    template<template<bool> class Derived,bool sparqlQuery>
+    template<class Derived,bool sparqlQuery>
     class Iterator;
 
-    template<template<bool> class Derived,bool sparqlQuery = false>
-    class TriplesParser {
+    template<class Derived,bool sparqlQuery>
+    class AbstractParser {
 
     protected:
-    	using element_type = std::conditional_t<sparqlQuery, SparqlQuery::TriplePatternElement, Triple>;
+        using element_type = std::conditional_t<sparqlQuery, SparqlQuery::TriplePatternElement, Triple>;
 
-        explicit TriplesParser() {
+        explicit AbstractParser() {
             current_triple = std::make_shared<element_type>();
         };
         std::shared_ptr<element_type> current_triple;
@@ -51,28 +50,28 @@ namespace rdf_parser::Turtle::parsers {
         }
 
 
-        virtual ~TriplesParser() {};
+        virtual ~AbstractParser() {};
 
 
         Iterator<Derived,sparqlQuery> begin()
         {
-            return static_cast<Derived<sparqlQuery>*>(this)->begin_implementation();
+            return static_cast<Derived*>(this)->begin_implementation();
         }
 
         bool end() { return false; }
 
     };
 
-    template<template<bool>class Derived,bool sparqlQuery = false>
+    template<class Derived,bool sparqlQuery>
     class Iterator {
 
     private:
         bool done_;
         bool parser_done_;
-		Derived<sparqlQuery> *triplesParser = nullptr;
+        Derived *triplesParser = nullptr;
 
     public:
-        explicit Iterator(Derived<sparqlQuery> *triplesParser) :
+        explicit Iterator(Derived *triplesParser) :
                 done_{false}, parser_done_{false}, triplesParser{triplesParser} {
             //check if there is at least one parsed triple
             if (triplesParser->hasNextTriple())
@@ -101,9 +100,9 @@ namespace rdf_parser::Turtle::parsers {
     };
 
 
-    };
+};
 
 
 
 
-#endif //RDF_PARSER_TRIPLESPARSER_HPP
+#endif //RDF_PARSER_ABSTRACTPARSER_HPP
