@@ -4,8 +4,7 @@
 
 
 /**
- * StringParser is responsible for parsing triples from string sources.
- * It parse the string one time and put the parsed triples in a std::queue
+ * StringParser is responsible for parsing rdf from string sources.
  */
 
 
@@ -23,7 +22,7 @@ namespace {
 
 namespace rdf_parser::Turtle::parsers {
 
-    class StringParser : public BaseStringParser<false> {
+    class RdfStringParser : public BaseStringParser<false> {
 
 
     public:
@@ -33,11 +32,11 @@ namespace rdf_parser::Turtle::parsers {
          * it also invoke nextTriple to have the first triple ready for using .
          * @param text the string to parse
          */
-        StringParser(std::string text):BaseStringParser(text) {}
+        RdfStringParser(std::string text): BaseStringParser<false>(text) {}
 
 
 
-        ~StringParser() override {}
+        ~RdfStringParser() override {}
 
 
     };

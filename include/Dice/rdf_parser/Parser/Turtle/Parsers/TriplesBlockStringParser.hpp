@@ -2,18 +2,14 @@
 // Created by fakhr on 08.01.21.
 //
 
-#ifndef RDF_PARSER_TRIPLESBLOCKPARSER_HPP
-#define RDF_PARSER_TRIPLESBLOCKPARSER_HPP
+#ifndef RDF_PARSER_TRIPLESBLOCKSTRINGPARSER_HPP
+#define RDF_PARSER_TRIPLESBLOCKSTRINGPARSER_HPP
 
-
-#include <chrono>
 
 #include "BaseStringParser.hpp"
-#include "Dice/rdf_parser/Parser/Turtle/Actions/Actions.hpp"
 
 /**
- * TriplesBlockParser is responsible for parsing sparql's tripleBlocks from string sources.
- * It parse the string one time and put the parsed triples in a std::queue
+ * TriplesBlockStringParser is responsible for parsing sparql's tripleBlocks from string sources.
  */
 
 namespace {
@@ -23,7 +19,7 @@ namespace {
 
 namespace rdf_parser::Turtle::parsers {
 
-    class TriplesBlockParser : public BaseStringParser<true> {
+    class TriplesBlockStringParser : public BaseStringParser<true> {
 
 
     public:
@@ -34,7 +30,7 @@ namespace rdf_parser::Turtle::parsers {
          * it also invoke nextTriple to have the first triple ready for using .
          * @param text the string to parse
          */
-        TriplesBlockParser(std::string text) : BaseStringParser(text) {
+        TriplesBlockStringParser(std::string text) : BaseStringParser<true>(text) {
         }
 
 
@@ -44,10 +40,10 @@ namespace rdf_parser::Turtle::parsers {
         * @param text the string to parse
         * @param prefix_map defines prefixes to be added before parsing
         */
-        TriplesBlockParser(std::string text, std::map<std::string, std::string> prefix_map) : BaseStringParser(text,
-                                                                                                               prefix_map) {
+        TriplesBlockStringParser(std::string text, std::map<std::string, std::string> prefix_map) : BaseStringParser<true>(text,
+                                                                                                                     prefix_map) {
         };
     };
 }
 
-#endif //RDF_PARSER_TRIPLESBLOCKPARSER_HPP
+#endif //RDF_PARSER_TRIPLESBLOCKSTRINGPARSER_HPP

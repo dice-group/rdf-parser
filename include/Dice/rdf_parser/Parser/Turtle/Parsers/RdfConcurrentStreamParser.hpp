@@ -2,7 +2,7 @@
 #define RDF_PARSER_TURTLEPEGTLCONCURRENTSTREAMPARSER_HPP
 
 /**
- * CuncurrentStreamParser is responsible for parsing triples from stream sources.
+ * CuncurrentStreamParser is responsible for parsing Rdfs from stream sources.
  * It also creates its own thread for parsing.
  * It is also responsible for synchronizing between the parsing thread and the triples queue
  * It parse a file as a stream and put the parsed triples increasingly in a tbb::concurrent_bounded_queue
@@ -29,7 +29,7 @@ namespace rdf_parser::Turtle::parsers {
     /*
      *
      */
-    class CuncurrentStreamParser : public TriplesParser<CuncurrentStreamParser,false> {
+    class RdfConcurrentStreamParser : public TriplesParser<RdfConcurrentStreamParser,false> {
 
     private:
         std::shared_ptr<boost::lockfree::spsc_queue<std::conditional_t<false,SparqlQuery::TriplePatternElement ,Triple> ,boost::lockfree::capacity<100000>>> parsedTerms;
@@ -64,12 +64,12 @@ namespace rdf_parser::Turtle::parsers {
             }
         }
 
-        ~CuncurrentStreamParser() override {
+        ~RdfConcurrentStreamParser() override {
             stream.close();
         }
 
 
-        CuncurrentStreamParser(std::string filename, std::size_t bufferSize = 1024 * 1024,
+        RdfConcurrentStreamParser(std::string filename, std::size_t bufferSize = 1024 * 1024,
                                unsigned int queueCapacity = 100000) :
                 stream{filename},
                 upperThrehold(queueCapacity),
@@ -83,7 +83,7 @@ namespace rdf_parser::Turtle::parsers {
                 termsCountIsNotEmpty{std::make_shared<std::atomic_bool>(false)},
                 parsingIsDone{std::make_shared<std::atomic_bool>(false)} {
             parsingThread = std::make_unique<util::ScopedThread>(
-                    std::thread(&CuncurrentStreamParser::startParsing, this, filename, bufferSize));
+                    std::thread(&RdfConcurrentStreamParser::startParsing, this, filename, bufferSize));
 
         }
 
@@ -129,8 +129,9 @@ namespace rdf_parser::Turtle::parsers {
             };
         };
 
-        Iterator<CuncurrentStreamParser,false> begin_implementation(){
-            return Iterator<CuncurrentStreamParser,false>(this);
+
+        Iterator<RdfConcurrentStreamParser,false> begin_implementation(){
+            return Iterator<RdfConcurrentStreamParser,false>(this);
         }
     };
 }

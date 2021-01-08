@@ -7,9 +7,7 @@
  * StreamParser is responsible for parsing triples from stream sources.
  * It parse a file as a stream and put the parsed triples increasingly in a std::queue
  */
-
 #include "TriplesParser.hpp"
-
 #include "Dice/rdf_parser/Parser/Turtle/Actions/Actions.hpp"
 
 namespace {
@@ -20,14 +18,13 @@ namespace {
 namespace rdf_parser::Turtle::parsers {
 
 
-    template<bool sparqlQuery=false>
-    class StreamParser : public TriplesParser<StreamParser<>,sparqlQuery> {
+    class StreamParser : public TriplesParser<StreamParser,false> {
 
     private:
         /**
         * a queue for storing parsed triples .
         */
-        std::shared_ptr<std::queue<std::conditional_t<sparqlQuery,SparqlQuery::TriplePatternElement ,Triple>>> parsedTerms;
+        std::shared_ptr<std::queue<std::conditional_t<false,SparqlQuery::TriplePatternElement ,Triple>>> parsedTerms;
 
         /**
          * defines the size of the stream buffer
@@ -36,7 +33,7 @@ namespace rdf_parser::Turtle::parsers {
 
         std::ifstream stream;
 
-    public:
+    protected:
 
 
         /**
@@ -59,6 +56,7 @@ namespace rdf_parser::Turtle::parsers {
         }
 
 
+    public:
 
         ~StreamParser() override {
             stream.close();
@@ -70,7 +68,7 @@ namespace rdf_parser::Turtle::parsers {
                 read_input file(filename);
                 parsedTerms = std::make_shared<std::queue<Triple>>();
                 States::State<> state(parsedTerms);
-                parse<Grammer::grammer<sparqlQuery>, Actions::action>(istream_input(stream, bufferSize, filename), state);
+                parse<Grammer::grammer<false>, Actions::action>(istream_input(stream, bufferSize, filename), state);
 
             }
             catch (std::exception &e) {
@@ -80,7 +78,7 @@ namespace rdf_parser::Turtle::parsers {
 
 
         void nextTriple() override {
-            this->current_triple = parsedTerms->front();
+            *(this->current_triple) = parsedTerms->front();
             parsedTerms->pop();
 
         }
@@ -90,12 +88,13 @@ namespace rdf_parser::Turtle::parsers {
             return not parsedTerms->empty();
         }
 
-        Iterator<StreamParser,sparqlQuery> begin_implementation(){
-            return Iterator<StreamParser,sparqlQuery>(this);
+
+
+        Iterator<StreamParser,false> begin_implementation(){
+            return Iterator<StreamParser,false>(this);
         }
 
     };
 }
-
 
 #endif //RDF_PARSER_TURTLEPEGTLSTREAMPARSER_HPP

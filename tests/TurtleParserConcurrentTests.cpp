@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include <Dice/rdf_parser/Parser/Turtle/Parsers/ConcurrentStreamParser.hpp>
+#include <Dice/rdf_parser/Parser/Turtle/Parsers/RdfConcurrentStreamParser.hpp>
 
 namespace {
     using namespace rdf_parser::Turtle::parsers;

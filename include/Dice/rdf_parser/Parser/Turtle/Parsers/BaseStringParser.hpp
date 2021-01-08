@@ -14,8 +14,8 @@
 
 
 /**
- * BaseStringParser is a base class for parsing strings .
- *
+ * BaseStringParser is a base class for parsing string sources .
+ * It parse the string one time and put the parsed elements in a std::queue
  */
 
 namespace {
@@ -92,6 +92,7 @@ namespace rdf_parser::Turtle::parsers {
             parsedTerms->pop();
 
         }
+
 
         /**
          * checks whether a string is valid rdf turtle file
