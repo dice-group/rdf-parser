@@ -44,21 +44,22 @@ A header-only library designed to allow efficient and controlled parsing for RDF
 Currently it supports ntriples and turtle languages, as well as triplesBlock part of sparql queries.
 It uses tao's PEGTL library for parsing.
 
-### Usage
+###  Usage
 
 The library is easy to use, for parsing turtle or ntriples include the header for the required parser.
-for example, to use the ConcurrentStreamParser, include `<Dice/rdf_parser/TurtleParser.hpp>` 
-each parser accepts one bool template parameter which determine wether to parse sparqlQuery's TriplesBlock or a rdf (true for sparqlQuery's and false for a rdf), and it's constructor accept one mandatory string parameter which is either the string which is the document to be parsed in case of `StringParser` or the filename of the file that contains the document to be parsed.
-Another optional parameter is a map of predefined prefixes.
+for example, to use the RdfConcurrentStreamParser, include `<Dice/rdf_parser/Parser/Turtle/Parsers/RdfConcurrentStreamParser.hpp>` 
+
+Rdf parsers' constructor accept one string parameter which is either the string which is the document to be parsed in case of `StringParser` or the filename of the file that contains the document to be parsed on the other cases
+
 Example :
 ```c++
-TurtleParser<FileParser> turtleParser("datasets/g.nt");
+ RdfConcurrentStreamParser parser("datasets/g.nt");
 ```
 where `"datasets/g.nt"` is the file name of the file we want to parse.
 
 Now an iterator can be created:
 ```c++
-auto iterator=turtleParser.begin();
+auto iterator=parser.begin();
 ```
 
 We can iterate over the triples and used the triples:
@@ -67,25 +68,28 @@ We can iterate over the triples and used the triples:
 while(it)
 {
  Triple triple= *it;
+ //do something
  it++;
 }
 ```
 
 ### Parsers types
 There are four types of parsers which can be used:
-- `StringParser`: It is used for parsing Strings immediately. It accepts one parameter which is the string of the document to be parsed.
-- `FileParser`: It is used for parsing a whole document file at a time. The parsed triples cannot be accessed before the parsing of the whole document is done. It is faster than the `StreamParser` (below) but require much more memory and thus may run out of memory for large inputs.
-- `StreamParser`: It is used for parsing streams or large files. It can process very big files with low memory usage by parsing chunk by chunk. However, triples are not accessible until the parsing is done. 
-- `ConcurrentStreamParser`: It can be used the same way as the `StreamParser` but uses a separated thread for parsing and uses Intel's TBB `concurrent_queue`
-for storing the parsed triples. Therefore, the already parsed triples can be accessed during the parsing process. It is the default template parameter for `TurtleParser`.
-And it is the recommended parser to use for large files or streams and for simultaneous parsing and accessing to the already parsed triples.
+- `RdfStringParser`: It is used for parsing Rdf Strings immediately. It accepts one parameter which is the string of the document to be parsed.
+- `RdfFileParser`: It is used for parsing a whole document file that contains a Rdf on it  at a time. The parsed triples cannot be accessed before the parsing of the whole document is done. It is faster than the `RdfStreamParser` (below) but require much more memory and thus may run out of memory for large inputs.
+- `RdfStreamParser`: It is used for parsing streams or large files that contains a Rdf. It can process very big files with low memory usage by parsing chunk by chunk. However, triples are not accessible until the parsing is done. 
+- `RdfConcurrentStreamParser`: It can be used the same way as the `RdfStreamParser` but uses a separated thread for parsing and uses Intel's TBB `concurrent_queue`
+for storing the parsed triples. Therefore, the already parsed triples can be accessed during the parsing process. It is the recommended parser to use for large files or streams and for simultaneous parsing and accessing to the already parsed triples.
+
+- `TriplesBlockStringParser`: It is used for parsing Sparql's TripleBlocks Strings immediately. It accepts one parameter which is the string of the document to be parsed.
+- `TriplesBlockFileParser`: It is used for parsing a whole document file that contains Sparql's TripleBlocks at a time. The parsed elements cannot be accessed before the parsing of the whole document is done.
 
 ### Examples
 
-1-Here we create a full example for parsing a turtle file. we use here the `ConcurrentStreamParser`. We assuming there is an turtle file at `datasets/dataset1.ttl`. The file is parsed and the triples are printed to `std::out`.
+1-Here we create a full example for parsing a turtle file. we use here the `RdfConcurrentStreamParser`. We assuming there is an turtle file at `datasets/dataset1.ttl`. The file is parsed and the triples are printed to `std::out`.
 
 ```c++
-#include <Dice/rdf_parser/Parser/Turtle/Parsers/ConcurrentStreamParser.hpp>
+#include <Dice/rdf_parser/Parser/Turtle/Parsers/RdfConcurrentStreamParser.hpp>
 
 namespace {
     using namespace rdf_parser::Turtle::parsers;
@@ -94,7 +98,7 @@ namespace {
 
 int main()
 {
- CuncurrentStreamParser<> parser("datasets/dataset1.ttl");
+ RdfConcurrentStreamParser parser("datasets/dataset1.ttl");
  auto it=Parser.begin();
  while (it){
          Triple triple= *it;
@@ -107,10 +111,10 @@ int main()
 }
 ```
 
-2-Here we create a full example for The tripleBlock part of SparqlQuery Using the StringParser.
+2-Here we create a full example for parsing The tripleBlock part of SparqlQuery Using the TriplesBlockStringParser.
 
 ```c++
-#include <Dice/rdf_parser/Parser/Turtle/Parsers/StringParser.hpp>
+#include <Dice/rdf_parser/Parser/Turtle/Parsers/TriplesBlockStringParser.hpp>
  
 namespace {
     using namespace rdf_parser::Turtle::parsers;
@@ -124,7 +128,7 @@ prefixes.insert(std::pair<std::string,std::string>("wde","http://www.wikidata.or
 prefixes.insert(std::pair<std::string,std::string>("wdt","http://www.wikidata.org/prop/direct/"));
 
 // create the parser with 2 parameters: the query and the prefixes map
-StringParser<true> parser("?var1 <http://www.wikidata.org/prop/P463> _:b0 . _:b0 <http://www.wikidata.org/prop/statement/P463> wde:Q202479 ; <http://www.wikidata.org/prop/qualifier/P580> ?var2 .",prefixes) ;
+TriplesBlockStringParser parser("?var1 <http://www.wikidata.org/prop/P463> _:b0 . _:b0 <http://www.wikidata.org/prop/statement/P463> wde:Q202479 ; <http://www.wikidata.org/prop/qualifier/P580> ?var2 .",prefixes) ;
 
 //get an iterator 
 auto it= parser.begin();
