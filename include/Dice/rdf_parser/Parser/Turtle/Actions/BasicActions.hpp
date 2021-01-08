@@ -12,6 +12,7 @@ This file contains the actions required for pasrsing RDF term .
 
 #include "Dice/rdf_parser/Parser/Turtle/Grammer.hpp"
 #include "Dice/rdf_parser/Parser/Turtle/States/BasicState.hpp"
+#include <Dice/rdf_parser/Sparql/TripleVariable.hpp>
 
 namespace {
     using namespace tao::pegtl;
@@ -308,7 +309,10 @@ namespace rdf_parser::Turtle {
         struct action<Grammer::BlankNode> {
            template<typename Input,bool SparqlQuery>
             static void apply(const Input &in, States::BasicState<SparqlQuery> &state) {
-                state.setElement(BNode(state.getBlank_node_string()));
+                if constexpr (SparqlQuery==false)
+                    state.setElement(BNode(state.getBlank_node_string()));
+                else
+                    state.setElement(rdf_parser::SparqlQuery::TripleVariable(state.getBlank_node_string()));
             }
         };
 

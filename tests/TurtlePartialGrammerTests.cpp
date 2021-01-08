@@ -75,3 +75,18 @@ TEST(PatrialGrammerTest, tripleBlock2) {
         it++;
     }
 }
+
+
+TEST(PatrialGrammerTest, BlankNodes) {
+
+    std::map<std::string,std::string> prefixes;
+    prefixes.insert(std::pair<std::string,std::string>("wde","http://www.wikidata.org/entity/"));
+    prefixes.insert(std::pair<std::string,std::string>("wdt","http://www.wikidata.org/prop/direct/"));
+    rdf_parser::Turtle::parsers::StringParser<true> parser("?var1 <http://www.wikidata.org/prop/P463> _:b0 . _:b0 <http://www.wikidata.org/prop/statement/P463> wde:Q202479 ; <http://www.wikidata.org/prop/qualifier/P580> ?var2 .",prefixes) ;
+    auto it= parser.begin();
+    while (it)
+    {
+        auto x=*it;
+        it++;
+    }
+}
