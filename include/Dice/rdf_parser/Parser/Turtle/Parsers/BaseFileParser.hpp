@@ -16,7 +16,7 @@
 #include <fstream>
 #include <chrono>
 
-#include "TriplesParser.hpp"
+#include "AbstractParser.hpp"
 #include "Dice/rdf_parser/Parser/Turtle/Actions/Actions.hpp"
 
 namespace {
@@ -26,7 +26,7 @@ namespace {
 namespace rdf_parser::Turtle::parsers {
 
     template<bool sparqlQuery>
-    class BaseFileParser : public TriplesParser<BaseFileParser<sparqlQuery>,sparqlQuery> {
+    class BaseFileParser : public AbstractParser<BaseFileParser<sparqlQuery>,sparqlQuery> {
 
     private:
         /**
@@ -34,7 +34,7 @@ namespace rdf_parser::Turtle::parsers {
          */
         std::shared_ptr<std::queue<Triple>> parsedTerms;
 
-    public:
+    protected:
 
 
         /**
@@ -77,6 +77,7 @@ namespace rdf_parser::Turtle::parsers {
 
         }
 
+    public:
 
         ~BaseFileParser() override {
 //           The constructors that take a FILE* argument take ownership of the file pointer, i.e. they fclose() it in the destructor.Therfore, no need to close the file in this destructor
@@ -94,36 +95,11 @@ namespace rdf_parser::Turtle::parsers {
         }
 
 
-        /**
-         * checks whether a file is valid rdf turtle file
-         */
-        static bool isParsable(std::string filename) {
-            try {
-                std::ifstream infile(filename);
-                read_input file(filename);
-                parse<Grammer::grammer<false>>(file);
-                return true;
-            }
-            catch (std::exception &e) {
-                return false;
-            }
-        }
-
         Iterator<BaseFileParser<sparqlQuery>,sparqlQuery> begin_implementation(){
             return Iterator<BaseFileParser<sparqlQuery>,sparqlQuery>(this);
         }
 
-        /**
-         * calculate the time for parsing a rdf turtle file.
-         * Note that the calculated time is only for parsing without using processing the input(creating and storing the triples out of the string)
-         */
-        static long calculateParsingTime(const std::string filename) {
-            std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
-            isParsable(filename);
-            std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
-            auto duration = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
-            return duration;
-        }
+
 
     };
 }

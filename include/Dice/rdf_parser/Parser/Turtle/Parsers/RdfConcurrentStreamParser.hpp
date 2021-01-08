@@ -15,7 +15,7 @@
 #include <iostream>
 #include <exception>
 
-#include "TriplesParser.hpp"
+#include "AbstractParser.hpp"
 #include "Dice/rdf_parser/util/scoped_thread.hpp"
 #include "Dice/rdf_parser/Parser/Turtle/Actions/Actions.hpp"
 #include "Dice/rdf_parser/Parser/Turtle/States/ConcurrentState.hpp"
@@ -29,10 +29,10 @@ namespace rdf_parser::Turtle::parsers {
     /*
      *
      */
-    class RdfConcurrentStreamParser : public TriplesParser<RdfConcurrentStreamParser,false> {
+    class RdfConcurrentStreamParser : public AbstractParser<RdfConcurrentStreamParser,false> {
 
     private:
-        std::shared_ptr<boost::lockfree::spsc_queue<std::conditional_t<false,SparqlQuery::TriplePatternElement ,Triple> ,boost::lockfree::capacity<100000>>> parsedTerms;
+        std::shared_ptr<boost::lockfree::spsc_queue<Triple,boost::lockfree::capacity<100000>>> parsedTerms;
         unsigned int upperThrehold;
         unsigned int lowerThrehold;
 

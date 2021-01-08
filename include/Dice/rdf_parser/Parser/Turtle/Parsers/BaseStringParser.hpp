@@ -9,7 +9,7 @@
 
 #include <chrono>
 
-#include "TriplesParser.hpp"
+#include "AbstractParser.hpp"
 #include "Dice/rdf_parser/Parser/Turtle/Actions/Actions.hpp"
 
 
@@ -26,7 +26,7 @@ namespace {
 namespace rdf_parser::Turtle::parsers {
 
     template<bool sparqlQuery>
-    class BaseStringParser : public TriplesParser<BaseStringParser<sparqlQuery>,sparqlQuery> {
+    class BaseStringParser : public AbstractParser<BaseStringParser<sparqlQuery>,sparqlQuery> {
 
 
     protected:
@@ -94,37 +94,12 @@ namespace rdf_parser::Turtle::parsers {
         }
 
 
-        /**
-         * checks whether a string is valid rdf turtle file
-         */
-        static bool isParsable(const std::string &input) {
-            try {
-                string_input in(input, "the text");
-                parse<Grammer::grammer<sparqlQuery>>(in);
-                return true;
-            }
-            catch (std::exception &e) {
-                return false;
-            }
-
-        }
 
         Iterator<BaseStringParser,sparqlQuery> begin_implementation(){
             return Iterator<BaseStringParser,sparqlQuery>(this);
         }
 
 
-        /**
-         * calculate the time for parsing a rdf turtle string.
-         * Note that the calculated time is only for parsing without using processing the input(creating and storing the triples out of the string)
-         */
-        static long calculateParsingTime(const std::string &input) {
-            std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
-            isParsable(input);
-            std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
-            auto duration = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1).count();
-            return duration;
-        }
 
     };
 }

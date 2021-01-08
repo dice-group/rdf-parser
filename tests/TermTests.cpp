@@ -1,16 +1,18 @@
 #include <gtest/gtest.h>
 #include <Dice/rdf_parser/Parser/Turtle/Parsers/RdfStringParser.hpp>
 
+
 namespace {
 	using namespace rdf_parser::Turtle;
 	using namespace rdf_parser::store::rdf;
+	using namespace rdf_parser::Turtle::parsers;
 }
 
 
 TEST(TermTests, parseIRI) {
-	StringParser<> parser("@prefix pref: <http://example.com/> . "
+	RdfStringParser parser("@prefix pref: <http://example.com/> . "
 									  "<http://example.com/x> a pref:x.");
-	StringParser<>::Iterator iterator = parser.begin();
+	auto iterator = parser.begin();
 	ASSERT_TRUE(bool(iterator));
 	const Triple &triple = *iterator;
 	// check if the non-prefix IRI is correct
@@ -20,11 +22,11 @@ TEST(TermTests, parseIRI) {
 }
 
 TEST(TermTests, parseStringTerm) {
-	StringParser<> parser("@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . "
+	RdfStringParser parser("@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . "
 									  "<http://example.com/x> a \"text\". "
 									  "<http://example.com/x> a \"text\"^^<http://www.w3.org/2001/XMLSchema#string>. "
 									  "<http://example.com/x> a \"text\"^^xsd:string. ");
-	StringParser<>::Iterator iterator = parser.begin();
+	auto iterator = parser.begin();
 	ASSERT_TRUE(bool(iterator));
 	Triple plain = *iterator;
 	++iterator;
@@ -40,12 +42,12 @@ TEST(TermTests, parseStringTerm) {
 
 
 TEST(TermTests, parseNumbers) {
-	StringParser<> parser("@prefix : <http://example.org/elements> .                                                                              \n"
+	RdfStringParser parser("@prefix : <http://example.org/elements> .                                                                              \n"
 									  "<http://en.wikipedia.org/wiki/Helium>   "
 		    						  ":atomicNumber 2 ;"
 			  						  " :atomicMass 4.002602 ;"
 			                          " :specificGravity 1.663E-4 . ");
-	StringParser<>::Iterator iterator = parser.begin();
+	auto iterator = parser.begin();
 	ASSERT_TRUE(bool(iterator));
 	Triple integerNumber = *iterator;
 	++iterator;

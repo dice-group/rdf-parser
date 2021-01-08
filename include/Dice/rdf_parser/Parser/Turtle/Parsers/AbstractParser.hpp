@@ -1,5 +1,5 @@
-#ifndef RDF_PARSER_TRIPLESPARSER_HPP
-#define RDF_PARSER_TRIPLESPARSER_HPP
+#ifndef RDF_PARSER_ABSTRACTPARSER_HPP
+#define RDF_PARSER_ABSTRACTPARSER_HPP
 
 #include "Dice/rdf_parser/RDF/Triple.hpp"
 
@@ -19,12 +19,12 @@ namespace rdf_parser::Turtle::parsers {
     class Iterator;
 
     template<class Derived,bool sparqlQuery>
-    class TriplesParser {
+    class AbstractParser {
 
     protected:
         using element_type = std::conditional_t<sparqlQuery, SparqlQuery::TriplePatternElement, Triple>;
 
-        explicit TriplesParser() {
+        explicit AbstractParser() {
             current_triple = std::make_shared<element_type>();
         };
         std::shared_ptr<element_type> current_triple;
@@ -50,7 +50,7 @@ namespace rdf_parser::Turtle::parsers {
         }
 
 
-        virtual ~TriplesParser() {};
+        virtual ~AbstractParser() {};
 
 
         Iterator<Derived,sparqlQuery> begin()
@@ -105,4 +105,4 @@ namespace rdf_parser::Turtle::parsers {
 
 
 
-#endif //RDF_PARSER_TRIPLESPARSER_HPP
+#endif //RDF_PARSER_ABSTRACTPARSER_HPP

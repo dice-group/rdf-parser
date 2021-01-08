@@ -96,7 +96,6 @@ int main()
 {
  CuncurrentStreamParser<> parser("datasets/dataset1.ttl");
  auto it=Parser.begin();
- //or we can use: CuncurrentStreamParser<>::Iterator it=Parser.begin();
  while (it){
          Triple triple= *it;
          std::cout << triple.subject().getIdentifier() << " "

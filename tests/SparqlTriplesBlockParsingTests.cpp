@@ -1,15 +1,11 @@
 
 #include <gtest/gtest.h>
 #include <Dice/rdf_parser/Parser/Turtle/Parsers/TriplesBlockStringParser.hpp>
-#include <Dice/rdf_parser/Parser/Turtle/Parsers/RdfConcurrentStreamParser.hpp>
-#include <Dice/rdf_parser/Parser/Turtle/Parsers/RdfFileParser.hpp>
-#include <Dice/rdf_parser/Parser/Turtle/Parsers/StreamParser.hpp>
-
 
 using namespace rdf_parser::Turtle;
 
 
-TEST(PatrialGrammerTest, F1) {
+TEST(SparqlTriplesBlockParsingTests, F1) {
 
     rdf_parser::Turtle::parsers::TriplesBlockStringParser parser("?g <sad> ?who . ") ;
     auto it= parser.begin();
@@ -20,7 +16,7 @@ TEST(PatrialGrammerTest, F1) {
     }
 }
 
-TEST(PatrialGrammerTest, AddedprefixTest) {
+TEST(SparqlTriplesBlockParsingTests, AddedprefixTest) {
 
     std::map<std::string,std::string > prefixes;
     prefixes.insert(std::pair<std::string,std::string>("foaf","http://xmlns.com/foaf/0.1/"));
@@ -33,7 +29,7 @@ TEST(PatrialGrammerTest, AddedprefixTest) {
     }
 }
 
-TEST(PatrialGrammerTest, AddedprefixTest2) {
+TEST(SparqlTriplesBlockParsingTests, AddedprefixTest2) {
 
     std::map<std::string,std::string> prefixes;
     //prefixes.insert(std::pair<std::string,std::string>("","http://example.org/book/"));
@@ -50,7 +46,7 @@ TEST(PatrialGrammerTest, AddedprefixTest2) {
 }
 
 
-TEST(PatrialGrammerTest, tripleBlock) {
+TEST(SparqlTriplesBlockParsingTests, tripleBlock) {
 
 
 rdf_parser::Turtle::parsers::TriplesBlockStringParser parser("?x <http://xmlns.com/foaf/0.1/knows> ?y .\n"
@@ -63,7 +59,7 @@ it++;
 }
 }
 
-TEST(PatrialGrammerTest, tripleBlock2) {
+TEST(SparqlTriplesBlockParsingTests, tripleBlock2) {
 
     std::map<std::string,std::string> prefixes;
     prefixes.insert(std::pair<std::string,std::string>("ex","http://example.org/"));
@@ -77,7 +73,7 @@ TEST(PatrialGrammerTest, tripleBlock2) {
 }
 
 
-TEST(PatrialGrammerTest, BlankNodes) {
+TEST(SparqlTriplesBlockParsingTests, BlankNodes) {
 
     std::map<std::string,std::string> prefixes;
     prefixes.insert(std::pair<std::string,std::string>("wde","http://www.wikidata.org/entity/"));
