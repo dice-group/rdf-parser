@@ -10,33 +10,39 @@ For more information about states please check https://github.com/taocpp/PEGTL/b
 #include <queue>
 #include <stack>
 
-#include "BasicState.hpp"
-#include <Dice/rdf-parser/RDF/Triple.hpp>
+#include "Dice/rdf-parser/Parser/Turtle/States/BasicState.hpp"
+#include "Dice/rdf-parser/RDF/Triple.hpp"
 
 
-namespace rdf_parser::Turtle {
-	namespace States {
+namespace rdf_parser::Turtle::States {
 
 		/*
-        * State defines the data structures realted to the whole grammer (stores the parsed triples)
+        * State defines the data structures related to the whole grammar (stores the parsed triples)
         */
 		template<bool sparqlQuery = false, typename T = std::queue<std::conditional_t<sparqlQuery, SparqlQuery::TriplePatternElement, Triple>>>
 		class State : public BasicState<sparqlQuery> {
+			using Term = rdf_parser::store::rdf::Term;
+			using Literal = rdf_parser::store::rdf::Literal;
+			using Element_t = std::conditional_t<sparqlQuery, SparqlQuery::VarOrTerm, Term>;
+			using Triple_t = std::conditional_t<sparqlQuery, SparqlQuery::TriplePatternElement, Triple>;
 
 		protected:
-			using BnplCollectionList = std::vector<std::conditional_t<sparqlQuery, SparqlQuery::VarOrTerm, Term>>;
-			using VerbObjectPair = std::pair<std::conditional_t<sparqlQuery, SparqlQuery::VarOrTerm, Term>, std::conditional_t<sparqlQuery, SparqlQuery::VarOrTerm, Term>>;
+			/**
+			 * Blank Node Property List
+			 */
+			using BnplCollectionList = std::vector<Element_t>;
+			using VerbObjectPair = std::pair<Element_t, Element_t>;
 
 			std::shared_ptr<T> parsed_elements;
 
 
-			//we use this to slove the case when 2 verbs are pushed into the stack without a pop between
+			//we use this to solve the case when 2 verbs are pushed into the stack without a pop between
 			//to solve the PredicateObjectList recursive problem.
-			std::stack<std::conditional_t<sparqlQuery, SparqlQuery::VarOrTerm, Term>> verb_stack;
+			std::stack<Element_t> verb_stack;
 			int verb_stack_one_step_pre_size = 0;
 			int verb_stack_two_step_pre_size = 0;
 
-			std::conditional_t<sparqlQuery, SparqlQuery::VarOrTerm, Term> subject;
+			Element_t subject_;
 
 
 			//deal with multi terms and nesting
@@ -47,7 +53,7 @@ namespace rdf_parser::Turtle {
 			std::vector<VerbObjectPair> verb_object_pair_list;
 			std::stack<std::vector<VerbObjectPair>> verb_object_pair_list_stack;
 			//to deal with the case when there are BNPL + optional predicateObjectList
-			std::conditional_t<sparqlQuery, SparqlQuery::VarOrTerm, Term> first_BNPL;
+			Element_t first_BNPL;
 
 
 		public:
@@ -60,16 +66,15 @@ namespace rdf_parser::Turtle {
 			virtual inline void syncWithMainThread() {
 			}
 
-			virtual inline void insertTriple(std::conditional_t<sparqlQuery, SparqlQuery::TriplePatternElement, Triple> triple) {
+			virtual inline void insertTriple(Triple_t triple) {
 				this->parsed_elements->push(std::move(triple));
 			}
 
-			virtual void setPasrsingIsDone() {
+			virtual void setParsingIsDone() {
 			}
 
 
 			inline void clearTripleParameters() {
-				//                first_BNPL = nullptr;
 				verb_stack_two_step_pre_size = 0;
 				verb_stack_one_step_pre_size = 0;
 				bnpl_collection_list.clear();
@@ -78,12 +83,12 @@ namespace rdf_parser::Turtle {
 			}
 
 
-			inline void setSubject(std::conditional_t<sparqlQuery, SparqlQuery::VarOrTerm, Term> subject) {
-				this->subject = std::move(subject);
+			inline void setSubject(Element_t subject) {
+				this->subject_ = std::move(subject);
 			}
 
 
-			void proccessVerb() {
+			void processVerb() {
 				verb_stack_two_step_pre_size = verb_stack_one_step_pre_size;
 				verb_stack_one_step_pre_size = verb_stack.size();
 				verb_stack.push(this->getElement());
@@ -94,14 +99,14 @@ namespace rdf_parser::Turtle {
 				}
 			}
 
-			void proccessCollection() {
-				std::vector<std::conditional_t<sparqlQuery, SparqlQuery::TriplePatternElement, Triple>> LocalParsedTerms;
+			void processCollection() {
+				std::vector<Triple_t> LocalParsedTerms;
 				URIRef first("rdf:first");
 				URIRef rest("rdf:rest");
 				URIRef nil("rdf:nil");
 				if (bnpl_collection_list.size() == 0) {
 					BNode unlabeledNode(this->createBlankNodeLabel());
-					std::conditional_t<sparqlQuery, SparqlQuery::TriplePatternElement, Triple> triple(unlabeledNode, first, nil);
+					Triple_t triple(unlabeledNode, first, nil);
 					LocalParsedTerms.push_back(triple);
 					*(this->element_) = unlabeledNode;
 				} else {
@@ -109,11 +114,11 @@ namespace rdf_parser::Turtle {
 					for (auto object = bnpl_collection_list.rbegin();
 						 object != bnpl_collection_list.rend(); object++) {
 						BNode unlabeledNode(this->createBlankNodeLabel());
-						std::conditional_t<sparqlQuery, SparqlQuery::TriplePatternElement, Triple> triple1;
+						Triple_t triple1;
 						triple1.setSubject(unlabeledNode);
 						triple1.setPredicate(rest);
 
-						std::conditional_t<sparqlQuery, SparqlQuery::TriplePatternElement, Triple> triple2(unlabeledNode, first, *object);
+						Triple_t triple2(unlabeledNode, first, *object);
 						//case 1 :last element_ :
 						if (lastElement) {
 							lastElement = false;
@@ -134,16 +139,15 @@ namespace rdf_parser::Turtle {
 				bnpl_collection_list_stack.pop();
 			}
 
-			void proccessBlankNodePropertyList() {
-				//ToDO : manage the unlabeled nodes names
+			void processBlankNodePropertyList() {
 				//create new Blank Node as subject
 				BNode unlabeledNode(this->createBlankNodeLabel());
 				//add the the unlabeledNode to object list
 				*(this->element_) = unlabeledNode;
-				auto verbobjectPairList = verb_object_pair_list;
+				auto verbObjectPairList = verb_object_pair_list;
 				//go through all the VerbObject pairs and make triples out of them with the unlabeled subject
-				for (auto &pair : verbobjectPairList) {
-					std::conditional_t<sparqlQuery, SparqlQuery::TriplePatternElement, Triple> triple(unlabeledNode, pair.first, pair.second);
+				for (auto &pair : verbObjectPairList) {
+					Triple_t triple(unlabeledNode, pair.first, pair.second);
 					insertTriple(triple);
 				}
 				verb_object_pair_list.clear();
@@ -159,7 +163,7 @@ namespace rdf_parser::Turtle {
 				bnpl_collection_list_stack.pop();
 			}
 
-			void proccessPredicateObjectListInner() {
+			void processPredicateObjectListInner() {
 				auto verb = verb_stack.top();
 				verb_stack.pop();
 				for (auto &object : bnpl_collection_list) {
@@ -169,10 +173,10 @@ namespace rdf_parser::Turtle {
 			}
 
 
-			inline void proccessTripleSeq() {
+			inline void processTripleSeq() {
 				//add the subject to each pair in verbObjectsList and create a triple out of that
 				for (auto &pair : verb_object_pair_list) {
-					std::conditional_t<sparqlQuery, SparqlQuery::TriplePatternElement, Triple> triple(subject, pair.first, pair.second);
+					Triple_t triple(subject_, pair.first, pair.second);
 					//add the created triple into the store
 					insertTriple(triple);
 				}
@@ -188,12 +192,11 @@ namespace rdf_parser::Turtle {
 			}
 
 
-			std::conditional_t<sparqlQuery, SparqlQuery::VarOrTerm, Term> &getFirst_BNPL() {
+			Element_t &getFirst_BNPL() {
 				return first_BNPL;
 			}
 		};
-	}// namespace States
-}// namespace rdf_parser::Turtle
+	}// namespace rdf_parser::Turtle
 
 
 #endif//RDF_PARSER_STATE_HPP

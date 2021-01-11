@@ -8,29 +8,30 @@ For more information about states please check https://github.com/taocpp/PEGTL/b
 */
 
 #include <atomic>
-#include <boost/lockfree/spsc_queue.hpp>
 #include <condition_variable>
 #include <mutex>
 #include <thread>
 
-#include "State.hpp"
+#include <boost/lockfree/spsc_queue.hpp>
+
+#include "Dice/rdf-parser/Parser/Turtle/States/State.hpp"
 
 namespace rdf_parser::Turtle {
 	namespace States {
 
 		/*
-         * ConcurrentState defines the data structures realted to the whole grammer (stores the parsed triples)
-         * in a cunncurent data structure (intel concureent queue)
+         * ConcurrentState defines the data structures related to the whole grammar (stores the parsed triples)
+         * in a concurrent data structure (boost lock-free spsc_queue)
          */
 		template<bool sparqlQuery, typename T = boost::lockfree::spsc_queue<std::conditional_t<sparqlQuery, SparqlQuery::VarOrTerm, Term>>>
 		class ConcurrentState : public State<sparqlQuery, T> {
 
 		private:
-			//Defines  threhold for triples in the Queue(should be assigned by the constructor)
-			unsigned int upperThrehold;
+			//Defines  threshold for triples in the Queue(should be assigned by the constructor)
+			unsigned int upperThreshold;
 			std::shared_ptr<std::condition_variable> cv;
 			std::shared_ptr<std::mutex> m;
-			std::shared_ptr<std::atomic_bool> termCountWithinThreholds;
+			std::shared_ptr<std::atomic_bool> termCountWithinThresholds;
 			std::shared_ptr<std::atomic_bool> termsCountIsNotEmpty;
 			std::shared_ptr<std::atomic_bool> parsingIsDone;
 
@@ -38,35 +39,35 @@ namespace rdf_parser::Turtle {
 			std::shared_ptr<std::mutex> m2;
 
 		public:
-			explicit ConcurrentState(std::shared_ptr<T> &parsingQueue, unsigned int upperThrehold,
+			explicit ConcurrentState(std::shared_ptr<T> &parsingQueue, unsigned int upperThreshold,
 									 std::shared_ptr<std::condition_variable> cv, std::shared_ptr<std::mutex> m,
 									 std::shared_ptr<std::condition_variable> cv2, std::shared_ptr<std::mutex> m2,
-									 std::shared_ptr<std::atomic_bool> termCountWithinThreholds,
+									 std::shared_ptr<std::atomic_bool> termCountWithinThresholds,
 									 std::shared_ptr<std::atomic_bool> termsCountIsNotEmpty,
 									 std::shared_ptr<std::atomic_bool> parsingIsDone)
 				: State<sparqlQuery, T>(parsingQueue) {
-				this->upperThrehold = upperThrehold;
+				this->upperThreshold = upperThreshold;
 				this->cv = cv;
 				this->m = m;
 				this->cv2 = cv2;
 				this->m2 = m2;
-				this->termCountWithinThreholds = termCountWithinThreholds;
+				this->termCountWithinThresholds = termCountWithinThresholds;
 				this->termsCountIsNotEmpty = termsCountIsNotEmpty;
 				this->parsingIsDone = parsingIsDone;
 			}
 
 			inline void syncWithMainThread() override {
-				if (this->parsed_elements->read_available() > upperThrehold) {
+				if (this->parsed_elements->read_available() > upperThreshold) {
 					std::unique_lock<std::mutex> lk(*m);
-					*termCountWithinThreholds = false;
+					*termCountWithinThresholds = false;
 					//set the parsing thread to sleep
-					cv->wait(lk, [&] { return termCountWithinThreholds->load(); });
+					cv->wait(lk, [&] { return termCountWithinThresholds->load(); });
 					//the parsing thread wake from sleeping
 				}
 			}
 
 			inline void insertTriple(std::conditional_t<sparqlQuery, SparqlQuery::TriplePatternElement, Triple> triple) override {
-				if (*termsCountIsNotEmpty == false) {
+				if (not *termsCountIsNotEmpty) {
 					{
 						std::lock_guard<std::mutex> lk(*m2);
 						*termsCountIsNotEmpty = true;
@@ -79,8 +80,8 @@ namespace rdf_parser::Turtle {
 			}
 
 
-			void setPasrsingIsDone() override {
-				if (*termsCountIsNotEmpty == false) {
+			void setParsingIsDone() override {
+				if (not *termsCountIsNotEmpty) {
 					{
 						std::lock_guard<std::mutex> lk(*m2);
 						*termsCountIsNotEmpty = true;

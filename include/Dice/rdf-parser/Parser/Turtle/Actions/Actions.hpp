@@ -5,10 +5,10 @@
 #include "Dice/rdf-parser/Parser/Turtle/States/State.hpp"
 
 /**
-Actions define how to deal with the parsed grammers during the parsing and allow to store information in the states.
+Actions define how to deal with the parsed grammars during the parsing and allow to store information in the states.
 For more information about actions please check https://github.com/taocpp/PEGTL/blob/master/doc/Actions-and-States.md#
 
-This file contains the actions required for pasrsing RDF triples  in a whole file,stream or string.
+This file contains the actions required for parsing RDF triples  in a whole file,stream or string.
 */
 
 
@@ -35,7 +35,7 @@ namespace rdf_parser::Turtle::Actions {
 	struct action<Grammer::tripleSeq1<SparqlQuery>> {
 		template<typename Input, typename Queue>
 		static void apply(const Input &in, States::State<SparqlQuery, Queue> &state) {
-			state.proccessTripleSeq();
+			state.processTripleSeq();
 		}
 	};
 
@@ -45,7 +45,7 @@ namespace rdf_parser::Turtle::Actions {
 		static void apply(const Input &in, States::State<SparqlQuery, Queue> &state) {
 			//add the unlabeled blank node from BNPL as subject
 			state.setSubject(state.getFirst_BNPL());
-			state.proccessTripleSeq();
+			state.processTripleSeq();
 		}
 	};
 
@@ -62,7 +62,7 @@ namespace rdf_parser::Turtle::Actions {
 	struct action<Grammer::verb<SparqlQuery>> {
 		template<typename Input, typename Queue>
 		static void apply(const Input &in, States::State<SparqlQuery, Queue> &state) {
-			state.proccessVerb();
+			state.processVerb();
 		}
 	};
 
@@ -87,7 +87,7 @@ namespace rdf_parser::Turtle::Actions {
 	struct action<Grammer::collection<SparqlQuery>> {
 		template<typename Input, typename Queue>
 		static void apply(const Input &in, States::State<SparqlQuery, Queue> &state) {
-			state.proccessCollection();
+			state.processCollection();
 		}
 	};
 
@@ -103,7 +103,7 @@ namespace rdf_parser::Turtle::Actions {
 	struct action<Grammer::blankNodePropertyList<SparqlQuery>> {
 		template<typename Input, typename Queue>
 		static void apply(const Input &in, States::State<SparqlQuery, Queue> &state) {
-			state.proccessBlankNodePropertyList();
+			state.processBlankNodePropertyList();
 		}
 	};
 
@@ -112,7 +112,7 @@ namespace rdf_parser::Turtle::Actions {
 	struct action<Grammer::predicateObjectListInner<SparqlQuery>> {
 		template<typename Input, typename Queue>
 		static void apply(const Input &in, States::State<SparqlQuery, Queue> &state) {
-			state.proccessPredicateObjectListInner();
+			state.processPredicateObjectListInner();
 		}
 	};
 
@@ -122,7 +122,7 @@ namespace rdf_parser::Turtle::Actions {
 		template<typename Input, typename Queue, bool SparqlQuery>
 		static void apply(const Input &in, States::State<SparqlQuery, Queue> &state) {
 			//Here parsingIsDone lock is set to true
-			state.setPasrsingIsDone();
+			state.setParsingIsDone();
 		}
 	};
 }// namespace rdf_parser::Turtle::Actions
