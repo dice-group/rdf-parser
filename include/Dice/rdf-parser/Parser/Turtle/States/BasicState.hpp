@@ -41,7 +41,7 @@ namespace rdf_parser::Turtle::States {
 			bool type_tag_found = false;
 			bool lang_tag_found = false;
 			bool iri_is_IRIREF;
-			std::string lan_tag_;
+			std::string lang_tag_;
 			std::string type_tag_;
 			std::string literal_string_;
 			std::string blank_node_string_;
@@ -65,13 +65,22 @@ namespace rdf_parser::Turtle::States {
 				prefix_map.insert(std::pair<std::string, std::string>(std::move(prefix), std::move(value)));
 			}
 
-			inline void setLan_tag(std::string lan_tag) { this->lan_tag_ = std::move(lan_tag); }
+			inline void setLan_tag(std::string lan_tag) { this->lang_tag_ = std::move(lan_tag); }
 
 			inline void setType_tag(std::string type_tag) { this->type_tag_ = std::move(type_tag); }
 
 
+			[[nodiscard]] bool isTypeTagFound() const {
+				return type_tag_found;
+			}
+
 			inline void setType_tag_found(bool found) {
 				this->type_tag_found = found;
+			}
+
+
+			[[nodiscard]] bool isLangTagFound() const {
+				return lang_tag_found;
 			}
 
 			inline void setLang_tag_found(bool found) {
@@ -82,48 +91,24 @@ namespace rdf_parser::Turtle::States {
 				this->iri_is_IRIREF = found;
 			}
 
-			void proccessRdfLiteral() {
-				//check if this RdfLiteral has IRI part
-				if (type_tag_found) {
-					std::string tag;
-					//set it again to false
-					type_tag_found = false;
-					//check if the type tag is iri or PREFIXED NAME and process it accordingly
-					if (not iriIsIRIREF()) {
-						size_t pos = type_tag_.find(':');
-						std::string prefix = type_tag_.substr(0, pos);
-						if (auto prefix_iter = prefix_map.find(prefix);
-								prefix_iter != prefix_map.end()){
-							const auto &mappedPrefix = prefix_iter->second;
-							tag = mappedPrefix + type_tag_.substr(pos + 1, type_tag_.length());
-						} else {
-							tag = type_tag_;
-						}
-					} else {
-						tag = type_tag_;
-					}
-					*element_ = (Literal(literal_string_, std::nullopt, tag));
-				}
-				//check if this RdfLiteral has langTag part
-				else if (lang_tag_found) {
-					//set it again to false
-					lang_tag_found = false;
-					*element_ = Literal(literal_string_, lan_tag_, std::nullopt);
-				} else {
-					*element_ = Literal(literal_string_, std::nullopt, std::nullopt);
-				}
+			const std::string &getType_tag() {
+				return type_tag_;
 			}
 
-			std::string getType_tag() {
-				return type_tag_;
+			const std::string &getLang_tag() {
+				return lang_tag_;
 			}
 
 			bool iriIsIRIREF() {
 				return iri_is_IRIREF;
 			}
 
-			std::string getBlank_node_string() {
+			const std::string &getBlank_node_string() {
 				return blank_node_string_;
+			}
+
+			const std::string &getLiteral_string() {
+				return literal_string_;
 			}
 
 			inline void setLiteral_string(std::string literal_string) { this->literal_string_ = std::move(literal_string); }
@@ -132,28 +117,21 @@ namespace rdf_parser::Turtle::States {
 
 			inline void setBase(std::string base) { this->base_ = std::move(base); }
 
-			std::string getBase() { return base_; }
+			const std::string &getBase() { return base_; }
 
 			// create a unique label for a BlankNode
 			std::string createBlankNodeLabel() {
 				return fmt::format("b{}", latest_BN_label++);
 			}
 
-			/**
-			 * Checks if the prefix already exits
-			 * @param prefix the prefix you are looking for
-			 * @return if it exists or not
-			 */
-			inline bool hasPrefix(const std::string &prefix) {
-				auto found = prefix_map.find(prefix);
-				if (found != prefix_map.end())
-					return true;
-				return false;
-			}
-
-			inline std::string getPrefixValue(const std::string& prefix) {
-				auto found = prefix_map.find(prefix);
-				return found->second;
+			[[nodiscard]] inline std::optional<std::reference_wrapper<const std::string>> getPrefixValue(const std::string& prefix) const {
+				if (auto prefix_iter = prefix_map.find(prefix);
+						prefix_iter != prefix_map.end()) {
+					const auto &mappedPrefix = prefix_iter->second;
+					return std::optional<std::reference_wrapper<const std::string>>{mappedPrefix};
+				} else{
+					return std::nullopt;
+				}
 			}
 		};
 	}// namespace rdf_parser::Turtle

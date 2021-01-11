@@ -118,13 +118,11 @@ namespace rdf_parser::Turtle::Actions {
 				ss >> statement;//read the whole statement
 				int pos = statement.find(':');
 				prefix = statement.substr(0, pos);
-				value = statement.substr(pos + 1, statement.length() - prefix.length());
 
-
-				if (state.hasPrefix(prefix)) {
-					std::string mappedPrefix = state.getPrefixValue(prefix);
-					value = mappedPrefix + value;
-					state.setElement(URIRef(value));
+				if (auto mappedPrefix_opt = state.getPrefixValue(prefix);
+					mappedPrefix_opt.has_value()){
+					const std::string &mappedPrefix = mappedPrefix_opt.value();
+					state.setElement(URIRef(mappedPrefix + statement.substr(pos + 1, statement.length() - prefix.length())));
 					state.setIri_is_IRIREF(false);
 				} else {
 					throw std::runtime_error("undefined prefix");
@@ -214,9 +212,40 @@ namespace rdf_parser::Turtle::Actions {
 
 		template<>
 		struct action<Grammer::RdfLiteral> {
+			using Literal = rdf_parser::store::rdf::Literal;
 			template<typename Input, bool SparqlQuery>
 			static void apply(const Input &in, States::BasicState<SparqlQuery> &state) {
-				state.proccessRdfLiteral();
+				//check if this RdfLiteral has IRI part
+				if (state.isTypeTagFound()) {
+					std::string tag;
+					//set it again to false
+					state.setType_tag_found(false);
+
+					const std::string &type_tag = state.getType_tag();
+					//check if the type tag is iri or PREFIXED NAME and process it accordingly
+					if (not state.iriIsIRIREF()) {
+						size_t pos = type_tag.find(':');
+						std::string prefix = type_tag.substr(0, pos);
+						if (auto mappedPrefix_opt = state.getPrefixValue(prefix);
+							mappedPrefix_opt.has_value()) {
+							const std::string &mappedPrefix = mappedPrefix_opt.value();
+							tag = mappedPrefix + type_tag.substr(pos + 1, type_tag.length());
+						} else {
+							tag = type_tag;
+						}
+					} else {
+						tag = type_tag;
+					}
+					state.setElement(Literal{state.getLiteral_string(), std::nullopt, tag});
+				}
+				//check if this RdfLiteral has langTag part
+				else if (state.isLangTagFound()) {
+					//set it again to false
+					state.setLang_tag_found(false);
+					state.setElement(Literal(state.getLiteral_string(), state.getLang_tag(), std::nullopt));
+				} else {
+					state.setElement(Literal(state.getLiteral_string(), std::nullopt, std::nullopt));
+				}
 			}
 		};
 
