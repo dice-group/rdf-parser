@@ -10,9 +10,9 @@ This file contains the actions required for pasrsing RDF term .
 */
 
 
-#include "Dice/rdf_parser/Parser/Turtle/Grammer.hpp"
-#include "Dice/rdf_parser/Parser/Turtle/States/BasicState.hpp"
-#include <Dice/rdf_parser/Sparql/TripleVariable.hpp>
+#include "Dice/rdf-parser/Parser/Turtle/Grammer.hpp"
+#include "Dice/rdf-parser/Parser/Turtle/States/BasicState.hpp"
+#include <Dice/rdf-parser/Sparql/TripleVariable.hpp>
 
 namespace {
     using namespace tao::pegtl;

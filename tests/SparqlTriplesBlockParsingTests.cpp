@@ -1,6 +1,6 @@
 
 #include <gtest/gtest.h>
-#include <Dice/rdf_parser/Parser/Turtle/Parsers/TriplesBlockStringParser.hpp>
+#include <Dice/rdf-parser/Parser/Turtle/Parsers/TriplesBlockStringParser.hpp>
 
 using namespace rdf_parser::Turtle;
 

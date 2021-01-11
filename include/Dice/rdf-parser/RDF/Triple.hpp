@@ -6,7 +6,7 @@
  */
 
 
-#include "Dice/rdf_parser/RDF/Term.hpp"
+#include "Dice/rdf-parser/RDF/Term.hpp"
 
 namespace rdf_parser::store::rdf {
     class Triple {

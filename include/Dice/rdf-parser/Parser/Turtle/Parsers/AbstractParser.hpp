@@ -1,7 +1,7 @@
 #ifndef RDF_PARSER_ABSTRACTPARSER_HPP
 #define RDF_PARSER_ABSTRACTPARSER_HPP
 
-#include "Dice/rdf_parser/RDF/Triple.hpp"
+#include "Dice/rdf-parser/RDF/Triple.hpp"
 
 
 /**

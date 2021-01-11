@@ -16,8 +16,8 @@ For more information about states please check https://github.com/taocpp/PEGTL/b
 #include <string>
 #include <optional>
 
-#include "Dice/rdf_parser/RDF/Term.hpp"
-#include "Dice/rdf_parser/Sparql/TriplePatternElement.hpp"
+#include "Dice/rdf-parser/RDF/Term.hpp"
+#include "Dice/rdf-parser/Sparql/TriplePatternElement.hpp"
 
 
 namespace {

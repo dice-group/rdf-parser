@@ -8,7 +8,7 @@
  * It parse a file as a stream and put the parsed triples increasingly in a std::queue
  */
 #include "AbstractParser.hpp"
-#include "Dice/rdf_parser/Parser/Turtle/Actions/Actions.hpp"
+#include "Dice/rdf-parser/Parser/Turtle/Actions/Actions.hpp"
 #include "../Configurations.hpp"
 
 namespace {

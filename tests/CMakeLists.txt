@@ -12,7 +12,7 @@ conan_basic_setup()
 add_executable(tests Tests.cpp)
 
 target_link_libraries(tests
-        rdf_parser
+        rdf-parser
         ${CONAN_LIBS}
         )
 

@@ -12,7 +12,7 @@
 #include <chrono>
 
 #include "BaseStringParser.hpp"
-#include "Dice/rdf_parser/Parser/Turtle/Actions/Actions.hpp"
+#include "Dice/rdf-parser/Parser/Turtle/Actions/Actions.hpp"
 
 
 namespace {

@@ -2,7 +2,7 @@
 #define RDF_PARSER_ACTIONS_HPP
 
 #include "BasicActions.hpp"
-#include "Dice/rdf_parser/Parser/Turtle/States/State.hpp"
+#include "Dice/rdf-parser/Parser/Turtle/States/State.hpp"
 
 /**
 Actions define how to deal with the parsed grammers during the parsing and allow to store information in the states.

@@ -16,9 +16,9 @@
 #include <exception>
 
 #include "AbstractParser.hpp"
-#include "Dice/rdf_parser/util/scoped_thread.hpp"
-#include "Dice/rdf_parser/Parser/Turtle/Actions/Actions.hpp"
-#include "Dice/rdf_parser/Parser/Turtle/States/ConcurrentState.hpp"
+#include "Dice/rdf-parser/util/scoped_thread.hpp"
+#include "Dice/rdf-parser/Parser/Turtle/Actions/Actions.hpp"
+#include "Dice/rdf-parser/Parser/Turtle/States/ConcurrentState.hpp"
 
 #include "../Configurations.hpp"
 namespace {
