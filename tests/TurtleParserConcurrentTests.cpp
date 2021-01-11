@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <Dice/rdf_parser/Parser/Turtle/Parsers/RdfConcurrentStreamParser.hpp>
-
+#include <Dice/rdf_parser/Parser/Turtle/Parsers/RdfStreamParser.hpp>
 namespace {
     using namespace rdf_parser::Turtle::parsers;
     using namespace rdf_parser::store::rdf;

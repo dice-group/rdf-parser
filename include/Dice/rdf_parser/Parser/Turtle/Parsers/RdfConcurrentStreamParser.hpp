@@ -20,6 +20,7 @@
 #include "Dice/rdf_parser/Parser/Turtle/Actions/Actions.hpp"
 #include "Dice/rdf_parser/Parser/Turtle/States/ConcurrentState.hpp"
 
+#include "../Configurations.hpp"
 namespace {
     using namespace tao::pegtl;
 }
@@ -32,7 +33,7 @@ namespace rdf_parser::Turtle::parsers {
     class RdfConcurrentStreamParser : public AbstractParser<RdfConcurrentStreamParser,false> {
 
     private:
-        std::shared_ptr<boost::lockfree::spsc_queue<Triple,boost::lockfree::capacity<100000>>> parsedTerms;
+        std::shared_ptr<boost::lockfree::spsc_queue<Triple,boost::lockfree::capacity<Configurations::RdfConcurrentStreamParser_QueueCapacity>>> parsedTerms;
         unsigned int upperThrehold;
         unsigned int lowerThrehold;
 
@@ -51,7 +52,7 @@ namespace rdf_parser::Turtle::parsers {
         void startParsing(std::string filename, std::size_t bufferSize) {
             try {
 
-                States::ConcurrentState<false,boost::lockfree::spsc_queue<Triple,boost::lockfree::capacity<100000>>> state(parsedTerms,
+                States::ConcurrentState<false,boost::lockfree::spsc_queue<Triple,boost::lockfree::capacity<Configurations::RdfConcurrentStreamParser_QueueCapacity>>> state(parsedTerms,
                                                                                    upperThrehold, cv,
                                                                                    m, cv2, m2,
                                                                                    termCountWithinThreholds,
@@ -69,12 +70,11 @@ namespace rdf_parser::Turtle::parsers {
         }
 
 
-        RdfConcurrentStreamParser(std::string filename, std::size_t bufferSize = 1024 * 1024,
-                               unsigned int queueCapacity = 100000) :
+        RdfConcurrentStreamParser(std::string filename) :
                 stream{filename},
-                upperThrehold(queueCapacity),
-                lowerThrehold(queueCapacity / 10),
-                parsedTerms{std::make_shared<boost::lockfree::spsc_queue<Triple,boost::lockfree::capacity<100000>>>()},
+                upperThrehold(Configurations::RdfConcurrentStreamParser_QueueCapacity),
+                lowerThrehold(Configurations::RdfConcurrentStreamParser_QueueCapacity / 10),
+                parsedTerms{std::make_shared<boost::lockfree::spsc_queue<Triple,boost::lockfree::capacity<Configurations::RdfConcurrentStreamParser_QueueCapacity>>>()},
                 cv{std::make_shared<std::condition_variable>()},
                 m{std::make_shared<std::mutex>()},
                 cv2{std::make_shared<std::condition_variable>()},
@@ -83,7 +83,7 @@ namespace rdf_parser::Turtle::parsers {
                 termsCountIsNotEmpty{std::make_shared<std::atomic_bool>(false)},
                 parsingIsDone{std::make_shared<std::atomic_bool>(false)} {
             parsingThread = std::make_unique<util::ScopedThread>(
-                    std::thread(&RdfConcurrentStreamParser::startParsing, this, filename, bufferSize));
+                    std::thread(&RdfConcurrentStreamParser::startParsing, this, filename, Configurations::RdfConcurrentStreamParser_BufferSize));
 
         }
 

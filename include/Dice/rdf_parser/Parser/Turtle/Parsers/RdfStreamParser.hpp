@@ -9,6 +9,7 @@
  */
 #include "AbstractParser.hpp"
 #include "Dice/rdf_parser/Parser/Turtle/Actions/Actions.hpp"
+#include "../Configurations.hpp"
 
 namespace {
     using namespace tao::pegtl;
@@ -18,19 +19,13 @@ namespace {
 namespace rdf_parser::Turtle::parsers {
 
 
-    class RdfStreamParser : public AbstractParser<RdfStreamParser,false> {
+    class RdfStreamParser : public AbstractParser<RdfStreamParser, false> {
 
     private:
         /**
         * a queue for storing parsed triples .
         */
         std::shared_ptr<std::queue<Triple>> parsedTerms;
-
-        /**
-         * defines the size of the stream buffer
-         */
-        const std::size_t defaultBufferSize = 10000000;
-
         std::ifstream stream;
 
     protected:
@@ -46,7 +41,8 @@ namespace rdf_parser::Turtle::parsers {
                 read_input file(filename);
                 parsedTerms = std::make_shared<std::queue<Triple>>();
                 States::State<> state(parsedTerms);
-                parse<Grammer::grammer<>, Actions::action>(istream_input(stream, defaultBufferSize, filename), state);
+                parse<Grammer::grammer<>, Actions::action>(
+                        istream_input(stream, Configurations::RdfStreamParser_BufferSize, filename), state);
 
             }
             catch (std::exception &e) {
@@ -58,22 +54,9 @@ namespace rdf_parser::Turtle::parsers {
 
     public:
 
+
         ~RdfStreamParser() override {
             stream.close();
-        }
-
-        RdfStreamParser(std::string filename, std::size_t bufferSize) {
-            try {
-                std::ifstream stream(filename);
-                read_input file(filename);
-                parsedTerms = std::make_shared<std::queue<Triple>>();
-                States::State<> state(parsedTerms);
-                parse<Grammer::grammer<false>, Actions::action>(istream_input(stream, bufferSize, filename), state);
-
-            }
-            catch (std::exception &e) {
-                throw e;
-            }
         }
 
 
@@ -89,9 +72,8 @@ namespace rdf_parser::Turtle::parsers {
         }
 
 
-
-        Iterator<RdfStreamParser,false> begin_implementation(){
-            return Iterator<RdfStreamParser,false>(this);
+        Iterator<RdfStreamParser, false> begin_implementation() {
+            return Iterator<RdfStreamParser, false>(this);
         }
 
     };
