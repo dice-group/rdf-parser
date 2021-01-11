@@ -1,7 +1,7 @@
 #ifndef RDF_PARSER_ACTIONS_HPP
 #define RDF_PARSER_ACTIONS_HPP
 
-#include "BasicActions.hpp"
+#include "Dice/rdf-parser/Parser/Turtle/Actions/BasicActions.hpp"
 #include "Dice/rdf-parser/Parser/Turtle/States/State.hpp"
 
 /**
@@ -12,135 +12,119 @@ This file contains the actions required for pasrsing RDF triples  in a whole fil
 */
 
 
-namespace rdf_parser::Turtle {
-    namespace Actions {
+namespace rdf_parser::Turtle::Actions {
 
-        template<>
-        struct action<Grammer::statement> {
-            template<typename Input, typename Queue,bool SparqlQuery>
-            static void apply(const Input &in, States::State<SparqlQuery,Queue> &state) {
-
-                state.syncWithMainThread();
-
-            }
-        };
+	template<>
+	struct action<Grammer::statement> {
+		template<typename Input, typename Queue, bool SparqlQuery>
+		static void apply(const Input &in, States::State<SparqlQuery, Queue> &state) {
+			state.syncWithMainThread();
+		}
+	};
 
 
+	template<bool SparqlQuery>
+	struct action<Grammer::triple<SparqlQuery>> {
+		template<typename Input, typename Queue>
+		static void apply(const Input &in, States::State<SparqlQuery, Queue> &state) {
+			state.clearTripleParameters();
+		}
+	};
 
-        template<bool SparqlQuery>
-        struct action<Grammer::triple<SparqlQuery>> {
-            template<typename Input, typename Queue>
-            static void apply(const Input &in, States::State<SparqlQuery,Queue> &state) {
-                state.clearTripleParameters();
+	template<bool SparqlQuery>
+	struct action<Grammer::tripleSeq1<SparqlQuery>> {
+		template<typename Input, typename Queue>
+		static void apply(const Input &in, States::State<SparqlQuery, Queue> &state) {
+			state.proccessTripleSeq();
+		}
+	};
 
-            }
-        };
-
-        template<bool SparqlQuery>
-        struct action<Grammer::tripleSeq1<SparqlQuery>> {
-            template<typename Input, typename Queue>
-            static void apply(const Input &in, States::State<SparqlQuery,Queue> &state) {
-
-                state.proccessTripleSeq();
-
-            }
-        };
-
-        template<bool SparqlQuery>
-        struct action<Grammer::tripleSeq2<SparqlQuery>> {
-            template<typename Input, typename Queue>
-            static void apply(const Input &in, States::State<SparqlQuery,Queue> &state) {
-
-                //add the unlabeled blank node from BNPL as subject
-                state.setSubject(state.getFirst_BNPL());
-
-                state.proccessTripleSeq();
-
-            }
-        };
+	template<bool SparqlQuery>
+	struct action<Grammer::tripleSeq2<SparqlQuery>> {
+		template<typename Input, typename Queue>
+		static void apply(const Input &in, States::State<SparqlQuery, Queue> &state) {
+			//add the unlabeled blank node from BNPL as subject
+			state.setSubject(state.getFirst_BNPL());
+			state.proccessTripleSeq();
+		}
+	};
 
 
-        template<bool SparqlQuery>
-        struct action<Grammer::subject<SparqlQuery>> {
-            template<typename Input, typename Queue>
-            static void apply(const Input &in, States::State<SparqlQuery,Queue> &state) {
-                state.setSubject(state.getElement());
-            }
-        };
+	template<bool SparqlQuery>
+	struct action<Grammer::subject<SparqlQuery>> {
+		template<typename Input, typename Queue>
+		static void apply(const Input &in, States::State<SparqlQuery, Queue> &state) {
+			state.setSubject(state.getElement());
+		}
+	};
 
-        template<bool SparqlQuery>
-        struct action<Grammer::verb<SparqlQuery>> {
-            template<typename Input, typename Queue>
-            static void apply(const Input &in, States::State<SparqlQuery,Queue> &state) {
-                state.proccessVerb();
-            }
-        };
+	template<bool SparqlQuery>
+	struct action<Grammer::verb<SparqlQuery>> {
+		template<typename Input, typename Queue>
+		static void apply(const Input &in, States::State<SparqlQuery, Queue> &state) {
+			state.proccessVerb();
+		}
+	};
 
-        template<bool SparqlQuery>
-        struct action<Grammer::object<SparqlQuery>> {
-            template<typename Input, typename Queue>
-            static void apply(const Input &in, States::State<SparqlQuery,Queue> &state) {
-                state.pushCurrentTermIntoBnpl_collection_list();
-            }
-        };
-
-
-        template<>
-        struct action<Grammer::collectionBegin> {
-            template<typename Input, typename Queue,bool SparqlQuery>
-            static void apply(const Input &in, States::State<SparqlQuery,Queue> &state) {
-                state.moveBnpl_collection_listIntoStack();
-            }
-        };
-
-        template<bool SparqlQuery>
-        struct action<Grammer::collection<SparqlQuery>> {
-            template<typename Input, typename Queue>
-            static void apply(const Input &in, States::State<SparqlQuery,Queue> &state) {
-                state.proccessCollection();
-            }
-        };
-
-        template<>
-        struct action<Grammer::blankNodePropertyListBegin> {
-            template<typename Input, typename Queue,bool SparqlQuery>
-            static void apply(const Input &in, States::State<SparqlQuery,Queue> &state) {
-                state.moveBnpl_collection_listIntoStack();
-            }
-        };
-
-        template<bool SparqlQuery>
-        struct action<Grammer::blankNodePropertyList<SparqlQuery>> {
-            template<typename Input, typename Queue>
-            static void apply(const Input &in, States::State<SparqlQuery,Queue> &state) {
-                state.proccessBlankNodePropertyList();
-            }
-        };
+	template<bool SparqlQuery>
+	struct action<Grammer::object<SparqlQuery>> {
+		template<typename Input, typename Queue>
+		static void apply(const Input &in, States::State<SparqlQuery, Queue> &state) {
+			state.pushCurrentTermIntoBnpl_collection_list();
+		}
+	};
 
 
-        template<bool SparqlQuery>
-        struct action<Grammer::predicateObjectListInner<SparqlQuery> > {
-            template<typename Input, typename Queue>
-            static void apply(const Input &in, States::State<SparqlQuery,Queue> &state) {
-                state.proccessPredicateObjectListInner();
-            }
-        };
+	template<>
+	struct action<Grammer::collectionBegin> {
+		template<typename Input, typename Queue, bool SparqlQuery>
+		static void apply(const Input &in, States::State<SparqlQuery, Queue> &state) {
+			state.moveBnpl_collection_listIntoStack();
+		}
+	};
+
+	template<bool SparqlQuery>
+	struct action<Grammer::collection<SparqlQuery>> {
+		template<typename Input, typename Queue>
+		static void apply(const Input &in, States::State<SparqlQuery, Queue> &state) {
+			state.proccessCollection();
+		}
+	};
+
+	template<>
+	struct action<Grammer::blankNodePropertyListBegin> {
+		template<typename Input, typename Queue, bool SparqlQuery>
+		static void apply(const Input &in, States::State<SparqlQuery, Queue> &state) {
+			state.moveBnpl_collection_listIntoStack();
+		}
+	};
+
+	template<bool SparqlQuery>
+	struct action<Grammer::blankNodePropertyList<SparqlQuery>> {
+		template<typename Input, typename Queue>
+		static void apply(const Input &in, States::State<SparqlQuery, Queue> &state) {
+			state.proccessBlankNodePropertyList();
+		}
+	};
 
 
-        template<>
-        struct action<Grammer::turtleDoc> {
-            template<typename Input, typename Queue,bool SparqlQuery>
-            static void apply(const Input &in, States::State<SparqlQuery,Queue> &state) {
-                //Here parsingIsDone lock is set to true
-                state.setPasrsingIsDone();
-            }
-        };
+	template<bool SparqlQuery>
+	struct action<Grammer::predicateObjectListInner<SparqlQuery>> {
+		template<typename Input, typename Queue>
+		static void apply(const Input &in, States::State<SparqlQuery, Queue> &state) {
+			state.proccessPredicateObjectListInner();
+		}
+	};
 
 
+	template<>
+	struct action<Grammer::turtleDoc> {
+		template<typename Input, typename Queue, bool SparqlQuery>
+		static void apply(const Input &in, States::State<SparqlQuery, Queue> &state) {
+			//Here parsingIsDone lock is set to true
+			state.setPasrsingIsDone();
+		}
+	};
+}// namespace rdf_parser::Turtle::Actions
 
-
-
-    }
-}
-
-#endif //RDF_PARSER_ACTIONS_HPP
+#endif//RDF_PARSER_ACTIONS_HPP

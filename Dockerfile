@@ -31,8 +31,8 @@ COPY tests tests
 COPY include include
 COPY cmake cmake
 
-RUN conan create . "sparql-parser-base/test1@dice-group/stable" --build missing --profile gcc10
-RUN conan create . "sparql-parser-base/test2dice-group/stable" --build missing --profile gcc10 -o rdf-parser:with_tests=True
+RUN conan create . "rdf-parser/test1@dice-group/stable" --build missing --profile gcc10
+RUN conan create . "rdf-parser/test2dice-group/stable" --build missing --profile gcc10 -o rdf-parser:with_tests=True
 
 ## change working directory
 #WORKDIR /rdf-parser/build
