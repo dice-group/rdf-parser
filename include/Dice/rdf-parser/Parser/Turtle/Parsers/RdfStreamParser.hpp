@@ -7,19 +7,15 @@
  * StreamParser is responsible for parsing triples from stream sources.
  * It parse a file as a stream and put the parsed triples increasingly in a std::queue
  */
-#include "../Configurations.hpp"
-#include "AbstractParser.hpp"
 #include "Dice/rdf-parser/Parser/Turtle/Actions/Actions.hpp"
+#include "Dice/rdf-parser/Parser/Turtle/Configurations.hpp"
+#include "Dice/rdf-parser/Parser/Turtle/Parsers/AbstractParser.hpp"
 
-namespace {
-	using namespace tao::pegtl;
-}
-
-
-namespace rdf_parser::Turtle::parsers {
+namespace Dice::rdf_parser::Turtle::parsers {
 
 
 	class RdfStreamParser : public AbstractParser<RdfStreamParser, false> {
+	// TODO: add tests
 
 	private:
 		/**
@@ -36,10 +32,10 @@ namespace rdf_parser::Turtle::parsers {
          */
 		RdfStreamParser(std::string filename) : stream{filename} {
 			try {
-				read_input file(filename);
+				tao::pegtl::read_input file(filename);
 				parsedTerms = std::make_shared<std::queue<Triple>>();
 				States::State<> state(parsedTerms);
-				parse<Grammer::grammer<>, Actions::action>(
+				tao::pegtl::parse<Grammar::grammar<>, Actions::action>(
 						istream_input(stream, Configurations::RdfStreamParser_BufferSize, filename), state);
 
 			} catch (std::exception &e) {
@@ -69,6 +65,6 @@ namespace rdf_parser::Turtle::parsers {
 			return Iterator<RdfStreamParser, false>(this);
 		}
 	};
-}// namespace rdf_parser::Turtle::parsers
+}// namespace Dice::rdf_parser::Turtle::parsers
 
 #endif//RDF_PARSER_TURTLEPEGTLSTREAMPARSER_HPP

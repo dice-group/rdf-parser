@@ -15,17 +15,13 @@
 #include <thread>
 #include <utility>
 
-#include "AbstractParser.hpp"
 #include "Dice/rdf-parser/Parser/Turtle/Actions/Actions.hpp"
+#include "Dice/rdf-parser/Parser/Turtle/Parsers/AbstractParser.hpp"
 #include "Dice/rdf-parser/Parser/Turtle/States/ConcurrentState.hpp"
 #include "Dice/rdf-parser/util/scoped_thread.hpp"
 
-#include "../Configurations.hpp"
-namespace {
-	using namespace tao::pegtl;
-}
-
-namespace rdf_parser::Turtle::parsers {
+#include "Dice/rdf-parser/Parser/Turtle/Configurations.hpp"
+namespace Dice::rdf_parser::Turtle::parsers {
 
 	/*
      *
@@ -57,7 +53,7 @@ namespace rdf_parser::Turtle::parsers {
 																																											  termCountWithinThreholds,
 																																											  termsCountIsNotEmpty,
 																																											  parsingIsDone);
-				parse<Grammer::grammer<false>, Actions::action>(istream_input(stream, bufferSize, filename), state);
+				tao::pegtl::parse<Grammar::grammar<false>, Actions::action>(istream_input(stream, bufferSize, filename), state);
 			} catch (std::exception &e) {
 				throw std::exception(e);
 			}
@@ -127,7 +123,7 @@ namespace rdf_parser::Turtle::parsers {
 			return Iterator<RdfConcurrentStreamParser, false>(this);
 		}
 	};
-}// namespace rdf_parser::Turtle::parsers
+}// namespace Dice::rdf_parser::Turtle::parsers
 
 
 #endif//RDF_PARSER_TURTLEPEGTLCONCURRENTSTREAMPARSER_HPP

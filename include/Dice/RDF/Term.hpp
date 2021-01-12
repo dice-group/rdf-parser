@@ -1,27 +1,19 @@
-#ifndef RDF_PARSER_TERM_HPP
-#define RDF_PARSER_TERM_HPP
+#ifndef DICE_RDF_TERM_HPP
+#define DICE_RDF_TERM_HPP
 
 
-#include <absl/hash/hash.h>
 #include <exception>
-#include <fmt/format.h>
 #include <optional>
 #include <stdexcept>
 #include <string>
 #include <utility>
 
-
-namespace rdf_parser::store::rdf {
-	class Term;
-}
-
-namespace rdf_parser::Turtle {
-
-	rdf_parser::store::rdf::Term parseTerm(std::string text);
-}
+#include <fmt/format.h>
+// todo: replace with dice-hash
+#include <absl/hash/hash.h>
 
 
-namespace rdf_parser::store::rdf {
+namespace Dice::rdf {
 
 	/**
      * This is a portable a string view. It is not bound to a single string but applicable to any copy of a string.
@@ -77,13 +69,6 @@ namespace rdf_parser::store::rdf {
          */
 		Term(std::string identifier, NodeType node_type) : identifier_(std::move(identifier)),
 														   node_type_(node_type) {}
-
-	public:
-		explicit Term(std::string identifier) : Term(make_term(std::move(identifier))) {}
-
-		static Term make_term(std::string identifier) {
-			return rdf_parser::Turtle::parseTerm(std::move(identifier));
-		}
 
 	public:
 		Term() = default;
@@ -260,46 +245,46 @@ namespace rdf_parser::store::rdf {
 	}
 
 
-};// namespace rdf_parser::store::rdf
+};// namespace Dice::rdf
 
 
 template<>
-struct std::hash<rdf_parser::store::rdf::Term> {
-	size_t operator()(const rdf_parser::store::rdf::Term &v) const {
+struct std::hash<Dice::rdf::Term> {
+	size_t operator()(const Dice::rdf::Term &v) const {
 		return v.hash();
 	}
 };
 
 template<>
-struct std::hash<rdf_parser::store::rdf::Term *> {
-	size_t operator()(const rdf_parser::store::rdf::Term *&v) const {
+struct std::hash<Dice::rdf::Term *> {
+	size_t operator()(const Dice::rdf::Term *&v) const {
 		return v->hash();
 	}
 };
 
 namespace rdf_parser::store::rdf {
 	struct TermHash {
-		size_t operator()(const rdf_parser::store::rdf::Term &v) const {
+		size_t operator()(const Dice::rdf::Term &v) const {
 			return v.hash();
 		}
 
-		size_t operator()(const std::unique_ptr<rdf_parser::store::rdf::Term> &v) const {
+		size_t operator()(const std::unique_ptr<Dice::rdf::Term> &v) const {
 			return v->hash();
 		}
 
-		size_t operator()(const rdf_parser::store::rdf::Term *&v) const {
+		size_t operator()(const Dice::rdf::Term *&v) const {
 			return v->hash();
 		}
 	};
 }// namespace rdf_parser::store::rdf
 
 template<>
-struct fmt::formatter<const rdf_parser::store::rdf::Term *> {
+struct fmt::formatter<const Dice::rdf::Term *> {
 	template<typename ParseContext>
 	constexpr auto parse(ParseContext &ctx) { return ctx.begin(); }
 
 	template<typename FormatContext>
-	auto format(const rdf_parser::store::rdf::Term *p, FormatContext &ctx) {
+	auto format(const Dice::rdf::Term *p, FormatContext &ctx) {
 		if (p != nullptr)
 			return format_to(ctx.out(), p->getIdentifier());
 		else
@@ -308,57 +293,14 @@ struct fmt::formatter<const rdf_parser::store::rdf::Term *> {
 };
 
 template<>
-struct fmt::formatter<rdf_parser::store::rdf::Term> {
+struct fmt::formatter<Dice::rdf::Term> {
 	template<typename ParseContext>
 	constexpr auto parse(ParseContext &ctx) { return ctx.begin(); }
 
 	template<typename FormatContext>
-	auto format(const rdf_parser::store::rdf::Term &p, FormatContext &ctx) {
+	auto format(const Dice::rdf::Term &p, FormatContext &ctx) {
 		return format_to(ctx.out(), p.getIdentifier());
 	}
 };
 
-
-#include "Dice/rdf-parser/Parser/Turtle/Actions/BasicActions.hpp"
-#include "Dice/rdf-parser/Parser/Turtle/Grammer.hpp"
-#include "Dice/rdf-parser/Parser/Turtle/States/BasicState.hpp"
-#include <tao/pegtl.hpp>
-
-
-namespace rdf_parser::Turtle {
-
-	class TermParser {
-		using Term = rdf_parser::store::rdf::Term;
-
-
-	public:
-		static Term makeTerm(std::string text) {
-			try {
-				using namespace tao::pegtl;
-				string_input input(text, "the text");
-				States::BasicState state;
-				parse<Grammer::term, Actions::action>(input, state);
-				return std::move(state.getElement());
-			} catch (std::exception &e) {
-				throw e;
-			}
-		}
-		static bool isTermParsable(std::string text) {
-			try {
-				using namespace tao::pegtl;
-				string_input input(text, "the text");
-				States::BasicState state;
-				parse<Grammer::term, Actions::action>(input, state);
-				return true;
-			} catch (std::exception &e) {
-				return false;
-			}
-		}
-	};
-
-	rdf_parser::store::rdf::Term parseTerm(std::string text) {
-		return TermParser::makeTerm(std::move(text));
-	}
-};// namespace rdf_parser::Turtle
-
-#endif//RDF_PARSER_TERM_HPP
+#endif//DICE_RDF_TERM_HPP

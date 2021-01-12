@@ -8,8 +8,8 @@
 
 #include <chrono>
 
-#include "AbstractParser.hpp"
 #include "Dice/rdf-parser/Parser/Turtle/Actions/Actions.hpp"
+#include "Dice/rdf-parser/Parser/Turtle/Parsers/AbstractParser.hpp"
 
 
 /**
@@ -17,22 +17,20 @@
  * It parse the string one time and put the parsed elements in a std::queue
  */
 
-namespace {
-	using namespace tao::pegtl;
-}
-
-
-namespace rdf_parser::Turtle::parsers {
+namespace Dice::rdf_parser::Turtle::parsers {
 
 	template<bool sparqlQuery>
 	class BaseStringParser : public AbstractParser<BaseStringParser<sparqlQuery>, sparqlQuery> {
 
+		using Triple = Dice::rdf::Triple;
+		using TriplePattern = Dice::sparql::TriplePattern;
+		using Triple_t = std::conditional_t<sparqlQuery, TriplePattern, Triple>;
 
 	protected:
 		/**
          * a queue for storing parsed triples .
          */
-		std::shared_ptr<std::queue<std::conditional_t<sparqlQuery, SparqlQuery::TriplePatternElement, Triple>>> parsedTerms;
+		std::shared_ptr<std::queue<Triple_t>> parsedTerms;
 
 	protected:
 		/**
@@ -40,11 +38,11 @@ namespace rdf_parser::Turtle::parsers {
          * it also invoke nextTriple to have the first triple ready for using .
          * @param text the string to parse
          */
-		BaseStringParser(std::string text) {
+		explicit BaseStringParser(std::string text) {
 			try {
-				string_input input(text, "the text");
+				tao::pegtl::string_input input(std::move(text), "the text");
 				States::State<sparqlQuery> state(parsedTerms);
-				parse<Grammer::grammer<sparqlQuery>, Actions::action>(input, state);
+				tao::pegtl::parse<Grammar::grammar<sparqlQuery>, Actions::action>(input, state);
 
 			} catch (std::exception &e) {
 				throw e;
@@ -57,13 +55,13 @@ namespace rdf_parser::Turtle::parsers {
         * @param text the string to parse
         * @param prefix_map defines prefixes to be added before parsing
         */
-		BaseStringParser(std::string text, std::map<std::string, std::string> prefix_map) {
+		BaseStringParser(std::string text, const std::map<std::string, std::string> &prefix_map) {
 			try {
-				string_input input(text, "the text");
+				tao::pegtl::string_input input(text, "the text");
 				States::State<sparqlQuery> state(parsedTerms);
 				for (auto pair : prefix_map)
 					state.addPrefix(pair.first, pair.second);
-				parse<Grammer::grammer<sparqlQuery>, Actions::action>(input, state);
+				tao::pegtl::parse<Grammar::grammar<sparqlQuery>, Actions::action>(input, state);
 
 			} catch (std::exception &e) {
 				throw e;
@@ -71,12 +69,11 @@ namespace rdf_parser::Turtle::parsers {
 		}
 
 	public:
-		bool hasNextTriple() const override {
+		[[nodiscard]] bool hasNextTriple() const override {
 			return not parsedTerms->empty();
 		}
 
-		~BaseStringParser() override {
-		}
+		~BaseStringParser() override = default;
 
 		void nextTriple() override {
 			*(this->current_triple) = parsedTerms->front();
@@ -88,7 +85,7 @@ namespace rdf_parser::Turtle::parsers {
 			return Iterator<BaseStringParser, sparqlQuery>(this);
 		}
 	};
-}// namespace rdf_parser::Turtle::parsers
+}// namespace Dice::rdf_parser::Turtle::parsers
 
 
 #endif//RDF_PARSER_BASESTRINGPARSER_HPP

@@ -1,17 +1,14 @@
 #include <gtest/gtest.h>
+
+#include "SparqlTriplesBlockParsingTests.cpp"
+#include "TermTests.cpp"
 #include "TurtleOfficalExamplesTest.cpp"
-#include "TurtleOfficialPositiveTests.cpp"
-#include "TurtleOfficialNegativeTests.cpp"
 #include "TurtleOfficialEvaluationTests.cpp"
 #include "TurtleOfficialNegativeEvaluationTests.cpp"
-#include "TermTests.cpp"
-#include "SparqlTriplesBlockParsingTests.cpp"
-//#include "TurtleParserFilesTests.cpp"
-//#include "TurtleParserConcurrentTests.cpp"
-
-
+#include "TurtleOfficialNegativeTests.cpp"
+#include "TurtleOfficialPositiveTests.cpp"
 
 int main(int argc, char **argv) {
-    testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
+	testing::InitGoogleTest(&argc, argv);
+	return RUN_ALL_TESTS();
 }

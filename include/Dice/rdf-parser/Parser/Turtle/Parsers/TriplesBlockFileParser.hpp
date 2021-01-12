@@ -6,18 +6,13 @@
 #define RDF_PARSER_TRIPLESBLOCKFILEPARSER_HPP
 
 
-#include "BaseFileParser.hpp"
+#include "Dice/rdf-parser/Parser/Turtle/Parsers/BaseFileParser.hpp"
 
 /**
  * TriplesBlockFileParser is responsible for parsing sparql's tripleBlocks from file sources.
  */
 
-namespace {
-	using namespace tao::pegtl;
-}
-
-
-namespace rdf_parser::Turtle::parsers {
+namespace Dice::rdf_parser::Turtle::parsers {
 
 	class TriplesBlockFileParser : public BaseFileParser<true> {
 
@@ -40,5 +35,5 @@ namespace rdf_parser::Turtle::parsers {
 		TriplesBlockFileParser(std::string text, std::map<std::string, std::string> prefix_map) : BaseFileParser<true>(text,
 																													   prefix_map){};
 	};
-}// namespace rdf_parser::Turtle::parsers
+}// namespace Dice::rdf_parser::Turtle::parsers
 #endif//RDF_PARSER_TRIPLESBLOCKFILEPARSER_HPP

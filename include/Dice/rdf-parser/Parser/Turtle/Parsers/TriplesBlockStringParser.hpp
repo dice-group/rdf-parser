@@ -6,18 +6,16 @@
 #define RDF_PARSER_TRIPLESBLOCKSTRINGPARSER_HPP
 
 
-#include "BaseStringParser.hpp"
+#include <utility>
+
+#include "Dice/rdf-parser/Parser/Turtle/Parsers/BaseStringParser.hpp"
 
 /**
  * TriplesBlockStringParser is responsible for parsing sparql's tripleBlocks from string sources.
  */
 
-namespace {
-	using namespace tao::pegtl;
-}
 
-
-namespace rdf_parser::Turtle::parsers {
+namespace Dice::rdf_parser::Turtle::parsers {
 
 	class TriplesBlockStringParser : public BaseStringParser<true> {
 
@@ -28,8 +26,7 @@ namespace rdf_parser::Turtle::parsers {
          * it also invoke nextTriple to have the first triple ready for using .
          * @param text the string to parse
          */
-		TriplesBlockStringParser(std::string text) : BaseStringParser<true>(text) {
-		}
+		explicit TriplesBlockStringParser(std::string text) : BaseStringParser<true>(std::move(text)) {}
 
 
 		/**
@@ -38,9 +35,9 @@ namespace rdf_parser::Turtle::parsers {
         * @param text the string to parse
         * @param prefix_map defines prefixes to be added before parsing
         */
-		TriplesBlockStringParser(std::string text, std::map<std::string, std::string> prefix_map) : BaseStringParser<true>(text,
-																														   prefix_map){};
+		TriplesBlockStringParser(std::string text, std::map<std::string, std::string> prefix_map) : BaseStringParser<true>(std::move(text),
+																														   std::move(prefix_map)){};
 	};
-}// namespace rdf_parser::Turtle::parsers
+}// namespace Dice::rdf_parser::Turtle::parsers
 
 #endif//RDF_PARSER_TRIPLESBLOCKSTRINGPARSER_HPP

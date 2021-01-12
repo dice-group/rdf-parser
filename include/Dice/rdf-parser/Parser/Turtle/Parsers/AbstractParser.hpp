@@ -1,28 +1,34 @@
 #ifndef RDF_PARSER_ABSTRACTPARSER_HPP
 #define RDF_PARSER_ABSTRACTPARSER_HPP
 
-#include "Dice/rdf-parser/RDF/Triple.hpp"
+#include "Dice/RDF/Triple.hpp"
+#include "Dice/SPARQL/TriplePattern.hpp"
 
 
 /**
  * Base class for parsing triples from different sources.
  */
 
-namespace {
-	using namespace rdf_parser::store::rdf;
-
-
-}
-namespace rdf_parser::Turtle::parsers {
+namespace Dice::rdf_parser::Turtle::parsers {
 
 	template<class Derived, bool sparqlQuery>
 	class Iterator;
 
 	template<class Derived, bool sparqlQuery>
 	class AbstractParser {
+		using Term = Dice::rdf::Term;
+		using URIRef = Dice::rdf::URIRef;
+		using Literal = Dice::rdf::Literal;
+		using BNode = Dice::rdf::BNode;
+		using Variable = Dice::sparql::Variable;
+		using VarOrTerm = Dice::sparql::VarOrTerm;
+		using Triple = Dice::rdf::Triple;
+		using TriplePattern = Dice::sparql::TriplePattern;
+		using Element_t = std::conditional_t<sparqlQuery, VarOrTerm, Term>;
+		using Triple_t = std::conditional_t<sparqlQuery, TriplePattern, Triple>;
 
 	protected:
-		using element_type = std::conditional_t<sparqlQuery, SparqlQuery::TriplePatternElement, Triple>;
+		using element_type = std::conditional_t<sparqlQuery, TriplePattern, Triple>;
 
 		explicit AbstractParser() {
 			current_triple = std::make_shared<element_type>();
@@ -49,7 +55,7 @@ namespace rdf_parser::Turtle::parsers {
 		}
 
 
-		virtual ~AbstractParser(){};
+		virtual ~AbstractParser() = default;
 
 
 		Iterator<Derived, sparqlQuery> begin() {
@@ -61,6 +67,16 @@ namespace rdf_parser::Turtle::parsers {
 
 	template<class Derived, bool sparqlQuery>
 	class Iterator {
+		using Term = Dice::rdf::Term;
+		using URIRef = Dice::rdf::URIRef;
+		using Literal = Dice::rdf::Literal;
+		using BNode = Dice::rdf::BNode;
+		using Variable = Dice::sparql::Variable;
+		using VarOrTerm = Dice::sparql::VarOrTerm;
+		using Triple = Dice::rdf::Triple;
+		using TriplePattern = Dice::sparql::TriplePattern;
+		using Element_t = std::conditional_t<sparqlQuery, VarOrTerm, Term>;
+		using Triple_t = std::conditional_t<sparqlQuery, TriplePattern, Triple>;
 
 	private:
 		bool done_;
@@ -91,12 +107,11 @@ namespace rdf_parser::Turtle::parsers {
 
 		operator bool() { return not done_; }
 
-		const std::conditional_t<sparqlQuery, SparqlQuery::TriplePatternElement, Triple> &
-		operator*() { return triplesParser->getCurrentTriple(); }
+		const Triple_t &operator*() { return triplesParser->getCurrentTriple(); }
 	};
 
 
-};// namespace rdf_parser::Turtle::parsers
+};// namespace Dice::rdf_parser::Turtle::parsers
 
 
 #endif//RDF_PARSER_ABSTRACTPARSER_HPP

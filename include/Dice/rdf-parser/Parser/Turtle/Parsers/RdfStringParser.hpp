@@ -9,17 +9,13 @@
 
 
 #include <chrono>
+#include <utility>
 
-#include "BaseStringParser.hpp"
 #include "Dice/rdf-parser/Parser/Turtle/Actions/Actions.hpp"
+#include "Dice/rdf-parser/Parser/Turtle/Parsers/BaseStringParser.hpp"
 
 
-namespace {
-	using namespace tao::pegtl;
-}
-
-
-namespace rdf_parser::Turtle::parsers {
+namespace Dice::rdf_parser::Turtle::parsers {
 
 	class RdfStringParser : public BaseStringParser<false> {
 
@@ -30,15 +26,15 @@ namespace rdf_parser::Turtle::parsers {
          * it also invoke nextTriple to have the first triple ready for using .
          * @param text the string to parse
          */
-		RdfStringParser(std::string text) : BaseStringParser<false>(text) {}
+		explicit RdfStringParser(std::string text) : BaseStringParser<false>(std::move(text)) {}
 
 		/**
          * checks whether a string is valid rdf turtle file
          */
 		static bool isParsable(const std::string &input) {
 			try {
-				string_input in(input, "the text");
-				parse<Grammer::grammer<false>>(in);
+				tao::pegtl::string_input in(input, "the text");
+				tao::pegtl::parse<Grammar::grammar<false>>(in);
 				return true;
 			} catch (std::exception &e) {
 				return false;
@@ -58,8 +54,8 @@ namespace rdf_parser::Turtle::parsers {
 		}
 
 
-		~RdfStringParser() override {}
+		~RdfStringParser() override = default;
 	};
-}// namespace rdf_parser::Turtle::parsers
+}// namespace Dice::rdf_parser::Turtle::parsers
 
 #endif//RDF_PARSER_TURTLEPEGTLSTRINGPARSER_HPP

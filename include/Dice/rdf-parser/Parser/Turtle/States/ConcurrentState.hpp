@@ -16,7 +16,7 @@ For more information about states please check https://github.com/taocpp/PEGTL/b
 
 #include "Dice/rdf-parser/Parser/Turtle/States/State.hpp"
 
-namespace rdf_parser::Turtle {
+namespace Dice::rdf_parser::Turtle {
 	namespace States {
 
 		/*
@@ -93,5 +93,5 @@ namespace rdf_parser::Turtle {
 		};
 
 	}// namespace States
-}// namespace rdf_parser::Turtle
+}// namespace Dice::rdf_parser::Turtle
 #endif//RDF_PARSER_CONCURRENTSTATE_HPP

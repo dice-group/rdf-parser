@@ -7,13 +7,9 @@
  */
 
 
-#include "BaseFileParser.hpp"
+#include "Dice/rdf-parser/Parser/Turtle/Parsers/BaseFileParser.hpp"
 
-namespace {
-	using namespace tao::pegtl;
-}
-
-namespace rdf_parser::Turtle::parsers {
+namespace Dice::rdf_parser::Turtle::parsers {
 
 	class RdfFileParser : public BaseFileParser<false> {
 
@@ -31,8 +27,8 @@ namespace rdf_parser::Turtle::parsers {
 		static bool isParsable(std::string filename) {
 			try {
 				std::ifstream infile(filename);
-				read_input file(filename);
-				parse<Grammer::grammer<false>>(file);
+				tao::pegtl::read_input file(filename);
+				tao::pegtl::parse<Grammar::grammar<false>>(file);
 				return true;
 			} catch (std::exception &e) {
 				return false;
@@ -51,6 +47,6 @@ namespace rdf_parser::Turtle::parsers {
 			return duration;
 		}
 	};
-}// namespace rdf_parser::Turtle::parsers
+}// namespace Dice::rdf_parser::Turtle::parsers
 
 #endif//RDF_PARSER_TURTLEPEGTLFILEPARSER_HPP

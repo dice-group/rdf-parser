@@ -15,14 +15,10 @@
 #include <chrono>
 #include <fstream>
 
-#include "AbstractParser.hpp"
 #include "Dice/rdf-parser/Parser/Turtle/Actions/Actions.hpp"
+#include "Dice/rdf-parser/Parser/Turtle/Parsers/AbstractParser.hpp"
 
-namespace {
-	using namespace tao::pegtl;
-}
-
-namespace rdf_parser::Turtle::parsers {
+namespace Dice::rdf_parser::Turtle::parsers {
 
 	template<bool sparqlQuery>
 	class BaseFileParser : public AbstractParser<BaseFileParser<sparqlQuery>, sparqlQuery> {
@@ -44,7 +40,7 @@ namespace rdf_parser::Turtle::parsers {
 				std::ifstream infile(filename);
 				read_input file(filename);
 				States::State<> state(parsedTerms);
-				parse<Grammer::grammer<false>, Actions::action>(file, state);
+				parse<Grammar::grammar<false>, Actions::action>(file, state);
 
 			} catch (std::exception &e) {
 				throw e;
@@ -63,7 +59,7 @@ namespace rdf_parser::Turtle::parsers {
 				States::State<sparqlQuery> state(parsedTerms);
 				for (auto pair : prefix_map)
 					state.addPrefix(pair.first, pair.second);
-				parse<Grammer::grammer<sparqlQuery>, Actions::action>(filename, state);
+				parse<Grammar::grammar<sparqlQuery>, Actions::action>(filename, state);
 
 			} catch (std::exception &e) {
 				throw e;
@@ -90,7 +86,7 @@ namespace rdf_parser::Turtle::parsers {
 			return Iterator<BaseFileParser<sparqlQuery>, sparqlQuery>(this);
 		}
 	};
-}// namespace rdf_parser::Turtle::parsers
+}// namespace Dice::rdf_parser::Turtle::parsers
 
 
 #endif//RDF_PARSER_BASEFILEPARSER_HPP

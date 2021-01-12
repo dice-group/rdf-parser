@@ -2,19 +2,15 @@
 #define RDF_PARSER_TURTLEPEGTLGRAMMER_HPP
 
 /**
-All grammers for turtle are defined here.PEGTL is used for parsing.
-For more information about how to define grammers and rules using PEGTl please check "https://github.com/taocpp/PEGTL/blob/master/doc/Rules-and-Grammars.md"
+All grammars for turtle are defined here.PEGTL is used for parsing.
+For more information about how to define grammars and rules using PEGTl please check "https://github.com/taocpp/PEGTL/blob/master/doc/Rules-and-Grammars.md"
 */
 
 
 #include <tao/pegtl.hpp>
 
-namespace {
+namespace Dice::rdf_parser::Turtle::Grammar {
 	using namespace tao::pegtl;
-}
-
-
-namespace rdf_parser::Turtle::Grammer {
 
 	//      Terminals
 
@@ -271,8 +267,8 @@ namespace rdf_parser::Turtle::Grammer {
 	struct term : sor<literal, BlankNode, iri> {
 	};
 
-	//The following grammers are not part of turtle.they are part of sparql language.but used here to make it
-	//possible to parse some sparql grammer which has very similar context to turtle.
+	//The following grammars are not part of turtle.they are part of sparql language.but used here to make it
+	//possible to parse some sparql grammar which has very similar context to turtle.
 
 	struct varname : seq<
 							 sor<PN_CHARS_U, digit>,
@@ -404,13 +400,13 @@ namespace rdf_parser::Turtle::Grammer {
 
 
 	template<bool sparqlQuery = false>
-	struct grammer : std::conditional_t<sparqlQuery,
+	struct grammar : std::conditional_t<sparqlQuery,
 										must<triplesBlock, eof>,
 										sor<
 												must<turtleDoc, eof>,
 												seq<ignored, eof>>> {};
 
 
-}// namespace rdf_parser::Turtle::Grammer
+}// namespace Dice::rdf_parser::Turtle::Grammar
 
 #endif//RDF_PARSER_TURTLEPEGTLGRAMMER_HPP
