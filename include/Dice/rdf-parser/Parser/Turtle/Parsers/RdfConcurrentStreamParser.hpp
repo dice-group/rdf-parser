@@ -18,7 +18,7 @@
 #include "Dice/rdf-parser/Parser/Turtle/Actions/Actions.hpp"
 #include "Dice/rdf-parser/Parser/Turtle/Parsers/AbstractParser.hpp"
 #include "Dice/rdf-parser/Parser/Turtle/States/ConcurrentState.hpp"
-#include "Dice/rdf-parser/util/scoped_thread.hpp"
+#include "Dice/rdf-parser/util/ScopedThread.hpp"
 
 #include "Dice/rdf-parser/Parser/Turtle/Configurations.hpp"
 namespace Dice::rdf_parser::Turtle::parsers {
@@ -27,33 +27,48 @@ namespace Dice::rdf_parser::Turtle::parsers {
      *
      */
 	class RdfConcurrentStreamParser : public AbstractParser<RdfConcurrentStreamParser, false> {
+		using Term = Dice::rdf::Term;
+		using URIRef = Dice::rdf::URIRef;
+		using Literal = Dice::rdf::Literal;
+		using BNode = Dice::rdf::BNode;
+		using Variable = Dice::sparql::Variable;
+		using VarOrTerm = Dice::sparql::VarOrTerm;
+		using Triple = Dice::rdf::Triple;
+		using TriplePattern = Dice::sparql::TriplePattern;
 
 	private:
-		std::shared_ptr<boost::lockfree::spsc_queue<Triple, boost::lockfree::capacity<Configurations::RdfConcurrentStreamParser_QueueCapacity>>> parsedTerms;
-		unsigned int upperThrehold;
-		unsigned int lowerThrehold;
+		std::shared_ptr<
+				boost::lockfree::spsc_queue<
+						Triple,
+						boost::lockfree::capacity<Configurations::RdfConcurrentStreamParser_QueueCapacity>>>
+				parsedTerms;
+		unsigned int upperThreshold;
+		unsigned int lowerThreshold;
 
 		std::ifstream stream;
-		std::unique_ptr<util::ScopedThread> parsingThread;
 		std::shared_ptr<std::condition_variable> cv;
 		std::shared_ptr<std::mutex> m;
 		std::shared_ptr<std::condition_variable> cv2;
 		std::shared_ptr<std::mutex> m2;
-		std::shared_ptr<std::atomic_bool> termCountWithinThreholds;
+		std::shared_ptr<std::atomic_bool> termCountWithinThresholds;
 		std::shared_ptr<std::atomic_bool> termsCountIsNotEmpty;
 		std::shared_ptr<std::atomic_bool> parsingIsDone;
+		std::unique_ptr<util::ScopedThread> parsingThread;
 
 	public:
 		void startParsing(std::string filename, std::size_t bufferSize) {
 			try {
 
-				States::ConcurrentState<false, boost::lockfree::spsc_queue<Triple, boost::lockfree::capacity<Configurations::RdfConcurrentStreamParser_QueueCapacity>>> state(parsedTerms,
-																																											  upperThrehold, cv,
-																																											  m, cv2, m2,
-																																											  termCountWithinThreholds,
-																																											  termsCountIsNotEmpty,
-																																											  parsingIsDone);
-				tao::pegtl::parse<Grammar::grammar<false>, Actions::action>(istream_input(stream, bufferSize, filename), state);
+				States::ConcurrentState<false, boost::lockfree::spsc_queue<Triple, boost::lockfree::capacity<Configurations::RdfConcurrentStreamParser_QueueCapacity>>>
+						state(parsedTerms,
+							  upperThreshold,
+							  cv, m,
+							  cv2, m2,
+							  termCountWithinThresholds,
+							  termsCountIsNotEmpty,
+							  parsingIsDone);
+				tao::pegtl::parse<Grammar::grammar<false>, Actions::action>(
+						tao::pegtl::istream_input(stream, bufferSize, filename), std::move(state));
 			} catch (std::exception &e) {
 				throw std::exception(e);
 			}
@@ -64,28 +79,28 @@ namespace Dice::rdf_parser::Turtle::parsers {
 		}
 
 
-		RdfConcurrentStreamParser(std::string filename) : stream{filename},
-														  upperThrehold(Configurations::RdfConcurrentStreamParser_QueueCapacity),
-														  lowerThrehold(Configurations::RdfConcurrentStreamParser_QueueCapacity / 10),
-														  parsedTerms{std::make_shared<boost::lockfree::spsc_queue<Triple, boost::lockfree::capacity<Configurations::RdfConcurrentStreamParser_QueueCapacity>>>()},
-														  cv{std::make_shared<std::condition_variable>()},
-														  m{std::make_shared<std::mutex>()},
-														  cv2{std::make_shared<std::condition_variable>()},
-														  m2{std::make_shared<std::mutex>()},
-														  termCountWithinThreholds{std::make_shared<std::atomic_bool>(false)},
-														  termsCountIsNotEmpty{std::make_shared<std::atomic_bool>(false)},
-														  parsingIsDone{std::make_shared<std::atomic_bool>(false)} {
-			parsingThread = std::make_unique<util::ScopedThread>(
-					std::thread(&RdfConcurrentStreamParser::startParsing, this, filename, Configurations::RdfConcurrentStreamParser_BufferSize));
-		}
+		explicit RdfConcurrentStreamParser(const std::string &filename)
+			: stream{filename},
+			  upperThreshold(Configurations::RdfConcurrentStreamParser_QueueCapacity),
+			  lowerThreshold(Configurations::RdfConcurrentStreamParser_QueueCapacity / 10),
+			  parsedTerms{std::make_shared<boost::lockfree::spsc_queue<Triple, boost::lockfree::capacity<Configurations::RdfConcurrentStreamParser_QueueCapacity>>>()},
+			  cv{std::make_shared<std::condition_variable>()},
+			  m{std::make_shared<std::mutex>()},
+			  cv2{std::make_shared<std::condition_variable>()},
+			  m2{std::make_shared<std::mutex>()},
+			  termCountWithinThresholds{std::make_shared<std::atomic_bool>(false)},
+			  termsCountIsNotEmpty{std::make_shared<std::atomic_bool>(false)},
+			  parsingIsDone{std::make_shared<std::atomic_bool>(false)},
+			  parsingThread{std::make_unique<util::ScopedThread>(
+					  std::thread(&RdfConcurrentStreamParser::startParsing, this, filename, Configurations::RdfConcurrentStreamParser_BufferSize))} {}
 
 
 		void nextTriple() override {
 			parsedTerms->pop(*(this->current_triple));
-			if (parsedTerms->read_available() < lowerThrehold) {
+			if (parsedTerms->read_available() < lowerThreshold) {
 				{
 					std::lock_guard<std::mutex> lk(*m);
-					*termCountWithinThreholds = true;
+					*termCountWithinThresholds = true;
 				}
 				cv->notify_one();
 			}

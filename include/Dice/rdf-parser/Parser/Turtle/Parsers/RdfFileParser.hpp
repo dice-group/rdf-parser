@@ -7,6 +7,8 @@
  */
 
 
+#include <utility>
+
 #include "Dice/rdf-parser/Parser/Turtle/Parsers/BaseFileParser.hpp"
 
 namespace Dice::rdf_parser::Turtle::parsers {
@@ -19,12 +21,12 @@ namespace Dice::rdf_parser::Turtle::parsers {
         * it also invoke nextTriple to have the first triple ready for using .
         * @param filename the filename of the file we want to parse
         */
-		RdfFileParser(std::string text) : BaseFileParser<false>(text) {}
+		explicit RdfFileParser(std::string text) : BaseFileParser<false>(std::move(text)) {}
 
 		/**
         * checks whether a file is valid rdf turtle file
         */
-		static bool isParsable(std::string filename) {
+		static bool isParsable(const std::string& filename) {
 			try {
 				std::ifstream infile(filename);
 				tao::pegtl::read_input file(filename);
@@ -39,7 +41,7 @@ namespace Dice::rdf_parser::Turtle::parsers {
          * calculate the time for parsing a rdf turtle file.
          * Note that the calculated time is only for parsing without using processing the input(creating and storing the triples out of the string)
          */
-		static long calculateParsingTime(const std::string filename) {
+		static long calculateParsingTime(const std::string& filename) {
 			std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
 			isParsable(filename);
 			std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();

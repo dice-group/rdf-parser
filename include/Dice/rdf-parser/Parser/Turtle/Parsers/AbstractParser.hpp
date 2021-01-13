@@ -28,7 +28,7 @@ namespace Dice::rdf_parser::Turtle::parsers {
 		using Triple_t = std::conditional_t<sparqlQuery, TriplePattern, Triple>;
 
 	protected:
-		using element_type = std::conditional_t<sparqlQuery, TriplePattern, Triple>;
+		using element_type = Triple_t;
 
 		explicit AbstractParser() {
 			current_triple = std::make_shared<element_type>();
@@ -45,7 +45,7 @@ namespace Dice::rdf_parser::Turtle::parsers {
 		/**
          * check whether there is a further triple
          */
-		virtual bool hasNextTriple() const = 0;
+		[[nodiscard]] virtual bool hasNextTriple() const = 0;
 
 		/**
          * get the current triple

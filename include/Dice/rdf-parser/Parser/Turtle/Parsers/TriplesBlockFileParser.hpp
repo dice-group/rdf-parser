@@ -1,10 +1,8 @@
-//
-// Created by fakhr on 08.01.21.
-//
-
 #ifndef RDF_PARSER_TRIPLESBLOCKFILEPARSER_HPP
 #define RDF_PARSER_TRIPLESBLOCKFILEPARSER_HPP
 
+
+#include <utility>
 
 #include "Dice/rdf-parser/Parser/Turtle/Parsers/BaseFileParser.hpp"
 
@@ -13,6 +11,8 @@
  */
 
 namespace Dice::rdf_parser::Turtle::parsers {
+
+	// todo: broken?
 
 	class TriplesBlockFileParser : public BaseFileParser<true> {
 
@@ -23,7 +23,7 @@ namespace Dice::rdf_parser::Turtle::parsers {
          * it also invoke nextTriple to have the first triple ready for using .
          * @param filename the filename of the file we want to parse
          */
-		TriplesBlockFileParser(std::string text) : BaseFileParser<true>(text) {}
+		explicit TriplesBlockFileParser(const std::string& text) : BaseFileParser<true>(text) {}
 
 
 		/**
@@ -32,7 +32,7 @@ namespace Dice::rdf_parser::Turtle::parsers {
         * @param text the string to parse
         * @param prefix_map defines prefixes to be added before parsing
         */
-		TriplesBlockFileParser(std::string text, std::map<std::string, std::string> prefix_map) : BaseFileParser<true>(text,
+		TriplesBlockFileParser(std::string text, const std::map<std::string, std::string>& prefix_map) : BaseFileParser<true>(std::move(text),
 																													   prefix_map){};
 	};
 }// namespace Dice::rdf_parser::Turtle::parsers

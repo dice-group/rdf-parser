@@ -1,6 +1,11 @@
 #include <gtest/gtest.h>
 
+#include <Dice/rdf-parser/Parser/Turtle/Parsers/RdfConcurrentStreamParser.hpp>
 #include <Dice/rdf-parser/Parser/Turtle/Parsers/RdfFileParser.hpp>
+// todo: broken?
+//#include <Dice/rdf-parser/Parser/Turtle/Parsers/TriplesBlockFileParser.hpp>
+// todo: broken?
+//#include <Dice/rdf-parser/Parser/Turtle/Parsers/RdfStreamParser.hpp>
 
 namespace Dice::tests::rdf_parser::turtle_parser_concurrent_tests {
 	namespace {
@@ -8,7 +13,23 @@ namespace Dice::tests::rdf_parser::turtle_parser_concurrent_tests {
 	}
 
 	TEST(TurtleParserFilesTests, ntripleFile1) {
-		ASSERT_EQ(RdfFileParser::isParsable("../datasets/g.nt"), true);
+		RdfFileParser parser{"../datasets/g.nt"};
+		long i = 0;
+		for (const auto &item : parser) {
+			if (item.hash())
+				i++;
+		}
+		ASSERT_TRUE(i > 0);
+	}
+
+	TEST(TurtleParserFilesTests, ntripleFile1_concurrent) {
+		RdfConcurrentStreamParser parser{"../datasets/g.nt"};
+		long i = 0;
+		for (const auto &item : parser) {
+			if (item.hash())
+				i++;
+		}
+		ASSERT_TRUE(i > 0);
 	}
 
 	TEST(TurtleParserFilesTests, turtleFile1) {

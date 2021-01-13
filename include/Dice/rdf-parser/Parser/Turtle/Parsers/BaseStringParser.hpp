@@ -1,7 +1,3 @@
-//
-// Created by fakhr on 08.01.21.
-//
-
 #ifndef RDF_PARSER_BASESTRINGPARSER_HPP
 #define RDF_PARSER_BASESTRINGPARSER_HPP
 
