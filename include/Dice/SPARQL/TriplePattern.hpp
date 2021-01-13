@@ -12,6 +12,7 @@ namespace Dice::sparql {
 }// namespace Dice::sparql
 
 namespace Dice::hash {
+	template<>
 	inline std::size_t dice_hash(const Dice::sparql::VarOrTerm &v) noexcept {
 		if (std::holds_alternative<Dice::sparql::Variable>(v))
 			return dice_hash(std::get<Dice::sparql::Variable>(v));
@@ -31,14 +32,13 @@ namespace Dice::sparql {
 		TriplePattern(VarOrTerm subject, VarOrTerm predicate, VarOrTerm object) : super_t{std::move(subject), std::move(predicate), std::move(object)} {}
 
 		[[nodiscard]] size_t hash() const noexcept {
-			return ::Dice::hash::detail::hash_combine({::Dice::hash::dice_hash(entries_[0]),
-													   ::Dice::hash::dice_hash(entries_[1]),
-													   ::Dice::hash::dice_hash(entries_[2])});
+			return ::Dice::hash::dice_hash(this->entries_);
 		}
 	};
 }// namespace Dice::sparql
-//
+
 namespace Dice::hash {
+	template<>
 	inline std::size_t dice_hash(const Dice::sparql::TriplePattern &v) noexcept {
 		return v.hash();
 	}

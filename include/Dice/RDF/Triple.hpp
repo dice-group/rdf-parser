@@ -20,17 +20,13 @@ namespace Dice::rdf {
 
 		Triple(Term subject, Term predicate, Term object) : super_t{std::move(subject), std::move(predicate), std::move(object)} {}
 		[[nodiscard]] size_t hash() const noexcept {
-			return ::Dice::hash::detail::hash_combine(
-					{::Dice::hash::dice_hash(entries_[0]),
-					 ::Dice::hash::dice_hash(entries_[1]),
-					 ::Dice::hash::dice_hash(entries_[2])});
-			// TODO: commented code below doesn't compile, fix in dice-hash
-			// return ::Dice::hash::dice_hash(entries_);
+			return ::Dice::hash::dice_hash(this->entries_);
 		}
 	};
 }// namespace Dice::rdf
 
 namespace Dice::hash {
+	template<>
 	inline std::size_t dice_hash(const Dice::rdf::Triple &v) noexcept {
 		return v.hash();
 	}

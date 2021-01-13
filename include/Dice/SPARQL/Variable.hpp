@@ -57,11 +57,11 @@ namespace Dice::sparql {
 }// namespace Dice::sparql
 
 namespace Dice::hash {
+	template<>
 	inline std::size_t dice_hash(const Dice::sparql::Variable &v) noexcept {
 		return v.hash();
 	}
 }// namespace Dice::hash
-
 
 template<>
 struct std::hash<Dice::sparql::Variable> {

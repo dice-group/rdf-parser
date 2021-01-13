@@ -245,6 +245,7 @@ namespace Dice::rdf {
 };// namespace Dice::rdf
 
 namespace Dice::hash {
+	template<>
 	inline std::size_t dice_hash(const Dice::rdf::Term &v) noexcept {
 		return v.hash();
 	}
