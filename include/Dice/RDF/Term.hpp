@@ -31,14 +31,6 @@ namespace Dice::rdf {
 		}
 	};
 
-	class Term;
-}// namespace Dice::rdf
-
-namespace Dice::hash {
-	inline std::size_t dice_hash(const Dice::rdf::Term &term) noexcept;
-}
-
-namespace Dice::rdf {
 	class Literal;
 
 	class BNode;
@@ -164,18 +156,10 @@ namespace Dice::rdf {
 		}
 
 		[[nodiscard]] std::size_t hash() const {
-			return ::Dice::hash::dice_hash(*this);
+			return ::Dice::hash::dice_hash(this->identifier_);
 		}
 	};
-}// namespace Dice::rdf
 
-namespace Dice::hash {
-	inline std::size_t dice_hash(const Dice::rdf::Term &term) noexcept {
-		return dice_hash(term.getIdentifier());
-	}
-}// namespace Dice::hash
-
-namespace Dice::rdf {
 	class URIRef : public Term {
 
 	public:
@@ -259,6 +243,12 @@ namespace Dice::rdf {
 		return static_cast<const URIRef &>(*this);
 	}
 };// namespace Dice::rdf
+
+namespace Dice::hash {
+	inline std::size_t dice_hash(const Dice::rdf::Term &v) noexcept {
+		return v.hash();
+	}
+}// namespace Dice::hash
 
 template<>
 struct std::hash<Dice::rdf::Term> {

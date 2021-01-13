@@ -7,10 +7,33 @@ namespace Dice::tests::rdf_parser::term_tests {
 	using namespace Dice::rdf;
 	using namespace Dice::rdf_parser::Turtle::parsers;
 
+	TEST(TermTests, compileHash) {
+		std::unordered_set<Term> x;
+		std::unordered_set<Triple> x2;
+		std::unordered_set<sparql::Variable> y;
+		std::unordered_set<sparql::TriplePattern> y2;
+	}
+
+	TEST(TermTests, compileFormattedOutput) {
+		Term term = parse_term("<http://example.com/x>");
+		std::cout << fmt::format("{}", term);
+		Triple triple{parse_term("<http://example.com/x>"), parse_term("<http://example.com/x>"), parse_term("<http://example.com/x>")};
+		std::cout << fmt::format("{}", triple);
+
+		sparql::TriplePattern triplePattern{parse_term("<http://example.com/x>"), sparql::Variable("my_var", false), sparql::Variable("my_var", true)};
+		std::cout << fmt::format("{}", triplePattern);
+	}
+
 	TEST(TermTests, parseSingleIRI) {
 		Term term = parse_term("<http://example.com/x>");
 		ASSERT_EQ(term.type(), Term::NodeType::URIRef_);
-		std::cout << fmt::format("{}", term);
+	}
+
+	TEST(TermTests, parseTriple) {
+		Triple triple{parse_term("<http://example.com/x>"), parse_term("<http://example.com/x>"), parse_term("<http://example.com/x>")};
+		for (const auto &term : triple) {
+			ASSERT_EQ(term.type(), Term::NodeType::URIRef_);
+		}
 	}
 
 	// TODO: Name of file's and tests' names seem odd.
