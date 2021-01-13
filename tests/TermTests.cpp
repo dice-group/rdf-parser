@@ -10,6 +10,7 @@ namespace Dice::tests::rdf_parser::term_tests {
 	TEST(TermTests, parseSingleIRI) {
 		Term term = parse_term("<http://example.com/x>");
 		ASSERT_EQ(term.type(), Term::NodeType::URIRef_);
+		std::cout << fmt::format("{}", term);
 	}
 
 	// TODO: Name of file's and tests' names seem odd.

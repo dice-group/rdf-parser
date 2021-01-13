@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
 project(rdf-parser VERSION 0.11.0)
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 
 
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
@@ -29,8 +29,8 @@ if(RDF_PARSER_BUILD_TESTS)
     add_subdirectory(tests)
 endif()
 
-# require C++17
-target_compile_features(rdf-parser INTERFACE cxx_std_17)
+# require C++20
+target_compile_features(rdf-parser INTERFACE cxx_std_20)
 
 # Make package findable
 configure_file(cmake/dummy-config.cmake.in rdf-parser-config.cmake @ONLY)

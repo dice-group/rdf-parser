@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 
 
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
@@ -16,7 +16,7 @@ target_link_libraries(tests
         ${CONAN_LIBS}
         )
 
-set_property(TARGET tests PROPERTY CXX_STANDARD 17)
+set_property(TARGET tests PROPERTY CXX_STANDARD 20)
 
 
 # copy files for testing to the binary folder

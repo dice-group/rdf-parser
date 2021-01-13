@@ -8,9 +8,8 @@
 #include <string>
 #include <utility>
 
+#include <Dice/hash/DiceHash.hpp>
 #include <fmt/format.h>
-// todo: replace with dice-hash
-#include <absl/hash/hash.h>
 
 
 namespace Dice::rdf {
@@ -32,6 +31,14 @@ namespace Dice::rdf {
 		}
 	};
 
+	class Term;
+}// namespace Dice::rdf
+
+namespace Dice::hash {
+	inline std::size_t dice_hash(const Dice::rdf::Term &term) noexcept;
+}
+
+namespace Dice::rdf {
 	class Literal;
 
 	class BNode;
@@ -157,10 +164,18 @@ namespace Dice::rdf {
 		}
 
 		[[nodiscard]] std::size_t hash() const {
-			return absl::Hash<std::string>()(identifier_);
+			return ::Dice::hash::dice_hash(*this);
 		}
 	};
+}// namespace Dice::rdf
 
+namespace Dice::hash {
+	inline std::size_t dice_hash(const Dice::rdf::Term &term) noexcept {
+		return dice_hash(term.getIdentifier());
+	}
+}// namespace Dice::hash
+
+namespace Dice::rdf {
 	class URIRef : public Term {
 
 	public:
@@ -243,10 +258,7 @@ namespace Dice::rdf {
 	const URIRef &Term::castURIRef() const {
 		return static_cast<const URIRef &>(*this);
 	}
-
-
 };// namespace Dice::rdf
-
 
 template<>
 struct std::hash<Dice::rdf::Term> {
@@ -254,29 +266,6 @@ struct std::hash<Dice::rdf::Term> {
 		return v.hash();
 	}
 };
-
-template<>
-struct std::hash<Dice::rdf::Term *> {
-	size_t operator()(const Dice::rdf::Term *&v) const {
-		return v->hash();
-	}
-};
-
-namespace rdf_parser::store::rdf {
-	struct TermHash {
-		size_t operator()(const Dice::rdf::Term &v) const {
-			return v.hash();
-		}
-
-		size_t operator()(const std::unique_ptr<Dice::rdf::Term> &v) const {
-			return v->hash();
-		}
-
-		size_t operator()(const Dice::rdf::Term *&v) const {
-			return v->hash();
-		}
-	};
-}// namespace rdf_parser::store::rdf
 
 template<>
 struct fmt::formatter<const Dice::rdf::Term *> {
