@@ -1,4 +1,6 @@
 from conans import ConanFile, CMake
+from conans.tools import load
+import re, os
 
 
 class RDFParser(ConanFile):
@@ -17,6 +19,11 @@ class RDFParser(ConanFile):
     exports = "LICENSE"
     exports_sources = "include/*", "CMakeLists.txt", "cmake/dummy-config.cmake.in"
     no_copy_source = True
+
+    def set_version(self):
+        if not hasattr(self, 'version') or self.version is None:
+            cmake_file = load(os.path.join(self.recipe_folder, "CMakeLists.txt"))
+            self.version = re.search("project\(rdf-parser VERSION (.*)\)", cmake_file).group(1)
 
     def requirements(self):
         if self.options.with_tests:
