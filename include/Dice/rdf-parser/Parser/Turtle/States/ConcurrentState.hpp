@@ -21,7 +21,7 @@ For more information about states please check https://github.com/taocpp/PEGTL/b
 namespace Dice::rdf_parser::Turtle::States {
 
 	/*
-     * ConcurrentState deal with the logic of Concurrent parsing  (already parsed triples can be accessed during the parsing). It is a base class for SequentialState and ConcurrentState
+     * ConcurrentState deal with the logic of Concurrent parsing  (already parsed triples can be accessed during the parsing).
      */
 	template<bool sparqlQuery>
 	class ConcurrentState : public State<sparqlQuery, ConcurrentState<sparqlQuery>> {

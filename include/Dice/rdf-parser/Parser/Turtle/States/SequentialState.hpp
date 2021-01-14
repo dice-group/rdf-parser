@@ -19,7 +19,7 @@ For more information about states please check https://github.com/taocpp/PEGTL/b
 namespace Dice::rdf_parser::Turtle::States {
 
 	/*
-       * SequentialState deal with the logic of Sequential parsing  (parsed triples cant be accessed until all the file or the string is parsed). It is a base class for SequentialState and ConcurrentState
+       * SequentialState deal with the logic of Sequential parsing  (parsed triples cant be accessed until all the file or the string is parsed).
        */
 	template<bool sparqlQuery>
 	class SequentialState : public State<sparqlQuery, SequentialState<sparqlQuery>> {
