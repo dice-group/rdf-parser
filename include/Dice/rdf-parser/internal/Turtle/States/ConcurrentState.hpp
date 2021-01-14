@@ -11,14 +11,14 @@ For more information about states please check https://github.com/taocpp/PEGTL/b
 #include <condition_variable>
 #include <mutex>
 #include <thread>
-
-#include <boost/lockfree/spsc_queue.hpp>
 #include <utility>
 
-#include "Dice/rdf-parser/Parser/Turtle/Configurations.hpp"
-#include "Dice/rdf-parser/Parser/Turtle/States/State.hpp"
+#include <boost/lockfree/spsc_queue.hpp>
 
-namespace Dice::rdf_parser::Turtle::States {
+#include "Dice/rdf-parser/internal/Turtle/Configurations.hpp"
+#include "Dice/rdf-parser/internal/Turtle/States/State.hpp"
+
+namespace Dice::rdf_parser::internal::Turtle::States {
 
 	/*
      * ConcurrentState deal with the logic of Concurrent parsing  (already parsed triples can be accessed during the parsing).

@@ -15,34 +15,29 @@
 #include <thread>
 #include <utility>
 
-#include "Dice/rdf-parser/Parser/Turtle/Actions/Actions.hpp"
-#include "Dice/rdf-parser/Parser/Turtle/Parsers/AbstractParser.hpp"
-#include "Dice/rdf-parser/Parser/Turtle/States/ConcurrentState.hpp"
-#include "Dice/rdf-parser/util/ScopedThread.hpp"
-
-#include "Dice/rdf-parser/Parser/Turtle/Configurations.hpp"
+#include "Dice/rdf-parser/internal/Turtle/Actions/Actions.hpp"
+#include "Dice/rdf-parser/internal/Turtle/Parsers/AbstractParser.hpp"
+#include "Dice/rdf-parser/internal/Turtle/States/ConcurrentState.hpp"
+#include "Dice/rdf-parser/internal/util/ScopedThread.hpp"
+#include "Dice/rdf-parser/internal/Turtle/Configurations.hpp"
 
 namespace Dice::rdf_parser::Turtle::parsers {
 
 	/*
      *
      */
-	class RdfConcurrentStreamParser : public AbstractParser<RdfConcurrentStreamParser, false> {
+	class TurtleFileParser : public internal::Turtle::Parsers::AbstractParser<TurtleFileParser, false> {
 		using Term = Dice::rdf::Term;
-		using URIRef = Dice::rdf::URIRef;
-		using Literal = Dice::rdf::Literal;
-		using BNode = Dice::rdf::BNode;
-		using Variable = Dice::sparql::Variable;
-		using VarOrTerm = Dice::sparql::VarOrTerm;
 		using Triple = Dice::rdf::Triple;
-		using TriplePattern = Dice::sparql::TriplePattern;
 
 	private:
+		// TODO: we don't need the smart pointers for the members
 		std::shared_ptr<
 				boost::lockfree::spsc_queue<
 						Triple,
-						boost::lockfree::capacity<Configurations::RdfConcurrentStreamParser_QueueCapacity>>>
+						boost::lockfree::capacity<internal::Turtle::Configurations::RdfConcurrentStreamParser_QueueCapacity>>>
 				parsedTerms;
+		// use size_t instead of unsigned int
 		unsigned int upperThreshold;
 		unsigned int lowerThreshold;
 
@@ -57,7 +52,12 @@ namespace Dice::rdf_parser::Turtle::parsers {
 		std::unique_ptr<util::ScopedThread> parsingThread;
 
 	public:
+
+		using Iterator = internal::Turtle::Parsers::Iterator<TurtleFileParser, false>;
 		void startParsing(std::string filename, std::size_t bufferSize) {
+			namespace Grammar = internal::Turtle::Grammar;
+			namespace States = internal::Turtle::States;
+			namespace Actions = internal::Turtle::Actions;
 			try {
 
 				States::ConcurrentState<false>
@@ -75,17 +75,17 @@ namespace Dice::rdf_parser::Turtle::parsers {
 			}
 		}
 
-		~RdfConcurrentStreamParser() override {
+		~TurtleFileParser() override {
 			stream.close();
 		}
 
 
-		explicit RdfConcurrentStreamParser(const std::string &filename)
+		explicit TurtleFileParser(const std::string &filename)
 			: stream{filename},
-			  upperThreshold(Configurations::RdfConcurrentStreamParser_QueueCapacity),
-			  lowerThreshold(Configurations::RdfConcurrentStreamParser_QueueCapacity / 10),
+			  upperThreshold(internal::Turtle::Configurations::RdfConcurrentStreamParser_QueueCapacity),
+			  lowerThreshold(internal::Turtle::Configurations::RdfConcurrentStreamParser_QueueCapacity / 10),
 			  parsedTerms{
-					  std::make_shared<boost::lockfree::spsc_queue<Triple, boost::lockfree::capacity<Configurations::RdfConcurrentStreamParser_QueueCapacity>>>()},
+					  std::make_shared<boost::lockfree::spsc_queue<Triple, boost::lockfree::capacity<internal::Turtle::Configurations::RdfConcurrentStreamParser_QueueCapacity>>>()},
 			  cv{std::make_shared<std::condition_variable>()},
 			  m{std::make_shared<std::mutex>()},
 			  cv2{std::make_shared<std::condition_variable>()},
@@ -94,8 +94,8 @@ namespace Dice::rdf_parser::Turtle::parsers {
 			  termsCountIsNotEmpty{std::make_shared<std::atomic_bool>(false)},
 			  parsingIsDone{std::make_shared<std::atomic_bool>(false)},
 			  parsingThread{std::make_unique<util::ScopedThread>(
-					  std::thread(&RdfConcurrentStreamParser::startParsing, this, filename,
-								  Configurations::RdfConcurrentStreamParser_BufferSize))} {}
+					  std::thread(&TurtleFileParser::startParsing, this, filename,
+								  internal::Turtle::Configurations::RdfConcurrentStreamParser_BufferSize))} {}
 
 
 		void nextTriple() override {
@@ -116,7 +116,6 @@ namespace Dice::rdf_parser::Turtle::parsers {
 
 				//check if the parsing is done
 				if (*parsingIsDone) {
-					std::cout << "from main thread : parsingIsDone " << std::endl;
 					return false;
 				} else {
 					std::unique_lock<std::mutex> lk(*m2);
@@ -127,7 +126,6 @@ namespace Dice::rdf_parser::Turtle::parsers {
 						return true;
 
 					else if (*parsingIsDone) {
-						std::cout << "from main thread : parsingIsDone " << std::endl;
 						return false;
 					} else {
 						throw std::runtime_error("");
@@ -137,8 +135,8 @@ namespace Dice::rdf_parser::Turtle::parsers {
 		};
 
 
-		Iterator<RdfConcurrentStreamParser, false> begin_implementation() {
-			return Iterator<RdfConcurrentStreamParser, false>(this);
+		Iterator begin_implementation() {
+			return Iterator(this);
 		}
 	};
 }// namespace Dice::rdf_parser::Turtle::parsers

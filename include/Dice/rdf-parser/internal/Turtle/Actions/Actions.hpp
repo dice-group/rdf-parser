@@ -1,15 +1,15 @@
 #ifndef RDF_PARSER_ACTIONS_HPP
 #define RDF_PARSER_ACTIONS_HPP
 
-#include "Dice/rdf-parser/Parser/Turtle/Actions/BasicActions.hpp"
-#include "Dice/rdf-parser/Parser/Turtle/States/State.hpp"
+#include "Dice/rdf-parser/internal/Turtle/Actions/BasicActions.hpp"
+#include "Dice/rdf-parser/internal/Turtle/States/State.hpp"
 
 /**
  * Actions define how to deal with the parsed grammars during the parsing and allow to store information in the states.
  * For more information about actions please check https://github.com/taocpp/PEGTL/blob/master/doc/Actions-and-States.md#
  * This file contains the actions required for parsing RDF triples  in a whole file,stream or string.
 */
-namespace Dice::rdf_parser::Turtle::Actions {
+namespace Dice::rdf_parser::internal::Turtle::Actions {
 
 	template<>
 	struct action<Grammar::statement> {

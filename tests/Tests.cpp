@@ -8,7 +8,6 @@
 #include "TurtleOfficialNegativeTests.cpp"
 #include "TurtleOfficialPositiveTests.cpp"
 #include "TurtleParserFilesTests.cpp"
-#include "TurtleParserConcurrentTests.cpp"
 
 int main(int argc, char **argv) {
 	testing::InitGoogleTest(&argc, argv);

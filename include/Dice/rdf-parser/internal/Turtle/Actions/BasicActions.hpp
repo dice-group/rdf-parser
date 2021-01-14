@@ -11,10 +11,10 @@ This file contains the actions required for parsing RDF term .
 
 
 #include "Dice/SPARQL/Variable.hpp"
-#include "Dice/rdf-parser/Parser/Turtle/Grammar.hpp"
-#include "Dice/rdf-parser/Parser/Turtle/States/BasicState.hpp"
+#include "Dice/rdf-parser/internal/Turtle/Grammar.hpp"
+#include "Dice/rdf-parser/internal/Turtle/States/BasicState.hpp"
 
-namespace Dice::rdf_parser::Turtle::Actions {
+namespace Dice::rdf_parser::internal::Turtle::Actions {
 
 	template<typename Rule>
 	struct action : ::tao::pegtl::nothing<Rule> {};

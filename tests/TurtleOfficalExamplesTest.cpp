@@ -1,15 +1,15 @@
 #include <gtest/gtest.h>
 
-#include <Dice/rdf-parser/Parser/Turtle/Parsers/RdfStringParser.hpp>
+#include <Dice/rdf-parser/TurtleStringParser.hpp>
 
 
 namespace Dice::tests::rdf_parser::turtle_official_examples_tests {
 
-	using namespace Dice::rdf_parser::Turtle;
+	using namespace Dice::rdf_parser;
 
 
 	TEST(TurtleOfficalExamplesTests, EXAMPLE1) {
-		Dice::rdf_parser::Turtle::parsers::RdfStringParser parser(
+		TurtleStringParser parser(
 				"@base <http://example.org/> .\n"
 				"@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n"
 				"@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .\n"
@@ -39,7 +39,7 @@ namespace Dice::tests::rdf_parser::turtle_official_examples_tests {
 
 	TEST(TurtleOfficalExamplesTests, EXAMPLE2) {
 
-		Dice::rdf_parser::Turtle::parsers::RdfStringParser parser(
+		TurtleStringParser parser(
 				"<http://example.org/#spiderman> <http://www.perceive.net/schemas/relationship/enemyOf> <http://example.org/#green-goblin> .\n");
 		auto it = parser.begin();
 		std::cout << std::endl;
@@ -55,7 +55,7 @@ namespace Dice::tests::rdf_parser::turtle_official_examples_tests {
 
 	TEST(TurtleOfficalExamplesTests, EXAMPLE3) {
 
-		Dice::rdf_parser::Turtle::parsers::RdfStringParser parser(
+		TurtleStringParser parser(
 				"<http://example.org/#spiderman> <http://www.perceive.net/schemas/relationship/enemyOf> <http://example.org/#green-goblin> ;\n"
 				"\t\t\t\t<http://xmlns.com/foaf/0.1/name> \"Spiderman\" .");
 		auto it = parser.begin();
@@ -72,7 +72,7 @@ namespace Dice::tests::rdf_parser::turtle_official_examples_tests {
 
 	TEST(TurtleOfficalExamplesTests, EXAMPLE4) {
 
-		Dice::rdf_parser::Turtle::parsers::RdfStringParser parser(
+		TurtleStringParser parser(
 				"<http://example.org/#spiderman> <http://www.perceive.net/schemas/relationship/enemyOf> <http://example.org/#green-goblin> .\n"
 				"<http://example.org/#spiderman> <http://xmlns.com/foaf/0.1/name> \"Spiderman\" .");
 		auto it = parser.begin();
@@ -89,7 +89,7 @@ namespace Dice::tests::rdf_parser::turtle_official_examples_tests {
 
 	TEST(TurtleOfficalExamplesTests, EXAMPLE5) {
 
-		Dice::rdf_parser::Turtle::parsers::RdfStringParser parser(
+		TurtleStringParser parser(
 				"<http://example.org/#spiderman> <http://xmlns.com/foaf/0.1/name> \"Spiderman\", \"Человек-паук\"@ru .");
 		auto it = parser.begin();
 		std::cout << std::endl;
@@ -105,7 +105,7 @@ namespace Dice::tests::rdf_parser::turtle_official_examples_tests {
 
 	TEST(TurtleOfficalExamplesTests, EXAMPLE6) {
 
-		Dice::rdf_parser::Turtle::parsers::RdfStringParser parser(
+		TurtleStringParser parser(
 				"<http://example.org/#spiderman> <http://xmlns.com/foaf/0.1/name> \"Spiderman\" .\n"
 				"<http://example.org/#spiderman> <http://xmlns.com/foaf/0.1/name> \"Человек-паук\"@ru .");
 		auto it = parser.begin();
@@ -122,7 +122,7 @@ namespace Dice::tests::rdf_parser::turtle_official_examples_tests {
 
 	TEST(TurtleOfficalExamplesTests, EXAMPLE7) {
 
-		Dice::rdf_parser::Turtle::parsers::RdfStringParser parser(
+		TurtleStringParser parser(
 				"@prefix somePrefix: <http://www.perceive.net/schemas/relationship/> .\n"
 				"\n"
 				"<http://example.org/#green-goblin> somePrefix:enemyOf <http://example.org/#spiderman> .");
@@ -140,7 +140,7 @@ namespace Dice::tests::rdf_parser::turtle_official_examples_tests {
 
 	TEST(TurtleOfficalExamplesTests, EXAMPLE8) {
 
-		Dice::rdf_parser::Turtle::parsers::RdfStringParser parser(
+		TurtleStringParser parser(
 				"PREFIX somePrefix: <http://www.perceive.net/schemas/relationship/>\n"
 				"\n"
 				"<http://example.org/#green-goblin> somePrefix:enemyOf <http://example.org/#spiderman> .\n"
@@ -159,7 +159,7 @@ namespace Dice::tests::rdf_parser::turtle_official_examples_tests {
 
 	TEST(TurtleOfficalExamplesTests, EXAMPLE9) {
 
-		Dice::rdf_parser::Turtle::parsers::RdfStringParser parser(
+		TurtleStringParser parser(
 				"<http://one.example/subject1> <http://one.example/predicate1> <http://one.example/object1> .\n"
 				"@base <http://one.example/> .\n"
 				"<subject2> <predicate2> <object2> .     \n"
@@ -189,7 +189,7 @@ namespace Dice::tests::rdf_parser::turtle_official_examples_tests {
 
 	TEST(TurtleOfficalExamplesTests, EXAMPLE10) {
 
-		Dice::rdf_parser::Turtle::parsers::RdfStringParser parser(
+		TurtleStringParser parser(
 				"@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n"
 				"\n"
 				"<http://example.org/#green-goblin> foaf:name \"Green Goblin\" .\n"
@@ -209,7 +209,7 @@ namespace Dice::tests::rdf_parser::turtle_official_examples_tests {
 
 	TEST(TurtleOfficalExamplesTests, EXAMPLE11) {
 
-		Dice::rdf_parser::Turtle::parsers::RdfStringParser parser(
+		TurtleStringParser parser(
 				"@prefix show: <http://example.org/vocab/show/> .\n"
 				"show:218 show:blurb '''This is a multi-line  \n"
 				"literal with many quotes''' .");
@@ -227,7 +227,7 @@ namespace Dice::tests::rdf_parser::turtle_official_examples_tests {
 
 	TEST(TurtleOfficalExamplesTests, EXAMPLE12) {
 
-		Dice::rdf_parser::Turtle::parsers::RdfStringParser parser(
+		TurtleStringParser parser(
 				"@prefix : <http://example.org/elements> .                                                                              \n"
 				"<http://en.wikipedia.org/wiki/Helium>                                                                                  \n"
 				"    :atomicNumber 2 ;                                                                                    \n"
@@ -247,7 +247,7 @@ namespace Dice::tests::rdf_parser::turtle_official_examples_tests {
 
 	TEST(TurtleOfficalExamplesTests, EXAMPLE13) {
 
-		Dice::rdf_parser::Turtle::parsers::RdfStringParser parser(
+		TurtleStringParser parser(
 				"@prefix : <http://example.org/stats> .\n"
 				"<http://somecountry.example/census2007>\n"
 				"    :isLandlocked false .     ");
@@ -265,7 +265,7 @@ namespace Dice::tests::rdf_parser::turtle_official_examples_tests {
 
 	TEST(TurtleOfficalExamplesTests, EXAMPLE14) {
 
-		Dice::rdf_parser::Turtle::parsers::RdfStringParser parser(
+		TurtleStringParser parser(
 				"@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n"
 				"\n"
 				"_:alice foaf:knows _:bob .\n"
@@ -284,7 +284,7 @@ namespace Dice::tests::rdf_parser::turtle_official_examples_tests {
 
 	TEST(TurtleOfficalExamplesTests, EXAMPLE15) {
 
-		Dice::rdf_parser::Turtle::parsers::RdfStringParser parser(
+		TurtleStringParser parser(
 				"@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n"
 				"\n"
 				"[] foaf:knows [ foaf:name \"Bob\" ] .");
@@ -302,7 +302,7 @@ namespace Dice::tests::rdf_parser::turtle_official_examples_tests {
 
 	TEST(TurtleOfficalExamplesTests, EXAMPLE16) {
 
-		Dice::rdf_parser::Turtle::parsers::RdfStringParser parser(
+		TurtleStringParser parser(
 				"@prefix foaf: <http://xmlns.com/foaf/0.1/> .\n"
 				"\n"
 				"[ foaf:name \"Alice\" ] foaf:knows [\n"
@@ -324,7 +324,7 @@ namespace Dice::tests::rdf_parser::turtle_official_examples_tests {
 
 	TEST(TurtleOfficalExamplesTests, EXAMPLE17) {
 
-		Dice::rdf_parser::Turtle::parsers::RdfStringParser parser(
+		TurtleStringParser parser(
 				"_:a <http://xmlns.com/foaf/0.1/name> \"Alice\" .\n"
 				"_:a <http://xmlns.com/foaf/0.1/knows> _:b .\n"
 				"_:b <http://xmlns.com/foaf/0.1/name> \"Bob\" .\n"
@@ -345,7 +345,7 @@ namespace Dice::tests::rdf_parser::turtle_official_examples_tests {
 
 	TEST(TurtleOfficalExamplesTests, EXAMPLE18) {
 
-		Dice::rdf_parser::Turtle::parsers::RdfStringParser parser(
+		TurtleStringParser parser(
 				"@prefix : <http://example.org/foo> .\n"
 				":subject :predicate ( :a :b :c ) .\n"
 				"\n"
@@ -364,7 +364,7 @@ namespace Dice::tests::rdf_parser::turtle_official_examples_tests {
 
 	TEST(TurtleOfficalExamplesTests, EXAMPLE19) {
 
-		Dice::rdf_parser::Turtle::parsers::RdfStringParser parser(
+		TurtleStringParser parser(
 				"@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n"
 				"@prefix dc: <http://purl.org/dc/elements/1.1/> .\n"
 				"@prefix ex: <http://example.org/stuff/1.0/> .\n"
@@ -389,7 +389,7 @@ namespace Dice::tests::rdf_parser::turtle_official_examples_tests {
 
 	TEST(TurtleOfficalExamplesTests, EXAMPLE20) {
 
-		Dice::rdf_parser::Turtle::parsers::RdfStringParser parser(
+		TurtleStringParser parser(
 				"PREFIX : <http://example.org/stuff/1.0/>\n"
 				":a :b ( \"apple\" \"banana\" ) .");
 		auto it = parser.begin();
@@ -406,7 +406,7 @@ namespace Dice::tests::rdf_parser::turtle_official_examples_tests {
 
 	TEST(TurtleOfficalExamplesTests, EXAMPLE21) {
 
-		Dice::rdf_parser::Turtle::parsers::RdfStringParser parser(
+		TurtleStringParser parser(
 				"@prefix : <http://example.org/stuff/1.0/> .\n"
 				"@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n"
 				":a :b\n"
@@ -428,7 +428,7 @@ namespace Dice::tests::rdf_parser::turtle_official_examples_tests {
 
 	TEST(TurtleOfficalExamplesTests, EXAMPLE22) {
 
-		Dice::rdf_parser::Turtle::parsers::RdfStringParser parser(
+		TurtleStringParser parser(
 				"@prefix : <http://example.org/stuff/1.0/> .\n"
 				"\n"
 				":a :b \"The first line\\nThe second line\\n  more\" .\n"
@@ -450,7 +450,7 @@ namespace Dice::tests::rdf_parser::turtle_official_examples_tests {
 
 	TEST(TurtleOfficalExamplesTests, EXAMPLE23) {
 
-		Dice::rdf_parser::Turtle::parsers::RdfStringParser parser(
+		TurtleStringParser parser(
 				"@prefix : <http://example.org/stuff/1.0/> .\n"
 				"(1 2.0 3E1) :p \"w\" .");
 		auto it = parser.begin();
@@ -467,7 +467,7 @@ namespace Dice::tests::rdf_parser::turtle_official_examples_tests {
 
 	TEST(TurtleOfficalExamplesTests, EXAMPLE24) {
 
-		Dice::rdf_parser::Turtle::parsers::RdfStringParser parser(
+		TurtleStringParser parser(
 				"@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n"
 				"PREFIX : <http://example.org/stuff/1.0/> \n"
 				"    _:b0  rdf:first  1 ;\n"
@@ -493,7 +493,7 @@ namespace Dice::tests::rdf_parser::turtle_official_examples_tests {
 
 	TEST(TurtleOfficalExamplesTests, EXAMPLE25) {
 
-		Dice::rdf_parser::Turtle::parsers::RdfStringParser parser(
+		TurtleStringParser parser(
 				"PREFIX : <http://example.org/stuff/1.0/>\n"
 				"(1 [:p :q] ( 2 ) ) :p2 :q2 .");
 		auto it = parser.begin();
@@ -510,7 +510,7 @@ namespace Dice::tests::rdf_parser::turtle_official_examples_tests {
 
 	TEST(TurtleOfficalExamplesTests, EXAMPLE26) {
 
-		Dice::rdf_parser::Turtle::parsers::RdfStringParser parser(
+		TurtleStringParser parser(
 				"@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n"
 				"PREFIX : <http://example.org/stuff/1.0/> \n"
 				"    _:b0  rdf:first  1 ;\n"

@@ -11,27 +11,30 @@
 #include <chrono>
 #include <utility>
 
-#include "Dice/rdf-parser/Parser/Turtle/Actions/Actions.hpp"
-#include "Dice/rdf-parser/Parser/Turtle/Parsers/BaseStringParser.hpp"
+#include "Dice/rdf-parser/internal/Turtle/Actions/Actions.hpp"
+#include "Dice/rdf-parser/internal/Turtle/Parsers/BaseStringParser.hpp"
 
 
-namespace Dice::rdf_parser::Turtle::parsers {
+namespace Dice::rdf_parser {
 
-	class RdfStringParser : public BaseStringParser<false> {
+	class TurtleStringParser : public internal::Turtle::Parsers::BaseStringParser<false> {
 
 
 	public:
+		using Iterator [[maybe_unused]] = internal::Turtle::Parsers::Iterator<TurtleStringParser, false>;
+
 		/**
          * The constructor start the parsing.if the input is not valid it will throws and exception.
          * it also invoke nextTriple to have the first triple ready for using .
          * @param text the string to parse
          */
-		explicit RdfStringParser(std::string text) : BaseStringParser<false>(std::move(text)) {}
+		explicit TurtleStringParser(std::string text) : BaseStringParser<false>(std::move(text)) {}
 
 		/**
          * checks whether a string is valid rdf turtle file
          */
 		static bool isParsable(const std::string &input) {
+			namespace Grammar = internal::Turtle::Grammar;
 			try {
 				tao::pegtl::string_input in(input, "the text");
 				tao::pegtl::parse<Grammar::grammar<false>>(in);
@@ -54,7 +57,7 @@ namespace Dice::rdf_parser::Turtle::parsers {
 		}
 
 
-		~RdfStringParser() override = default;
+		~TurtleStringParser() override = default;
 	};
 }// namespace Dice::rdf_parser::Turtle::parsers
 

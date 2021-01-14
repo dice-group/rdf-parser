@@ -10,12 +10,12 @@ For more information about states please check https://github.com/taocpp/PEGTL/b
 #include <queue>
 #include <stack>
 
+#include "Dice/rdf-parser/internal/Turtle/States/BasicState.hpp"
 #include "Dice/RDF/Triple.hpp"
 #include "Dice/SPARQL/TriplePattern.hpp"
-#include "Dice/rdf-parser/Parser/Turtle/States/BasicState.hpp"
 
 
-namespace Dice::rdf_parser::Turtle::States {
+namespace Dice::rdf_parser::internal::Turtle::States {
 
 	/*
         * State defines the base data structures related to the whole grammar (stores the parsed triples). It is a base class for SequentialState and ConcurrentState

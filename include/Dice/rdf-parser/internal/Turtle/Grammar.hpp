@@ -9,7 +9,7 @@ For more information about how to define grammars and rules using PEGTl please c
 
 #include <tao/pegtl.hpp>
 
-namespace Dice::rdf_parser::Turtle::Grammar {
+namespace Dice::rdf_parser::internal::Turtle::Grammar {
 	using namespace tao::pegtl;
 
 	//      Terminals

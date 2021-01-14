@@ -4,14 +4,14 @@
 
 #include <utility>
 
-#include "Dice/rdf-parser/Parser/Turtle/Parsers/BaseStringParser.hpp"
+#include "Dice/rdf-parser/internal/Turtle/Parsers/BaseStringParser.hpp"
 
 /**
  * TriplesBlockStringParser is responsible for parsing sparql's tripleBlocks from string sources.
  */
 
 
-namespace Dice::rdf_parser::Turtle::parsers {
+namespace Dice::rdf_parser::internal::Turtle::Parsers {
 
 	class TriplesBlockStringParser : public BaseStringParser<true> {
 

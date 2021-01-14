@@ -4,9 +4,9 @@
 
 #include <chrono>
 
-#include "Dice/rdf-parser/Parser/Turtle/Actions/Actions.hpp"
-#include "Dice/rdf-parser/Parser/Turtle/Parsers/AbstractParser.hpp"
-#include "Dice/rdf-parser/Parser/Turtle/States/SequentialState.hpp"
+#include "Dice/rdf-parser/internal/Turtle/Parsers/AbstractParser.hpp"
+#include "Dice/rdf-parser/internal/Turtle/Actions/Actions.hpp"
+#include "Dice/rdf-parser/internal/Turtle/States/SequentialState.hpp"
 
 
 /**
@@ -14,7 +14,7 @@
  * It parse the string one time and put the parsed elements in a std::queue
  */
 
-namespace Dice::rdf_parser::Turtle::parsers {
+namespace Dice::rdf_parser::internal::Turtle::Parsers {
 
 	template<bool sparqlQuery>
 	class BaseStringParser : public AbstractParser<BaseStringParser<sparqlQuery>, sparqlQuery> {

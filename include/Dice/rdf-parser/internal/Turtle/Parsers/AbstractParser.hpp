@@ -9,22 +9,17 @@
  * Base class for parsing triples from different sources.
  */
 
-namespace Dice::rdf_parser::Turtle::parsers {
+namespace Dice::rdf_parser::internal::Turtle::Parsers {
 
-	template<class Derived, bool sparqlQuery>
+	template<class Parser, bool sparqlQuery>
 	class Iterator;
 
 	template<class Derived, bool sparqlQuery>
 	class AbstractParser {
 		using Term = Dice::rdf::Term;
-		using URIRef = Dice::rdf::URIRef;
-		using Literal = Dice::rdf::Literal;
-		using BNode = Dice::rdf::BNode;
-		using Variable = Dice::sparql::Variable;
 		using VarOrTerm = Dice::sparql::VarOrTerm;
 		using Triple = Dice::rdf::Triple;
 		using TriplePattern = Dice::sparql::TriplePattern;
-		using Element_t = std::conditional_t<sparqlQuery, VarOrTerm, Term>;
 		using Triple_t = std::conditional_t<sparqlQuery, TriplePattern, Triple>;
 
 	protected:
@@ -33,6 +28,7 @@ namespace Dice::rdf_parser::Turtle::parsers {
 		explicit AbstractParser() {
 			current_triple = std::make_shared<element_type>();
 		};
+		// TODO: doesn't need to be shared
 		std::shared_ptr<element_type> current_triple;
 
 
@@ -65,33 +61,26 @@ namespace Dice::rdf_parser::Turtle::parsers {
 		bool end() { return false; }
 	};
 
-	template<class Derived, bool sparqlQuery>
+	template<class Parser, bool sparqlQuery>
 	class Iterator {
 		using Term = Dice::rdf::Term;
-		using URIRef = Dice::rdf::URIRef;
-		using Literal = Dice::rdf::Literal;
-		using BNode = Dice::rdf::BNode;
-		using Variable = Dice::sparql::Variable;
-		using VarOrTerm = Dice::sparql::VarOrTerm;
 		using Triple = Dice::rdf::Triple;
 		using TriplePattern = Dice::sparql::TriplePattern;
-		using Element_t = std::conditional_t<sparqlQuery, VarOrTerm, Term>;
 		using Triple_t = std::conditional_t<sparqlQuery, TriplePattern, Triple>;
 
 	private:
 		bool done_;
 		bool parser_done_;
-		Derived *triplesParser = nullptr;
+		Parser *triplesParser = nullptr;
 
 	public:
-		explicit Iterator(Derived *triplesParser) : done_{false}, parser_done_{false}, triplesParser{triplesParser} {
+		explicit Iterator(Parser *triplesParser) : done_{false}, parser_done_{false}, triplesParser{triplesParser} {
 			//check if there is at least one parsed triple
 			if (triplesParser->hasNextTriple())
 				this->operator++();
 			else
 				parser_done_ = true;
 		};
-
 
 		void operator++() {
 			if (parser_done_) {

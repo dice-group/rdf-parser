@@ -2,12 +2,12 @@
 #define RDF_PARSER_BASICSTATE_HPP
 
 
-#include <Dice/RDF/Triple.hpp>
 #include <map>
 #include <memory>
 #include <optional>
 #include <string>
 
+#include "Dice/RDF/Triple.hpp"
 #include "Dice/RDF/Term.hpp"
 #include "Dice/RDF/Triple.hpp"
 #include "Dice/SPARQL/TriplePattern.hpp"
@@ -17,7 +17,7 @@
  * States store information needed during and after the parsing.
  * For more information about states please check https://github.com/taocpp/PEGTL/blob/master/doc/Actions-and-States.md#states
  */
-namespace Dice::rdf_parser::Turtle::States {
+namespace Dice::rdf_parser::internal::Turtle::States {
 
 	/*
      * BasicState defines the data structures related to rdf term

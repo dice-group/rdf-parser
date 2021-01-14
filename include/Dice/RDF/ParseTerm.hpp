@@ -2,9 +2,9 @@
 #define RDF_PARSER_MAKE_TERM_HPP
 
 #include "Dice/RDF/Term.hpp"
-#include "Dice/rdf-parser/Parser/Turtle/Actions/BasicActions.hpp"
-#include "Dice/rdf-parser/Parser/Turtle/Grammar.hpp"
-#include "Dice/rdf-parser/Parser/Turtle/States/BasicState.hpp"
+#include "Dice/rdf-parser/internal/Turtle/Actions/BasicActions.hpp"
+#include "Dice/rdf-parser/internal/Turtle/Grammar.hpp"
+#include "Dice/rdf-parser/internal/Turtle/States/BasicState.hpp"
 
 namespace Dice::rdf {
 	/**
@@ -16,10 +16,9 @@ namespace Dice::rdf {
 	inline Term parse_term(const std::string &identifier) {
 		try {
 			using namespace tao::pegtl;
-			// TODO: what is "the text" good for?
 			string_input input(identifier, "the text");
-			Dice::rdf_parser::Turtle::States::BasicState state;
-			parse<Dice::rdf_parser::Turtle::Grammar::term, Dice::rdf_parser::Turtle::Actions::action>(input, state);
+			Dice::rdf_parser::internal::Turtle::States::BasicState state;
+			parse<Dice::rdf_parser::internal::Turtle::Grammar::term, Dice::rdf_parser::internal::Turtle::Actions::action>(input, state);
 			return std::move(state.getElement());
 		} catch (const std::exception &e) {
 			throw std::logic_error{fmt::format("{} is not a valid term.")};

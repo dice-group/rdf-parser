@@ -1,11 +1,12 @@
 #include <Dice/RDF/ParseTerm.hpp>
-#include <Dice/rdf-parser/Parser/Turtle/Parsers/RdfStringParser.hpp>
+#include <Dice/rdf-parser/TurtleStringParser.hpp>
 #include <gtest/gtest.h>
 
 namespace Dice::tests::rdf_parser::term_tests {
-	using namespace Dice::rdf_parser::Turtle;
+	using namespace Dice::rdf_parser::internal::Turtle;
 	using namespace Dice::rdf;
-	using namespace Dice::rdf_parser::Turtle::parsers;
+	using namespace Dice::rdf_parser::internal::Turtle::Parsers;
+	using namespace Dice::rdf_parser;
 
 	TEST(TermTests, compileHash) {
 		std::unordered_set<Term> x;
@@ -39,7 +40,7 @@ namespace Dice::tests::rdf_parser::term_tests {
 	// TODO: Name of file's and tests' names seem odd.
 
 	TEST(TermTests, parseIRI) {
-		RdfStringParser parser("@prefix pref: <http://example.com/> . "
+		TurtleStringParser parser("@prefix pref: <http://example.com/> . "
 							   "<http://example.com/x> a pref:x.");
 		auto iterator = parser.begin();
 		ASSERT_TRUE(bool(iterator));
@@ -51,7 +52,7 @@ namespace Dice::tests::rdf_parser::term_tests {
 	}
 
 	TEST(TermTests, parseStringTerm) {
-		RdfStringParser parser("@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . "
+		TurtleStringParser parser("@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . "
 							   "<http://example.com/x> a \"text\". "
 							   "<http://example.com/x> a \"text\"^^<http://www.w3.org/2001/XMLSchema#string>. "
 							   "<http://example.com/x> a \"text\"^^xsd:string. ");
@@ -71,7 +72,7 @@ namespace Dice::tests::rdf_parser::term_tests {
 
 
 	TEST(TermTests, parseNumbers) {
-		RdfStringParser parser("@prefix : <http://example.org/elements> .                                                                              \n"
+		TurtleStringParser parser("@prefix : <http://example.org/elements> .                                                                              \n"
 							   "<http://en.wikipedia.org/wiki/Helium>   "
 							   ":atomicNumber 2 ;"
 							   " :atomicMass 4.002602 ;"
