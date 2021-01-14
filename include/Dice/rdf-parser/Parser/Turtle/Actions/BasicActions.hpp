@@ -47,7 +47,7 @@ namespace Dice::rdf_parser::Turtle::Actions {
 	template<>
 	struct action<Grammar::prefixID> {
 		template<typename Input, bool SparqlQuery>
-		static void apply(const Input &in, States::BasicState<SparqlQuery>  &state) {
+		static void apply(const Input &in, States::BasicState<SparqlQuery> &state) {
 			std::stringstream ss;
 			ss << in.string();
 			std::string prefix;
@@ -68,7 +68,7 @@ namespace Dice::rdf_parser::Turtle::Actions {
 	template<>
 	struct action<Grammar::sparqlPrefix> {
 		template<typename Input, bool SparqlQuery>
-		static void apply(const Input &in, States::BasicState<SparqlQuery>  &state) {
+		static void apply(const Input &in, States::BasicState<SparqlQuery> &state) {
 			std::stringstream ss;
 			ss << in.string();
 			std::string prefix;
@@ -90,7 +90,7 @@ namespace Dice::rdf_parser::Turtle::Actions {
 	template<>
 	struct action<Grammar::sparqlBase> {
 		template<typename Input, bool SparqlQuery>
-		static void apply(const Input &in, States::BasicState<SparqlQuery>  &state) {
+		static void apply(const Input &in, States::BasicState<SparqlQuery> &state) {
 			std::stringstream ss;
 			ss << in.string();
 			std::string ignore;
@@ -109,7 +109,7 @@ namespace Dice::rdf_parser::Turtle::Actions {
 	struct action<Grammar::PrefixedName> {
 		using URIRef = Dice::rdf::URIRef;
 		template<typename Input, bool SparqlQuery>
-		static void apply(const Input &in, States::BasicState<SparqlQuery>  &state) {
+		static void apply(const Input &in, States::BasicState<SparqlQuery> &state) {
 			std::stringstream ss;
 			ss << in.string();
 			std::string statement;
@@ -135,7 +135,7 @@ namespace Dice::rdf_parser::Turtle::Actions {
 	struct action<Grammar::IRIREF> {
 		using URIRef = Dice::rdf::URIRef;
 		template<typename Input, bool SparqlQuery>
-		static void apply(const Input &in, States::BasicState<SparqlQuery>  &state) {
+		static void apply(const Input &in, States::BasicState<SparqlQuery> &state) {
 			std::stringstream ss;
 			ss << in.string();
 			std::string s;
@@ -152,7 +152,7 @@ namespace Dice::rdf_parser::Turtle::Actions {
 	template<>
 	struct action<Grammar::ANON> {
 		template<typename Input, bool SparqlQuery>
-		static void apply(const Input &in, States::BasicState<SparqlQuery>  &state) {
+		static void apply(const Input &in, States::BasicState<SparqlQuery> &state) {
 			state.setBlank_node_string(state.createBlankNodeLabel());
 		};
 	};
@@ -161,13 +161,13 @@ namespace Dice::rdf_parser::Turtle::Actions {
 	struct action<Grammar::BooleanLiteral> {
 		using Literal = Dice::rdf::Literal;
 		template<typename Input, bool SparqlQuery>
-		static void apply(const Input &in, States::BasicState<SparqlQuery>  &state) {
+		static void apply(const Input &in, States::BasicState<SparqlQuery> &state) {
 			std::stringstream ss;
 			ss << in.string();
 			std::string s;
 			s = ss.str();
 
-			state.setLiteral_string(std::move(s)); // TODO: is that necessary
+			state.setLiteral_string(std::move(s));// TODO: is that necessary
 			state.setElement(Literal(state.getLiteral_string(), std::nullopt, "xsd:boolean"));
 		}
 	};
@@ -175,7 +175,7 @@ namespace Dice::rdf_parser::Turtle::Actions {
 	template<>
 	struct action<Grammar::DOUBLE> {
 		template<typename Input, bool SparqlQuery>
-		static void apply(const Input &in, States::BasicState<SparqlQuery>  &state) {
+		static void apply(const Input &in, States::BasicState<SparqlQuery> &state) {
 			state.setType_tag("xsd:double");
 		}
 	};
@@ -183,7 +183,7 @@ namespace Dice::rdf_parser::Turtle::Actions {
 	template<>
 	struct action<Grammar::DECIMAL> {
 		template<typename Input, bool SparqlQuery>
-		static void apply(const Input &in, States::BasicState<SparqlQuery>  &state) {
+		static void apply(const Input &in, States::BasicState<SparqlQuery> &state) {
 			state.setType_tag("xsd:decimal");
 		}
 	};
@@ -191,7 +191,7 @@ namespace Dice::rdf_parser::Turtle::Actions {
 	template<>
 	struct action<Grammar::INTEGER> {
 		template<typename Input, bool SparqlQuery>
-		static void apply(const Input &in, States::BasicState<SparqlQuery>  &state) {
+		static void apply(const Input &in, States::BasicState<SparqlQuery> &state) {
 			state.setType_tag("xsd:integer");
 		}
 	};
@@ -201,7 +201,7 @@ namespace Dice::rdf_parser::Turtle::Actions {
 		using Literal = Dice::rdf::Literal;
 
 		template<typename Input, bool SparqlQuery>
-		static void apply(const Input &in, States::BasicState<SparqlQuery>  &state) {
+		static void apply(const Input &in, States::BasicState<SparqlQuery> &state) {
 			std::stringstream ss;
 			ss << in.string();
 			std::string s;
@@ -216,7 +216,7 @@ namespace Dice::rdf_parser::Turtle::Actions {
 		using Literal = Dice::rdf::Literal;
 
 		template<typename Input, bool SparqlQuery>
-		static void apply(const Input &in, States::BasicState<SparqlQuery>  &state) {
+		static void apply(const Input &in, States::BasicState<SparqlQuery> &state) {
 			//check if this RdfLiteral has IRI part
 			if (state.isTypeTagFound()) {
 				std::string tag;
@@ -254,7 +254,7 @@ namespace Dice::rdf_parser::Turtle::Actions {
 	template<>
 	struct action<Grammar::RdfLiteralTypeTag> {
 		template<typename Input, bool SparqlQuery>
-		static void apply(const Input &in, States::BasicState<SparqlQuery>  &state) {
+		static void apply(const Input &in, States::BasicState<SparqlQuery> &state) {
 
 			std::stringstream ss;
 			ss << in.string();
@@ -274,7 +274,7 @@ namespace Dice::rdf_parser::Turtle::Actions {
 	template<>
 	struct action<Grammar::LANGTAG> {
 		template<typename Input, bool SparqlQuery>
-		static void apply(const Input &in, States::BasicState<SparqlQuery>  &state) {
+		static void apply(const Input &in, States::BasicState<SparqlQuery> &state) {
 			std::stringstream ss;
 			ss << in.string();
 			std::string s;
@@ -289,7 +289,7 @@ namespace Dice::rdf_parser::Turtle::Actions {
 	template<>
 	struct action<Grammar::turtleString> {
 		template<typename Input, bool SparqlQuery>
-		static void apply(const Input &in, States::BasicState<SparqlQuery>  &state) {
+		static void apply(const Input &in, States::BasicState<SparqlQuery> &state) {
 			std::stringstream ss;
 			ss << in.string();
 			std::string s;
@@ -306,7 +306,7 @@ namespace Dice::rdf_parser::Turtle::Actions {
 
 
 		template<typename Input, bool SparqlQuery>
-		static void apply(const Input &in, States::BasicState<SparqlQuery>  &state) {
+		static void apply(const Input &in, States::BasicState<SparqlQuery> &state) {
 			if constexpr (not SparqlQuery)
 				state.setElement(BNode(state.getBlank_node_string()));
 			else
@@ -319,7 +319,7 @@ namespace Dice::rdf_parser::Turtle::Actions {
 	struct action<Grammar::verb_a> {
 		using URIRef = Dice::rdf::URIRef;
 		template<typename Input, bool SparqlQuery>
-		static void apply(const Input &in, States::BasicState<SparqlQuery>  &state) {
+		static void apply(const Input &in, States::BasicState<SparqlQuery> &state) {
 			std::string fixedURI = "<http://www.w3.org/1999/02/22-rdf-syntax-ns#type>";
 			state.setElement(URIRef(fixedURI));
 		};
@@ -329,13 +329,13 @@ namespace Dice::rdf_parser::Turtle::Actions {
 	template<>
 	struct action<Grammar::BLANK_NODE_LABEL> {
 		template<typename Input, bool SparqlQuery>
-		static void apply(const Input &in, States::BasicState<SparqlQuery>  &state) {
+		static void apply(const Input &in, States::BasicState<SparqlQuery> &state) {
 			std::stringstream ss;
 			ss << in.string();
 			std::string s;
 			s = ss.str().substr(2);
 
-			state.setLiteral_string(std::move(s)); // TODO: is that necessary
+			state.setLiteral_string(std::move(s));// TODO: is that necessary
 			state.setBlank_node_string(state.getLiteral_string());
 		};
 	};
@@ -345,7 +345,7 @@ namespace Dice::rdf_parser::Turtle::Actions {
 		using Variable = Dice::sparql::Variable;
 
 		template<typename Input, bool SparqlQuery>
-		static void apply(const Input &in, States::BasicState<SparqlQuery>  &state) {
+		static void apply(const Input &in, States::BasicState<SparqlQuery> &state) {
 			std::stringstream ss;
 			ss << in.string();
 			std::string s;

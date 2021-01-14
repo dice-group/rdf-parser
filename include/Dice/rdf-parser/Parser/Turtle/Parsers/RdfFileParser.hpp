@@ -26,7 +26,7 @@ namespace Dice::rdf_parser::Turtle::parsers {
 		/**
         * checks whether a file is valid rdf turtle file
         */
-		static bool isParsable(const std::string& filename) {
+		static bool isParsable(const std::string &filename) {
 			try {
 				std::ifstream infile(filename);
 				tao::pegtl::read_input file(filename);
@@ -41,7 +41,7 @@ namespace Dice::rdf_parser::Turtle::parsers {
          * calculate the time for parsing a rdf turtle file.
          * Note that the calculated time is only for parsing without using processing the input(creating and storing the triples out of the string)
          */
-		static long calculateParsingTime(const std::string& filename) {
+		static long calculateParsingTime(const std::string &filename) {
 			std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
 			isParsable(filename);
 			std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();

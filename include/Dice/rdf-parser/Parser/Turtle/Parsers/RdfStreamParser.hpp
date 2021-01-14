@@ -16,8 +16,8 @@ namespace Dice::rdf_parser::Turtle::parsers {
 
 
 	class RdfStreamParser : public AbstractParser<RdfStreamParser, false> {
-	// TODO: add tests
-	// TODO: broken?
+		// TODO: add tests
+		// TODO: broken?
 		using Term = Dice::rdf::Term;
 		using URIRef = Dice::rdf::URIRef;
 		using Literal = Dice::rdf::Literal;
@@ -40,11 +40,12 @@ namespace Dice::rdf_parser::Turtle::parsers {
          * it also invoke nextTriple to have the first triple ready for using .
          * @param filename the filename of the file we want to parse
          */
-		explicit RdfStreamParser(const std::string& filename) : stream{filename} {
+		explicit RdfStreamParser(const std::string &filename) : stream{filename} {
 			try {
 				tao::pegtl::read_input file(filename);
 				parsedTerms = std::make_shared<std::queue<Triple>>();
-                States::SequentialState<false> state(parsedTerms);;
+				States::SequentialState<false> state(parsedTerms);
+				;
 				tao::pegtl::parse<Grammar::grammar<>, Actions::action>(
 						tao::pegtl::istream_input(stream, Configurations::RdfStreamParser_BufferSize, filename), std::move(state));
 
