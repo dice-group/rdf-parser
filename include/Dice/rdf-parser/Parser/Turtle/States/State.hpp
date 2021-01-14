@@ -20,8 +20,9 @@ namespace Dice::rdf_parser::Turtle::States {
 	/*
         * State defines the data structures related to the whole grammar (stores the parsed triples)
         */
-	template<bool sparqlQuery = false, typename T = std::queue<std::conditional_t<sparqlQuery, Dice::sparql::TriplePattern, Dice::rdf::Triple>>>
+	template<bool sparqlQuery = false, typename Queue_t<class s>>
 	class State : public BasicState<sparqlQuery> {
+    protected:
 		using Term = Dice::rdf::Term;
 		using URIRef = Dice::rdf::URIRef;
 		using Literal = Dice::rdf::Literal;
