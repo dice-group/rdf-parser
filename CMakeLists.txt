@@ -23,7 +23,7 @@ target_include_directories(rdf-parser INTERFACE
 target_link_libraries(rdf-parser INTERFACE  ${CONAN_LIBS})
 
 # testing
-option(RDF_PARSER_BUILD_TESTS "Build rdf-parser tests." ON)
+option(RDF_PARSER_BUILD_TESTS "Build rdf-parser tests." OFF)
 if(RDF_PARSER_BUILD_TESTS)
     enable_testing()
     add_subdirectory(tests)
