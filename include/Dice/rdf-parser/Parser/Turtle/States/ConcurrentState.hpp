@@ -24,7 +24,7 @@ namespace Dice::rdf_parser::Turtle::States {
      * ConcurrentState deal with the logic of Concurrent parsing  (already parsed triples can be accessed during the parsing). It is a base class for SequentialState and ConcurrentState
      */
     template<bool sparqlQuery>
-    class ConcurrentState : public State<sparqlQuery> {
+    class ConcurrentState : public State<sparqlQuery,ConcurrentState<sparqlQuery>> {
 
         using Term = Dice::rdf::Term;
         using VarOrTerm = Dice::sparql::VarOrTerm;
@@ -63,7 +63,7 @@ namespace Dice::rdf_parser::Turtle::States {
                 termsCountIsNotEmpty(std::move(termsCountIsNotEmpty)),
                 parsingIsDone(std::move(parsingIsDone)) {}
 
-        inline void syncWithMainThread() override {
+        inline void syncWithMainThread_impl()  {
             if (this->parsed_elements->read_available() > upperThreshold) {
                 std::unique_lock<std::mutex> lk(*m);
                 *termCountWithinThresholds = false;
@@ -73,7 +73,7 @@ namespace Dice::rdf_parser::Turtle::States {
             }
         }
 
-        inline void insertTriple(Triple_t triple) override {
+        inline void insertTriple_impl(Triple_t triple)  {
             if (not*termsCountIsNotEmpty) {
                 {
                     std::lock_guard<std::mutex> lk(*m2);
@@ -87,7 +87,7 @@ namespace Dice::rdf_parser::Turtle::States {
         }
 
 
-        void setParsingIsDone() override {
+        void setParsingIsDone_impl()  {
             if (not*termsCountIsNotEmpty) {
                 {
                     std::lock_guard<std::mutex> lk(*m2);

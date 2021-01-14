@@ -22,7 +22,7 @@ namespace Dice::rdf_parser::Turtle::States {
         */
 
 
-    template<bool sparqlQuery = false>
+    template<bool sparqlQuery,class Derived>
     class State : public BasicState<sparqlQuery> {
 
         using Term = Dice::rdf::Term;
@@ -67,11 +67,11 @@ namespace Dice::rdf_parser::Turtle::States {
 
     public:
 
-        virtual inline void syncWithMainThread() = 0;
+         inline void syncWithMainThread() {static_cast<Derived *>(this)->syncWithMainThread_impl();};
 
-        virtual inline void insertTriple(Triple_t triple) = 0;
+         inline void insertTriple(Triple_t triple) {return static_cast<Derived *>(this)->insertTriple_impl(triple);};
 
-        virtual void setParsingIsDone() = 0;
+         void setParsingIsDone() { static_cast<Derived *>(this)->setParsingIsDone_impl();};
 
 
         inline void clearTripleParameters() {
