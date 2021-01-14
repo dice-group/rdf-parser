@@ -47,7 +47,7 @@ namespace Dice::rdf_parser::Turtle::States {
 
     public:
         explicit ConcurrentState(
-                std::shared_ptr<boost::lockfree::spsc_queue<Triple_t, boost::lockfree::capacity<Configurations::RdfConcurrentStreamParser_QueueCapacity>>> &parsingQueue,
+                std::shared_ptr<boost::lockfree::spsc_queue<Triple_t, boost::lockfree::capacity<Configurations::RdfConcurrentStreamParser_QueueCapacity>>> parsingQueue,
                 unsigned int upperThreshold,
                 std::shared_ptr<std::condition_variable> cv, std::shared_ptr<std::mutex> m,
                 std::shared_ptr<std::condition_variable> cv2, std::shared_ptr<std::mutex> m2,

@@ -34,7 +34,7 @@ namespace Dice::rdf_parser::Turtle::States {
         std::shared_ptr<std::queue<Triple_t>> parsed_elements;
 
     public:
-        SequentialState(std::shared_ptr<std::queue<Triple_t>> &parsingQueue) : parsed_elements(parsingQueue) {};
+        SequentialState(std::shared_ptr<std::queue<Triple_t>> parsingQueue) : parsed_elements(parsingQueue) {};
 
         inline void syncWithMainThread() {
         }
