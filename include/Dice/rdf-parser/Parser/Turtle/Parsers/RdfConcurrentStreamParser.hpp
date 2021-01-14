@@ -21,6 +21,7 @@
 #include "Dice/rdf-parser/util/ScopedThread.hpp"
 
 #include "Dice/rdf-parser/Parser/Turtle/Configurations.hpp"
+
 namespace Dice::rdf_parser::Turtle::parsers {
 
 	/*
@@ -59,7 +60,7 @@ namespace Dice::rdf_parser::Turtle::parsers {
 		void startParsing(std::string filename, std::size_t bufferSize) {
 			try {
 
-				States::ConcurrentState<false, boost::lockfree::spsc_queue<Triple, boost::lockfree::capacity<Configurations::RdfConcurrentStreamParser_QueueCapacity>>>
+				States::ConcurrentState<false>
 						state(parsedTerms,
 							  upperThreshold,
 							  cv, m,
@@ -83,7 +84,8 @@ namespace Dice::rdf_parser::Turtle::parsers {
 			: stream{filename},
 			  upperThreshold(Configurations::RdfConcurrentStreamParser_QueueCapacity),
 			  lowerThreshold(Configurations::RdfConcurrentStreamParser_QueueCapacity / 10),
-			  parsedTerms{std::make_shared<boost::lockfree::spsc_queue<Triple, boost::lockfree::capacity<Configurations::RdfConcurrentStreamParser_QueueCapacity>>>()},
+			  parsedTerms{
+					  std::make_shared<boost::lockfree::spsc_queue<Triple, boost::lockfree::capacity<Configurations::RdfConcurrentStreamParser_QueueCapacity>>>()},
 			  cv{std::make_shared<std::condition_variable>()},
 			  m{std::make_shared<std::mutex>()},
 			  cv2{std::make_shared<std::condition_variable>()},
@@ -92,7 +94,8 @@ namespace Dice::rdf_parser::Turtle::parsers {
 			  termsCountIsNotEmpty{std::make_shared<std::atomic_bool>(false)},
 			  parsingIsDone{std::make_shared<std::atomic_bool>(false)},
 			  parsingThread{std::make_unique<util::ScopedThread>(
-					  std::thread(&RdfConcurrentStreamParser::startParsing, this, filename, Configurations::RdfConcurrentStreamParser_BufferSize))} {}
+					  std::thread(&RdfConcurrentStreamParser::startParsing, this, filename,
+								  Configurations::RdfConcurrentStreamParser_BufferSize))} {}
 
 
 		void nextTriple() override {

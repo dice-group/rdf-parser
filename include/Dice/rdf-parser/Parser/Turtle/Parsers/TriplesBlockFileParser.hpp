@@ -23,7 +23,7 @@ namespace Dice::rdf_parser::Turtle::parsers {
          * it also invoke nextTriple to have the first triple ready for using .
          * @param filename the filename of the file we want to parse
          */
-		explicit TriplesBlockFileParser(const std::string& text) : BaseFileParser<true>(text) {}
+		explicit TriplesBlockFileParser(const std::string &text) : BaseFileParser<true>(text) {}
 
 
 		/**
@@ -32,8 +32,8 @@ namespace Dice::rdf_parser::Turtle::parsers {
         * @param text the string to parse
         * @param prefix_map defines prefixes to be added before parsing
         */
-		TriplesBlockFileParser(std::string text, const std::map<std::string, std::string>& prefix_map) : BaseFileParser<true>(std::move(text),
-																													   prefix_map){};
+		TriplesBlockFileParser(std::string text, const std::map<std::string, std::string> &prefix_map) : BaseFileParser<true>(std::move(text),
+																															  prefix_map){};
 	};
 }// namespace Dice::rdf_parser::Turtle::parsers
 #endif//RDF_PARSER_TRIPLESBLOCKFILEPARSER_HPP

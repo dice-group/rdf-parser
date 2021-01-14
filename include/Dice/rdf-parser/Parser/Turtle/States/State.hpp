@@ -18,13 +18,15 @@ For more information about states please check https://github.com/taocpp/PEGTL/b
 namespace Dice::rdf_parser::Turtle::States {
 
 	/*
-        * State defines the data structures related to the whole grammar (stores the parsed triples)
+        * State defines the base data structures related to the whole grammar (stores the parsed triples). It is a base class for SequentialState and ConcurrentState
         */
-	template<bool sparqlQuery = false, typename T = std::queue<std::conditional_t<sparqlQuery, Dice::sparql::TriplePattern, Dice::rdf::Triple>>>
+
+
+	template<bool sparqlQuery, class Derived>
 	class State : public BasicState<sparqlQuery> {
+
 		using Term = Dice::rdf::Term;
 		using URIRef = Dice::rdf::URIRef;
-		using Literal = Dice::rdf::Literal;
 		using BNode = Dice::rdf::BNode;
 		using VarOrTerm = Dice::sparql::VarOrTerm;
 		using Triple = Dice::rdf::Triple;
@@ -33,13 +35,13 @@ namespace Dice::rdf_parser::Turtle::States {
 		using Triple_t = std::conditional_t<sparqlQuery, TriplePattern, Triple>;
 
 	protected:
+		State() {}
+
 		/**
-			 * Blank Node Property List
-			 */
+             * Blank Node Property List
+             */
 		using BnplCollectionList = std::vector<Element_t>;
 		using VerbObjectPair = std::pair<Element_t, Element_t>;
-
-		std::shared_ptr<T> parsed_elements;
 
 
 		//we use this to solve the case when 2 verbs are pushed into the stack without a pop between
@@ -63,21 +65,11 @@ namespace Dice::rdf_parser::Turtle::States {
 
 
 	public:
-		explicit State(std::shared_ptr<T> &parsingQueue) {
-			if (parsingQueue == nullptr)
-				parsingQueue = std::make_shared<T>();
-			parsed_elements = parsingQueue;
-		}
+		inline void syncWithMainThread() { static_cast<Derived *>(this)->syncWithMainThread_impl(); };
 
-		virtual inline void syncWithMainThread() {
-		}
+		inline void insertTriple(Triple_t triple) { return static_cast<Derived *>(this)->insertTriple_impl(triple); };
 
-		virtual inline void insertTriple(Triple_t triple) {
-			this->parsed_elements->push(std::move(triple));
-		}
-
-		virtual void setParsingIsDone() {
-		}
+		void setParsingIsDone() { static_cast<Derived *>(this)->setParsingIsDone_impl(); };
 
 
 		inline void clearTripleParameters() {

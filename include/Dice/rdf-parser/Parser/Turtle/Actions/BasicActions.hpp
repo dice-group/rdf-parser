@@ -25,6 +25,7 @@ namespace Dice::rdf_parser::Turtle::Actions {
 	template<bool SparqlQuery>
 	struct action<Grammar::tripleExtended<SparqlQuery>> : tao::pegtl::discard_input {};
 
+
 	template<>
 	struct action<Grammar::base> {
 		template<typename Input, bool SparqlQuery>
@@ -166,7 +167,7 @@ namespace Dice::rdf_parser::Turtle::Actions {
 			std::string s;
 			s = ss.str();
 
-			state.setLiteral_string(std::move(s)); // TODO: is that necessary
+			state.setLiteral_string(std::move(s));// TODO: is that necessary
 			state.setElement(Literal(state.getLiteral_string(), std::nullopt, "xsd:boolean"));
 		}
 	};
@@ -334,7 +335,7 @@ namespace Dice::rdf_parser::Turtle::Actions {
 			std::string s;
 			s = ss.str().substr(2);
 
-			state.setLiteral_string(std::move(s)); // TODO: is that necessary
+			state.setLiteral_string(std::move(s));// TODO: is that necessary
 			state.setBlank_node_string(state.getLiteral_string());
 		};
 	};

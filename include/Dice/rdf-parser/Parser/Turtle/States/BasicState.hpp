@@ -20,25 +20,21 @@
 namespace Dice::rdf_parser::Turtle::States {
 
 	/*
-	 * BasicState defines the data structures related to rdf term
-	 */
+     * BasicState defines the data structures related to rdf term
+     */
+
+
 	template<bool sparqlQuery = false>
 	class BasicState {
-		using Term = Dice::rdf::Term;
-		using URIRef = Dice::rdf::URIRef;
-		using Literal = Dice::rdf::Literal;
-		using BNode = Dice::rdf::BNode;
-		using Variable = Dice::sparql::Variable;
-		using VarOrTerm = Dice::sparql::VarOrTerm;
-		using Triple = Dice::rdf::Triple;
-		using TriplePattern = Dice::sparql::TriplePattern;
-		using Element_t = std::conditional_t<sparqlQuery, VarOrTerm, Term>;
-		using Triple_t = std::conditional_t<sparqlQuery, TriplePattern, Triple>;
-
 	public:
 		BasicState() {
 			element_ = std::make_shared<Element_t>();
 		}
+
+		using Term = Dice::rdf::Term;
+		using VarOrTerm = Dice::sparql::VarOrTerm;
+		using Triple = Dice::rdf::Triple;
+		using Element_t = std::conditional_t<sparqlQuery, VarOrTerm, Term>;
 
 	protected:
 		std::shared_ptr<Element_t> element_;
@@ -119,7 +115,9 @@ namespace Dice::rdf_parser::Turtle::States {
 
 		inline void setLiteral_string(std::string literal_string) { this->literal_string_ = std::move(literal_string); }
 
-		inline void setBlank_node_string(std::string blank_node_string) { this->blank_node_string_ = std::move(blank_node_string); }
+		inline void setBlank_node_string(std::string blank_node_string) {
+			this->blank_node_string_ = std::move(blank_node_string);
+		}
 
 		inline void setBase(std::string base) { this->base_ = std::move(base); }
 
@@ -130,7 +128,8 @@ namespace Dice::rdf_parser::Turtle::States {
 			return fmt::format("b{}", latest_BN_label++);
 		}
 
-		[[nodiscard]] inline std::optional<std::reference_wrapper<const std::string>> getPrefixValue(const std::string &prefix) const {
+		[[nodiscard]] inline std::optional<std::reference_wrapper<const std::string>>
+		getPrefixValue(const std::string &prefix) const {
 			if (auto prefix_iter = prefix_map.find(prefix);
 				prefix_iter != prefix_map.end()) {
 				const auto &mappedPrefix = prefix_iter->second;

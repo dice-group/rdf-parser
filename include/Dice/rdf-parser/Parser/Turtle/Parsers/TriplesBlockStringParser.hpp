@@ -31,8 +31,8 @@ namespace Dice::rdf_parser::Turtle::parsers {
         * @param text the string to parse
         * @param prefix_map defines prefixes to be added before parsing
         */
-		TriplesBlockStringParser(std::string text, const std::map<std::string, std::string>& prefix_map) : BaseStringParser<true>(std::move(text),
-																														   prefix_map){};
+		TriplesBlockStringParser(std::string text, const std::map<std::string, std::string> &prefix_map) : BaseStringParser<true>(std::move(text),
+																																  prefix_map){};
 	};
 }// namespace Dice::rdf_parser::Turtle::parsers
 

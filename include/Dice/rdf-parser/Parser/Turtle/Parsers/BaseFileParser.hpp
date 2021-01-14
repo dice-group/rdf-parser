@@ -13,6 +13,7 @@
 
 #include "Dice/rdf-parser/Parser/Turtle/Actions/Actions.hpp"
 #include "Dice/rdf-parser/Parser/Turtle/Parsers/AbstractParser.hpp"
+#include "Dice/rdf-parser/Parser/Turtle/States/SequentialState.hpp"
 
 namespace Dice::rdf_parser::Turtle::parsers {
 
@@ -28,6 +29,7 @@ namespace Dice::rdf_parser::Turtle::parsers {
 		using TriplePattern = Dice::sparql::TriplePattern;
 		using Element_t = std::conditional_t<sparqlQuery, VarOrTerm, Term>;
 		using Triple_t = std::conditional_t<sparqlQuery, TriplePattern, Triple>;
+
 	private:
 		/**
          * a queue for storing parsed triples .
@@ -40,11 +42,12 @@ namespace Dice::rdf_parser::Turtle::parsers {
          * it also invoke nextTriple to have the first triple ready for using .
          * @param filename the filename of the file we want to parse
          */
-		explicit BaseFileParser(const std::string& filename) {
+		explicit BaseFileParser(const std::string &filename) {
 			try {
 				std::ifstream infile(filename);
 				tao::pegtl::read_input file(filename);
-				States::State<> state(parsedTerms);
+				parsedTerms = std::make_shared<std::queue<Triple_t>>();
+				States::SequentialState<sparqlQuery> state(parsedTerms);
 				tao::pegtl::parse<Grammar::grammar<false>, Actions::action>(std::move(file), std::move(state));
 
 			} catch (std::exception &e) {
@@ -57,14 +60,16 @@ namespace Dice::rdf_parser::Turtle::parsers {
          * it also invoke nextTriple to have the first triple ready for using .
          * @param filename the filename of the file we want to parse
          */
-		BaseFileParser(std::string filename, const std::map<std::string, std::string>& prefix_map) {
+		BaseFileParser(std::string filename, const std::map<std::string, std::string> &prefix_map) {
 			try {
 				std::ifstream infile(filename);
 				tao::pegtl::read_input file(filename);
-				States::State<sparqlQuery> state(parsedTerms);
+				parsedTerms = std::make_shared<std::queue<Triple_t>>();
+				States::SequentialState<sparqlQuery> state(parsedTerms);
 				for (auto pair : prefix_map)
 					state.addPrefix(pair.first, pair.second);
-				tao::pegtl::parse<Grammar::grammar<sparqlQuery>, Actions::action>(std::move(filename), std::move(state));
+				tao::pegtl::parse<Grammar::grammar<sparqlQuery>, Actions::action>(std::move(filename),
+																				  std::move(state));
 
 			} catch (std::exception &e) {
 				throw e;

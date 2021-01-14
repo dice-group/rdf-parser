@@ -4,8 +4,8 @@
 #include <Dice/rdf-parser/Parser/Turtle/Parsers/RdfStreamParser.hpp>
 
 namespace Dice::tests::rdf_parser::turtle_parser_concurrent_tests {
-	using namespace rdf_parser::Turtle::parsers;
-	using namespace rdf_parser::store::rdf;
+	using namespace Dice::rdf_parser::Turtle::parsers;
+	using namespace Dice::sparql;
 
 
 	TEST(TurtleParserConcurrentTests, ntripleFileCon1) {
@@ -18,7 +18,7 @@ namespace Dice::tests::rdf_parser::turtle_parser_concurrent_tests {
 	}
 
 	TEST(TurtleParserConcurrentTests, turtleFileCon1) {
-		RdfConcurrentStreamParser parser("../datasets/instance-types_transitive.ttl");
+		RdfConcurrentStreamParser parser("../datasets/instance-types_lang=en_transitive.ttl");
 		auto it = parser.begin();
 		while (it)
 			it++;

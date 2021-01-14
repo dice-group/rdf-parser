@@ -6,6 +6,7 @@
 
 #include "Dice/rdf-parser/Parser/Turtle/Actions/Actions.hpp"
 #include "Dice/rdf-parser/Parser/Turtle/Parsers/AbstractParser.hpp"
+#include "Dice/rdf-parser/Parser/Turtle/States/SequentialState.hpp"
 
 
 /**
@@ -37,7 +38,8 @@ namespace Dice::rdf_parser::Turtle::parsers {
 		explicit BaseStringParser(std::string text) {
 			try {
 				tao::pegtl::string_input input(std::move(text), "the text");
-				States::State<sparqlQuery> state(parsedTerms);
+				parsedTerms = std::make_shared<std::queue<Triple_t>>();
+				States::SequentialState<sparqlQuery> state(parsedTerms);
 				tao::pegtl::parse<Grammar::grammar<sparqlQuery>, Actions::action>(input, state);
 
 			} catch (std::exception &e) {
@@ -54,7 +56,8 @@ namespace Dice::rdf_parser::Turtle::parsers {
 		BaseStringParser(std::string text, const std::map<std::string, std::string> &prefix_map) {
 			try {
 				tao::pegtl::string_input input(text, "the text");
-				States::State<sparqlQuery> state(parsedTerms);
+				parsedTerms = std::make_shared<std::queue<Triple_t>>();
+				States::SequentialState<sparqlQuery> state(parsedTerms);
 				for (auto pair : prefix_map)
 					state.addPrefix(pair.first, pair.second);
 				tao::pegtl::parse<Grammar::grammar<sparqlQuery>, Actions::action>(input, state);
