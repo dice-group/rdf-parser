@@ -59,7 +59,7 @@ namespace Dice::rdf_parser::Turtle::parsers {
 		void startParsing(std::string filename, std::size_t bufferSize) {
 			try {
 
-				States::ConcurrentState<false, boost::lockfree::spsc_queue<Triple, boost::lockfree::capacity<Configurations::RdfConcurrentStreamParser_QueueCapacity>>>
+				States::ConcurrentState<false>
 						state(parsedTerms,
 							  upperThreshold,
 							  cv, m,

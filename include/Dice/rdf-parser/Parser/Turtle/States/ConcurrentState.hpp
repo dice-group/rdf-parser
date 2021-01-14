@@ -23,17 +23,19 @@ namespace Dice::rdf_parser::Turtle::States {
          * ConcurrentState defines the data structures related to the whole grammar (stores the parsed triples)
          * in a concurrent data structure (boost lock-free spsc_queue)
          */
-	template<bool sparqlQuery, typename T = boost::lockfree::spsc_queue<std::conditional_t<sparqlQuery, sparql::VarOrTerm, rdf::Term>>>
-	class ConcurrentState : public State<sparqlQuery, T> {
-		using Term = Dice::rdf::Term;
-		using URIRef = Dice::rdf::URIRef;
-		using Literal = Dice::rdf::Literal;
-		using BNode = Dice::rdf::BNode;
-		using VarOrTerm = Dice::sparql::VarOrTerm;
-		using Triple = Dice::rdf::Triple;
-		using TriplePattern = Dice::sparql::TriplePattern;
-		using Element_t = std::conditional_t<sparqlQuery, VarOrTerm, Term>;
-		using Triple_t = std::conditional_t<sparqlQuery, TriplePattern, Triple>;
+	template<bool sparqlQuery>
+	class ConcurrentState : public State<sparqlQuery> {
+
+    using Term = Dice::rdf::Term;
+    using URIRef = Dice::rdf::URIRef;
+    using Literal = Dice::rdf::Literal;
+    using BNode = Dice::rdf::BNode;
+    using Variable = Dice::sparql::Variable;
+    using VarOrTerm = Dice::sparql::VarOrTerm;
+    using Triple = Dice::rdf::Triple;
+    using TriplePattern = Dice::sparql::TriplePattern;
+    using Element_t = std::conditional_t<sparqlQuery, VarOrTerm, Term>;
+    using Triple_t = std::conditional_t<sparqlQuery, TriplePattern, Triple>;
 
 	private:
 		//Defines  threshold for triples in the Queue(should be assigned by the constructor)
@@ -46,15 +48,18 @@ namespace Dice::rdf_parser::Turtle::States {
 		std::shared_ptr<std::atomic_bool> termsCountIsNotEmpty;
 		std::shared_ptr<std::atomic_bool> parsingIsDone;
 
+        std::shared_ptr<boost::lockfree::spsc_queue<Triple_t>> parsed_elements;
+
 	public:
-		ConcurrentState(std::shared_ptr<T> &parsingQueue,
+		explicit ConcurrentState(std::shared_ptr<boost::lockfree::spsc_queue<Triple_t>> &parsingQueue,
 						unsigned int upperThreshold,
 						std::shared_ptr<std::condition_variable> cv, std::shared_ptr<std::mutex> m,
 						std::shared_ptr<std::condition_variable> cv2, std::shared_ptr<std::mutex> m2,
 						std::shared_ptr<std::atomic_bool> termCountWithinThresholds,
 						std::shared_ptr<std::atomic_bool> termsCountIsNotEmpty,
 						std::shared_ptr<std::atomic_bool> parsingIsDone)
-			: State<sparqlQuery, T>(parsingQueue),
+			:
+			 parsed_elements(parsingQueue),
 			  upperThreshold(upperThreshold),
 			  cv(std::move(cv)), m(std::move(m)),
 			  cv2(std::move(cv2)), m2(std::move(m2)),

@@ -22,23 +22,18 @@ namespace Dice::rdf_parser::Turtle::States {
 	/*
 	 * BasicState defines the data structures related to rdf term
 	 */
+
+
 	template<bool sparqlQuery = false>
 	class BasicState {
-		using Term = Dice::rdf::Term;
-		using URIRef = Dice::rdf::URIRef;
-		using Literal = Dice::rdf::Literal;
-		using BNode = Dice::rdf::BNode;
-		using Variable = Dice::sparql::Variable;
-		using VarOrTerm = Dice::sparql::VarOrTerm;
-		using Triple = Dice::rdf::Triple;
-		using TriplePattern = Dice::sparql::TriplePattern;
-		using Element_t = std::conditional_t<sparqlQuery, VarOrTerm, Term>;
-		using Triple_t = std::conditional_t<sparqlQuery, TriplePattern, Triple>;
-
 	public:
 		BasicState() {
 			element_ = std::make_shared<Element_t>();
 		}
+        using Term = Dice::rdf::Term;
+        using VarOrTerm = Dice::sparql::VarOrTerm;
+        using Triple = Dice::rdf::Triple;
+        using Element_t = std::conditional_t<sparqlQuery, VarOrTerm, Term>;
 
 	protected:
 		std::shared_ptr<Element_t> element_;

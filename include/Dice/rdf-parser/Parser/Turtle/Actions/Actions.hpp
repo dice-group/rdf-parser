@@ -13,8 +13,8 @@ namespace Dice::rdf_parser::Turtle::Actions {
 
 	template<>
 	struct action<Grammar::statement> {
-		template<typename Input, typename Queue, bool SparqlQuery>
-		static void apply(const Input &in, States::State<SparqlQuery, Queue> &state) {
+		template<typename Input,bool sparqlQuery>
+		static void apply(const Input &in, States::State<sparqlQuery> &state) {
 			state.syncWithMainThread();
 		}
 	};
@@ -22,24 +22,24 @@ namespace Dice::rdf_parser::Turtle::Actions {
 
 	template<bool SparqlQuery>
 	struct action<Grammar::triple<SparqlQuery>> {
-		template<typename Input, typename Queue>
-		static void apply(const Input &in, States::State<SparqlQuery, Queue> &state) {
+		template<typename Input,bool sparqlQuery>
+		static void apply(const Input &in, States::State<sparqlQuery> &state) {
 			state.clearTripleParameters();
 		}
 	};
 
 	template<bool SparqlQuery>
 	struct action<Grammar::tripleSeq1<SparqlQuery>> {
-		template<typename Input, typename Queue>
-		static void apply(const Input &in, States::State<SparqlQuery, Queue> &state) {
+		template<typename Input,bool sparqlQuery>
+		static void apply(const Input &in, States::State<sparqlQuery> &state) {
 			state.processTripleSeq();
 		}
 	};
 
 	template<bool SparqlQuery>
 	struct action<Grammar::tripleSeq2<SparqlQuery>> {
-		template<typename Input, typename Queue>
-		static void apply(const Input &in, States::State<SparqlQuery, Queue> &state) {
+		template<typename Input,bool sparqlQuery>
+		static void apply(const Input &in, States::State<sparqlQuery> &state) {
 			//add the unlabeled blank node from BNPL as subject
 			state.setSubject(state.getFirst_BNPL());
 			state.processTripleSeq();
@@ -49,24 +49,24 @@ namespace Dice::rdf_parser::Turtle::Actions {
 
 	template<bool SparqlQuery>
 	struct action<Grammar::subject<SparqlQuery>> {
-		template<typename Input, typename Queue>
-		static void apply(const Input &in, States::State<SparqlQuery, Queue> &state) {
+		template<typename Input,bool sparqlQuery>
+		static void apply(const Input &in, States::State<sparqlQuery> &state) {
 			state.setSubject(state.getElement());
 		}
 	};
 
 	template<bool SparqlQuery>
 	struct action<Grammar::verb<SparqlQuery>> {
-		template<typename Input, typename Queue>
-		static void apply(const Input &in, States::State<SparqlQuery, Queue> &state) {
+		template<typename Input,bool sparqlQuery>
+		static void apply(const Input &in, States::State<sparqlQuery> &state) {
 			state.processVerb();
 		}
 	};
 
 	template<bool SparqlQuery>
 	struct action<Grammar::object<SparqlQuery>> {
-		template<typename Input, typename Queue>
-		static void apply(const Input &in, States::State<SparqlQuery, Queue> &state) {
+		template<typename Input,bool sparqlQuery>
+		static void apply(const Input &in, States::State<sparqlQuery> &state) {
 			state.pushCurrentTermIntoBnpl_collection_list();
 		}
 	};
@@ -74,32 +74,32 @@ namespace Dice::rdf_parser::Turtle::Actions {
 
 	template<>
 	struct action<Grammar::collectionBegin> {
-		template<typename Input, typename Queue, bool SparqlQuery>
-		static void apply(const Input &in, States::State<SparqlQuery, Queue> &state) {
+		template<typename Input,bool sparqlQuery>
+		static void apply(const Input &in, States::State<sparqlQuery> &state) {
 			state.moveBnpl_collection_listIntoStack();
 		}
 	};
 
 	template<bool SparqlQuery>
 	struct action<Grammar::collection<SparqlQuery>> {
-		template<typename Input, typename Queue>
-		static void apply(const Input &in, States::State<SparqlQuery, Queue> &state) {
+		template<typename Input,bool sparqlQuery>
+		static void apply(const Input &in, States::State<sparqlQuery> &state ) {
 			state.processCollection();
 		}
 	};
 
 	template<>
 	struct action<Grammar::blankNodePropertyListBegin> {
-		template<typename Input, typename Queue, bool SparqlQuery>
-		static void apply(const Input &in, States::State<SparqlQuery, Queue> &state) {
+		template<typename Input,bool sparqlQuery>
+		static void apply(const Input &in, States::State<sparqlQuery> &state) {
 			state.moveBnpl_collection_listIntoStack();
 		}
 	};
 
 	template<bool SparqlQuery>
 	struct action<Grammar::blankNodePropertyList<SparqlQuery>> {
-		template<typename Input, typename Queue>
-		static void apply(const Input &in, States::State<SparqlQuery, Queue> &state) {
+		template<typename Input,bool sparqlQuery>
+		static void apply(const Input &in, States::State<sparqlQuery> &state) {
 			state.processBlankNodePropertyList();
 		}
 	};
@@ -107,8 +107,8 @@ namespace Dice::rdf_parser::Turtle::Actions {
 
 	template<bool SparqlQuery>
 	struct action<Grammar::predicateObjectListInner<SparqlQuery>> {
-		template<typename Input, typename Queue>
-		static void apply(const Input &in, States::State<SparqlQuery, Queue> &state) {
+		template<typename Input,bool sparqlQuery>
+		static void apply(const Input &in, States::State<sparqlQuery> &state) {
 			state.processPredicateObjectListInner();
 		}
 	};
@@ -116,8 +116,8 @@ namespace Dice::rdf_parser::Turtle::Actions {
 
 	template<>
 	struct action<Grammar::turtleDoc> {
-		template<typename Input, typename Queue, bool SparqlQuery>
-		static void apply(const Input &in, States::State<SparqlQuery, Queue> &state) {
+		template<typename Input,bool sparqlQuery>
+		static void apply(const Input &in, States::State<sparqlQuery> &state) {
 			//Here parsingIsDone lock is set to true
 			state.setParsingIsDone();
 		}

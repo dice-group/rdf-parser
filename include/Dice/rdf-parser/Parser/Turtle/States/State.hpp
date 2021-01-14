@@ -20,27 +20,35 @@ namespace Dice::rdf_parser::Turtle::States {
 	/*
         * State defines the data structures related to the whole grammar (stores the parsed triples)
         */
-	template<bool sparqlQuery = false, typename Queue_t<class s>>
+
+
+	template<bool sparqlQuery = false>
 	class State : public BasicState<sparqlQuery> {
-    protected:
-		using Term = Dice::rdf::Term;
-		using URIRef = Dice::rdf::URIRef;
-		using Literal = Dice::rdf::Literal;
-		using BNode = Dice::rdf::BNode;
-		using VarOrTerm = Dice::sparql::VarOrTerm;
-		using Triple = Dice::rdf::Triple;
-		using TriplePattern = Dice::sparql::TriplePattern;
-		using Element_t = std::conditional_t<sparqlQuery, VarOrTerm, Term>;
-		using Triple_t = std::conditional_t<sparqlQuery, TriplePattern, Triple>;
+
+        using Term = Dice::rdf::Term;
+        using URIRef = Dice::rdf::URIRef;
+        using Literal = Dice::rdf::Literal;
+        using BNode = Dice::rdf::BNode;
+        using Variable = Dice::sparql::Variable;
+        using VarOrTerm = Dice::sparql::VarOrTerm;
+        using Triple = Dice::rdf::Triple;
+        using TriplePattern = Dice::sparql::TriplePattern;
+        using Element_t = std::conditional_t<sparqlQuery, VarOrTerm, Term>;
+        using Triple_t = std::conditional_t<sparqlQuery, TriplePattern, Triple>;
 
 	protected:
+
+	    State()
+        {
+	        ;
+        }
+
 		/**
 			 * Blank Node Property List
 			 */
 		using BnplCollectionList = std::vector<Element_t>;
 		using VerbObjectPair = std::pair<Element_t, Element_t>;
 
-		std::shared_ptr<T> parsed_elements;
 
 
 		//we use this to solve the case when 2 verbs are pushed into the stack without a pop between
@@ -63,22 +71,23 @@ namespace Dice::rdf_parser::Turtle::States {
 		Element_t first_BNPL;
 
 
+//	public:
+//		explicit State(std::shared_ptr<queue_t<>> &parsingQueue) {
+//			if (parsingQueue == nullptr)
+//				parsingQueue = std::make_shared<queue_t<>>();
+//			parsed_elements = parsingQueue;
+//		}
+
 	public:
-		explicit State(std::shared_ptr<T> &parsingQueue) {
-			if (parsingQueue == nullptr)
-				parsingQueue = std::make_shared<T>();
-			parsed_elements = parsingQueue;
-		}
 
-		virtual inline void syncWithMainThread() {
-		}
+		virtual inline void syncWithMainThread() =0;
 
-		virtual inline void insertTriple(Triple_t triple) {
-			this->parsed_elements->push(std::move(triple));
-		}
+		virtual inline void insertTriple(Triple_t triple)=0;
+//		{
+//			this->parsed_elements->push(std::move(triple));
+//		}
 
-		virtual void setParsingIsDone() {
-		}
+		virtual void setParsingIsDone()=0;
 
 
 		inline void clearTripleParameters() {

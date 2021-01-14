@@ -10,6 +10,7 @@
 #include "Dice/rdf-parser/Parser/Turtle/Actions/Actions.hpp"
 #include "Dice/rdf-parser/Parser/Turtle/Configurations.hpp"
 #include "Dice/rdf-parser/Parser/Turtle/Parsers/AbstractParser.hpp"
+#include "Dice/rdf-parser/Parser/Turtle/States/SequentialState.hpp"
 
 namespace Dice::rdf_parser::Turtle::parsers {
 
@@ -43,7 +44,7 @@ namespace Dice::rdf_parser::Turtle::parsers {
 			try {
 				tao::pegtl::read_input file(filename);
 				parsedTerms = std::make_shared<std::queue<Triple>>();
-				States::State<> state(parsedTerms);
+                States::SequentialState<false> state(parsedTerms);;
 				tao::pegtl::parse<Grammar::grammar<>, Actions::action>(
 						tao::pegtl::istream_input(stream, Configurations::RdfStreamParser_BufferSize, filename), std::move(state));
 

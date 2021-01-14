@@ -13,6 +13,7 @@
 
 #include "Dice/rdf-parser/Parser/Turtle/Actions/Actions.hpp"
 #include "Dice/rdf-parser/Parser/Turtle/Parsers/AbstractParser.hpp"
+#include "Dice/rdf-parser/Parser/Turtle/States/SequentialState.hpp"
 
 namespace Dice::rdf_parser::Turtle::parsers {
 
@@ -44,7 +45,7 @@ namespace Dice::rdf_parser::Turtle::parsers {
 			try {
 				std::ifstream infile(filename);
 				tao::pegtl::read_input file(filename);
-				States::State<> state(parsedTerms);
+                States::SequentialState<sparqlQuery> state(parsedTerms);
 				tao::pegtl::parse<Grammar::grammar<false>, Actions::action>(std::move(file), std::move(state));
 
 			} catch (std::exception &e) {
@@ -61,7 +62,7 @@ namespace Dice::rdf_parser::Turtle::parsers {
 			try {
 				std::ifstream infile(filename);
 				tao::pegtl::read_input file(filename);
-				States::State<sparqlQuery> state(parsedTerms);
+                States::SequentialState<sparqlQuery> state(parsedTerms);
 				for (auto pair : prefix_map)
 					state.addPrefix(pair.first, pair.second);
 				tao::pegtl::parse<Grammar::grammar<sparqlQuery>, Actions::action>(std::move(filename), std::move(state));
