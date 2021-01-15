@@ -32,10 +32,10 @@ namespace Dice::rdf_parser::Turtle::parsers {
 
 	private:
 		// TODO: we don't need the smart pointers for the members
-		std::shared_ptr<
+
 				boost::lockfree::spsc_queue<
 						Triple,
-						boost::lockfree::capacity<internal::Turtle::Configurations::RdfConcurrentStreamParser_QueueCapacity>>>
+						boost::lockfree::capacity<internal::Turtle::Configurations::RdfConcurrentStreamParser_QueueCapacity>>
 				parsedTerms;
 		size_t upperThreshold;
 		size_t lowerThreshold;
@@ -82,8 +82,6 @@ namespace Dice::rdf_parser::Turtle::parsers {
 			: stream{filename},
 			  upperThreshold(internal::Turtle::Configurations::RdfConcurrentStreamParser_QueueCapacity),
 			  lowerThreshold(internal::Turtle::Configurations::RdfConcurrentStreamParser_QueueCapacity / 10),
-			  parsedTerms{
-					  std::make_shared<boost::lockfree::spsc_queue<Triple, boost::lockfree::capacity<internal::Turtle::Configurations::RdfConcurrentStreamParser_QueueCapacity>>>()},
 			  cv{std::make_shared<std::condition_variable>()},
 			  m{std::make_shared<std::mutex>()},
 			  cv2{std::make_shared<std::condition_variable>()},
@@ -97,8 +95,8 @@ namespace Dice::rdf_parser::Turtle::parsers {
 
 
 		void nextTriple() override {
-			parsedTerms->pop(this->current_triple);
-			if (parsedTerms->read_available() < lowerThreshold) {
+			parsedTerms.pop(this->current_triple);
+			if (parsedTerms.read_available() < lowerThreshold) {
 				{
 					std::lock_guard<std::mutex> lk(*m);
 					*termCountWithinThresholds = true;
@@ -108,7 +106,7 @@ namespace Dice::rdf_parser::Turtle::parsers {
 		}
 
 		bool hasNextTriple() const override {
-			if (parsedTerms->read_available() != 0) {
+			if (parsedTerms.read_available() != 0) {
 				return true;
 			} else {
 
@@ -120,7 +118,7 @@ namespace Dice::rdf_parser::Turtle::parsers {
 					*termsCountIsNotEmpty = false;
 					cv2->wait(lk, [&] { return termsCountIsNotEmpty->load(); });
 
-					if (parsedTerms->read_available() != 0)
+					if (parsedTerms.read_available() != 0)
 						return true;
 
 					else if (*parsingIsDone) {

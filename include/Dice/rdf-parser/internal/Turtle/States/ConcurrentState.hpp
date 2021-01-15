@@ -27,7 +27,6 @@ namespace Dice::rdf_parser::internal::Turtle::States {
 	class ConcurrentState : public State<sparqlQuery, ConcurrentState<sparqlQuery>> {
 
 		using Term = Dice::rdf::Term;
-		using VarOrTerm = Dice::sparql::VarOrTerm;
 		using Triple = Dice::rdf::Triple;
 		using TriplePattern = Dice::sparql::TriplePattern;
 		using Triple_t = std::conditional_t<sparqlQuery, TriplePattern, Triple>;
@@ -43,11 +42,11 @@ namespace Dice::rdf_parser::internal::Turtle::States {
 		std::shared_ptr<std::atomic_bool> termsCountIsNotEmpty;
 		std::shared_ptr<std::atomic_bool> parsingIsDone;
 
-		std::shared_ptr<boost::lockfree::spsc_queue<Triple_t, boost::lockfree::capacity<Configurations::RdfConcurrentStreamParser_QueueCapacity>>> parsed_elements;
+		boost::lockfree::spsc_queue<Triple_t, boost::lockfree::capacity<Configurations::RdfConcurrentStreamParser_QueueCapacity>>& parsed_elements;
 
 	public:
 		explicit ConcurrentState(
-				std::shared_ptr<boost::lockfree::spsc_queue<Triple_t, boost::lockfree::capacity<Configurations::RdfConcurrentStreamParser_QueueCapacity>>> parsingQueue,
+				boost::lockfree::spsc_queue<Triple_t, boost::lockfree::capacity<Configurations::RdfConcurrentStreamParser_QueueCapacity>>& parsingQueue,
                 size_t upperThreshold,
 				std::shared_ptr<std::condition_variable> cv, std::shared_ptr<std::mutex> m,
 				std::shared_ptr<std::condition_variable> cv2, std::shared_ptr<std::mutex> m2,
@@ -63,7 +62,7 @@ namespace Dice::rdf_parser::internal::Turtle::States {
 			  parsingIsDone(std::move(parsingIsDone)) {}
 
 		inline void syncWithMainThread_impl() {
-			if (this->parsed_elements->read_available() > upperThreshold) {
+			if (this->parsed_elements.read_available() > upperThreshold) {
 				std::unique_lock<std::mutex> lk(*m);
 				*termCountWithinThresholds = false;
 				//set the parsing thread to sleep
@@ -78,10 +77,10 @@ namespace Dice::rdf_parser::internal::Turtle::States {
 					std::lock_guard<std::mutex> lk(*m2);
 					*termsCountIsNotEmpty = true;
 				}
-				this->parsed_elements->push(std::move(triple));
+				this->parsed_elements.push(std::move(triple));
 				cv2->notify_one();
 			} else {
-				this->parsed_elements->push(std::move(triple));
+				this->parsed_elements.push(std::move(triple));
 			}
 		}
 
