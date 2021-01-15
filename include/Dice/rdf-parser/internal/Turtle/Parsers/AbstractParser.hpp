@@ -57,7 +57,7 @@ namespace Dice::rdf_parser::internal::Turtle::Parsers {
 
 
 		Iterator<Derived, sparqlQuery> begin() {
-			return static_cast<Derived *>(this)->begin_implementation();
+			return static_cast<Derived *>(this)->begin_impl();
 		}
 
 		bool end() { return false; }

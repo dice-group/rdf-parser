@@ -20,6 +20,8 @@
 #include "Dice/rdf-parser/internal/Turtle/Parsers/AbstractParser.hpp"
 #include "Dice/rdf-parser/internal/Turtle/States/ConcurrentState.hpp"
 #include "Dice/rdf-parser/internal/util/ScopedThread.hpp"
+#include "Dice/rdf-parser/internal/Exceptions/ParsingExecption.hpp"
+#include "Dice/rdf-parser/internal/Exceptions/InternalError.hpp"
 
 namespace Dice::rdf_parser::Turtle::parsers {
 
@@ -69,7 +71,7 @@ namespace Dice::rdf_parser::Turtle::parsers {
 				tao::pegtl::parse<Grammar::grammar<false>, Actions::action>(
 						tao::pegtl::istream_input(stream, bufferSize, filename), std::move(state));
 			} catch (std::exception &e) {
-				throw std::exception(e);
+				throw internal::Exceptions::ParsingException();
 			}
 		}
 
@@ -124,14 +126,14 @@ namespace Dice::rdf_parser::Turtle::parsers {
 					else if (*parsingIsDone) {
 						return false;
 					} else {
-						throw std::runtime_error("");
+                        throw internal::Exceptions::InternalError();
 					}
 				}
 			};
 		};
 
 
-		Iterator begin_implementation() {
+		Iterator begin_impl() {
 			return Iterator(this);
 		}
 	};

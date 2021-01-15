@@ -9,7 +9,7 @@
 #include "Dice/rdf-parser/internal/Turtle/Parsers/AbstractParser.hpp"
 #include "Dice/rdf-parser/internal/Turtle/Actions/Actions.hpp"
 #include "Dice/rdf-parser/internal/Turtle/States/SequentialState.hpp"
-
+#include "Dice/rdf-parser/internal/Exceptions/ParsingExecption.hpp"
 
 /**
  * BaseStringParser is a base class for parsing string sources .
@@ -44,7 +44,7 @@ namespace Dice::rdf_parser::internal::Turtle::Parsers {
 				tao::pegtl::parse<Grammar::grammar<sparqlQuery>, Actions::action>(input, state);
 
 			} catch (std::exception &e) {
-				throw e;
+				throw Exceptions::ParsingException();
 			}
 		}
 
@@ -63,7 +63,7 @@ namespace Dice::rdf_parser::internal::Turtle::Parsers {
 				tao::pegtl::parse<Grammar::grammar<sparqlQuery>, Actions::action>(input, state);
 
 			} catch (std::exception &e) {
-				throw e;
+                throw Exceptions::ParsingException();
 			}
 		}
 
@@ -76,7 +76,7 @@ namespace Dice::rdf_parser::internal::Turtle::Parsers {
                 tao::pegtl::parse<Grammar::grammar<sparqlQuery>, Actions::action>(input, state);
 
             } catch (std::exception &e) {
-                throw e;
+                throw Exceptions::ParsingException();
             }
         }
 
@@ -93,7 +93,7 @@ namespace Dice::rdf_parser::internal::Turtle::Parsers {
 		}
 
 
-		Iterator<BaseStringParser, sparqlQuery> begin_implementation() {
+		Iterator<BaseStringParser, sparqlQuery> begin_impl() {
 			return Iterator<BaseStringParser, sparqlQuery>(this);
 		}
 	};
