@@ -26,9 +26,8 @@ namespace Dice::rdf_parser::internal::Turtle::Parsers {
 		using element_type = Triple_t;
 
 		explicit AbstractParser() {
-			current_triple ;
 		};
-		// TODO: doesn't need to be shared
+
 		element_type current_triple;
 
 
