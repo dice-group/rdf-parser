@@ -27,7 +27,7 @@ namespace Dice::rdf_parser::internal::Turtle::Parsers {
 		/**
          * a queue for storing parsed triples .
          */
-		std::shared_ptr<std::queue<Triple_t>> parsedTerms;
+		 std::queue<Triple_t> parsedTerms;
 
 	protected:
 		/**
@@ -38,7 +38,6 @@ namespace Dice::rdf_parser::internal::Turtle::Parsers {
 		explicit BaseStringParser(std::string text) {
 			try {
 				tao::pegtl::string_input input(std::move(text), "the text");
-				parsedTerms = std::make_shared<std::queue<Triple_t>>();
 				States::SequentialState<sparqlQuery> state(parsedTerms);
 				tao::pegtl::parse<Grammar::grammar<sparqlQuery>, Actions::action>(input, state);
 
@@ -56,7 +55,6 @@ namespace Dice::rdf_parser::internal::Turtle::Parsers {
 		BaseStringParser(std::string text, const std::map<std::string, std::string> &prefix_map) {
 			try {
 				tao::pegtl::string_input input(text, "the text");
-				parsedTerms = std::make_shared<std::queue<Triple_t>>();
 				States::SequentialState<sparqlQuery> state(parsedTerms);
 				for (auto pair : prefix_map)
 					state.addPrefix(pair.first, pair.second);
@@ -69,14 +67,14 @@ namespace Dice::rdf_parser::internal::Turtle::Parsers {
 
 	public:
 		[[nodiscard]] bool hasNextTriple() const override {
-			return not parsedTerms->empty();
+			return not parsedTerms.empty();
 		}
 
 		~BaseStringParser() override = default;
 
 		void nextTriple() override {
-			this->current_triple = parsedTerms->front();
-			parsedTerms->pop();
+			this->current_triple = parsedTerms.front();
+			parsedTerms.pop();
 		}
 
 
