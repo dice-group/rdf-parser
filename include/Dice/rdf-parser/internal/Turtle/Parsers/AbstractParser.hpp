@@ -26,10 +26,10 @@ namespace Dice::rdf_parser::internal::Turtle::Parsers {
 		using element_type = Triple_t;
 
 		explicit AbstractParser() {
-			current_triple = std::make_shared<element_type>();
+			current_triple ;
 		};
 		// TODO: doesn't need to be shared
-		std::shared_ptr<element_type> current_triple;
+		element_type current_triple;
 
 
 	public:
@@ -47,7 +47,7 @@ namespace Dice::rdf_parser::internal::Turtle::Parsers {
          * get the current triple
          */
 		const element_type &getCurrentTriple() {
-			return *current_triple;
+			return current_triple;
 		}
 
 

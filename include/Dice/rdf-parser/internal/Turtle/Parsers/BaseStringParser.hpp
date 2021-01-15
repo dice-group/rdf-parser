@@ -75,7 +75,7 @@ namespace Dice::rdf_parser::internal::Turtle::Parsers {
 		~BaseStringParser() override = default;
 
 		void nextTriple() override {
-			*(this->current_triple) = parsedTerms->front();
+			this->current_triple = parsedTerms->front();
 			parsedTerms->pop();
 		}
 

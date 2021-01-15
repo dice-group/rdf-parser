@@ -99,7 +99,7 @@ namespace Dice::rdf_parser::Turtle::parsers {
 
 
 		void nextTriple() override {
-			parsedTerms->pop(*(this->current_triple));
+			parsedTerms->pop(this->current_triple);
 			if (parsedTerms->read_available() < lowerThreshold) {
 				{
 					std::lock_guard<std::mutex> lk(*m);
