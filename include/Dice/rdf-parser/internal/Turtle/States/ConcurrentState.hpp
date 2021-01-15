@@ -34,7 +34,7 @@ namespace Dice::rdf_parser::internal::Turtle::States {
 
 	private:
 		//Defines  threshold for triples in the Queue(should be assigned by the constructor)
-		unsigned int upperThreshold;
+        size_t upperThreshold;
 		std::shared_ptr<std::condition_variable> cv;
 		std::shared_ptr<std::mutex> m;
 		std::shared_ptr<std::condition_variable> cv2;
@@ -48,7 +48,7 @@ namespace Dice::rdf_parser::internal::Turtle::States {
 	public:
 		explicit ConcurrentState(
 				std::shared_ptr<boost::lockfree::spsc_queue<Triple_t, boost::lockfree::capacity<Configurations::RdfConcurrentStreamParser_QueueCapacity>>> parsingQueue,
-				unsigned int upperThreshold,
+                size_t upperThreshold,
 				std::shared_ptr<std::condition_variable> cv, std::shared_ptr<std::mutex> m,
 				std::shared_ptr<std::condition_variable> cv2, std::shared_ptr<std::mutex> m2,
 				std::shared_ptr<std::atomic_bool> termCountWithinThresholds,

@@ -16,10 +16,10 @@
 #include <utility>
 
 #include "Dice/rdf-parser/internal/Turtle/Actions/Actions.hpp"
+#include "Dice/rdf-parser/internal/Turtle/Configurations.hpp"
 #include "Dice/rdf-parser/internal/Turtle/Parsers/AbstractParser.hpp"
 #include "Dice/rdf-parser/internal/Turtle/States/ConcurrentState.hpp"
 #include "Dice/rdf-parser/internal/util/ScopedThread.hpp"
-#include "Dice/rdf-parser/internal/Turtle/Configurations.hpp"
 
 namespace Dice::rdf_parser::Turtle::parsers {
 
@@ -37,9 +37,8 @@ namespace Dice::rdf_parser::Turtle::parsers {
 						Triple,
 						boost::lockfree::capacity<internal::Turtle::Configurations::RdfConcurrentStreamParser_QueueCapacity>>>
 				parsedTerms;
-		// use size_t instead of unsigned int
-		unsigned int upperThreshold;
-		unsigned int lowerThreshold;
+		size_t upperThreshold;
+		size_t lowerThreshold;
 
 		std::ifstream stream;
 		std::shared_ptr<std::condition_variable> cv;
@@ -52,7 +51,6 @@ namespace Dice::rdf_parser::Turtle::parsers {
 		std::unique_ptr<util::ScopedThread> parsingThread;
 
 	public:
-
 		using Iterator = internal::Turtle::Parsers::Iterator<TurtleFileParser, false>;
 		void startParsing(std::string filename, std::size_t bufferSize) {
 			namespace Grammar = internal::Turtle::Grammar;
