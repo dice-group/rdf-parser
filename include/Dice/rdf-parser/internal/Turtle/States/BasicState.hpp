@@ -2,10 +2,12 @@
 #define RDF_PARSER_BASICSTATE_HPP
 
 
-#include <map>
+
 #include <memory>
 #include <optional>
 #include <string>
+
+#include <robin_hood.h>
 
 #include "Dice/RDF/Triple.hpp"
 #include "Dice/RDF/Term.hpp"
@@ -54,7 +56,7 @@ namespace Dice::rdf_parser::internal::Turtle::States {
 		int latest_BN_label = 1;
 
 		// todo: use something optimized
-		std::map<std::string, std::string> prefix_map;
+		robin_hood::unordered_map<std::string, std::string> prefix_map;
 
 
 	public:
@@ -64,7 +66,7 @@ namespace Dice::rdf_parser::internal::Turtle::States {
 
 
 		inline void addPrefix(std::string prefix, std::string value) {
-			prefix_map.insert(std::pair<std::string, std::string>(std::move(prefix), std::move(value)));
+			prefix_map.emplace(std::pair<std::string,std::string>(std::move(prefix), std::move(value)));
 		}
 
 		inline void setLan_tag(std::string lan_tag) { this->lang_tag_ = std::move(lan_tag); }
