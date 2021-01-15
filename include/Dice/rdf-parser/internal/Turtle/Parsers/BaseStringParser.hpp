@@ -66,13 +66,13 @@ namespace Dice::rdf_parser::internal::Turtle::Parsers {
 		}
 
 	public:
-		[[nodiscard]] bool hasNextTriple() const override {
+		[[nodiscard]] bool hasNextTriple_impl() const  {
 			return not parsedTerms.empty();
 		}
 
 		~BaseStringParser() override = default;
 
-		void nextTriple() override {
+		void nextTriple_impl()  {
 			this->current_triple = parsedTerms.front();
 			parsedTerms.pop();
 		}

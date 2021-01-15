@@ -25,8 +25,7 @@ namespace Dice::rdf_parser::internal::Turtle::Parsers {
 	protected:
 		using element_type = Triple_t;
 
-		explicit AbstractParser() {
-		};
+		explicit AbstractParser(){};
 
 		element_type current_triple;
 
@@ -35,12 +34,16 @@ namespace Dice::rdf_parser::internal::Turtle::Parsers {
 		/**
          * process to the next parsed triple.
          */
-		virtual void nextTriple() = 0;
+		void nextTriple() {
+             static_cast<Derived *>(this)->nextTriple_impl();
+		}
 
 		/**
          * check whether there is a further triple
          */
-		[[nodiscard]] virtual bool hasNextTriple() const = 0;
+		[[nodiscard]] virtual bool hasNextTriple() {
+            return static_cast<Derived *>(this)->hasNextTriple_impl();
+		}
 
 		/**
          * get the current triple
@@ -99,7 +102,7 @@ namespace Dice::rdf_parser::internal::Turtle::Parsers {
 	};
 
 
-};// namespace Dice::rdf_parser::Turtle::parsers
+};// namespace Dice::rdf_parser::internal::Turtle::Parsers
 
 
 #endif//RDF_PARSER_ABSTRACTPARSER_HPP

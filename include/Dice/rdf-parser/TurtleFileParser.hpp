@@ -94,7 +94,7 @@ namespace Dice::rdf_parser::Turtle::parsers {
 								  internal::Turtle::Configurations::RdfConcurrentStreamParser_BufferSize))} {}
 
 
-		void nextTriple() override {
+		void nextTriple_impl()  {
 			parsedTerms.pop(this->current_triple);
 			if (parsedTerms.read_available() < lowerThreshold) {
 				{
@@ -105,7 +105,7 @@ namespace Dice::rdf_parser::Turtle::parsers {
 			}
 		}
 
-		bool hasNextTriple() const override {
+		bool hasNextTriple_impl() const  {
 			if (parsedTerms.read_available() != 0) {
 				return true;
 			} else {
