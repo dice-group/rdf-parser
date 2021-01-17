@@ -37,6 +37,7 @@ namespace Dice::rdf::internal {
 
 		const Element &operator[](std::size_t pos) const { return entries_[pos]; }
 
+
 		void setSubject(Element subject) { entries_[0] = std::move(subject); }
 
 		void setPredicate(Element predicate) { entries_[1] = std::move(predicate); }
@@ -51,6 +52,8 @@ namespace Dice::rdf::internal {
 		const_iterator rbegin() const { return entries_.rbegin(); }
 		reverse_iterator rend() { return entries_.rend(); }
 		const_reverse_iterator rend() const { return entries_.rend(); }
+
+
 	};
 
 }// namespace Dice::rdf::internal

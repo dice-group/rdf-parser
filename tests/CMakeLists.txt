@@ -23,8 +23,8 @@ set_property(TARGET tests PROPERTY CXX_STANDARD 20)
 file(COPY datasets DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 #download some files for the file parsers
-download_file(https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg)
-file(ARCHIVE_EXTRACT INPUT in_file.zip)
+#download_file(https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg)
+#file(ARCHIVE_EXTRACT INPUT in_file.zip)
 
 
 

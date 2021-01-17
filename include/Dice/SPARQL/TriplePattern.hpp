@@ -31,9 +31,16 @@ namespace Dice::sparql {
 
 		TriplePattern(VarOrTerm subject, VarOrTerm predicate, VarOrTerm object) : super_t{std::move(subject), std::move(predicate), std::move(object)} {}
 
+
 		[[nodiscard]] size_t hash() const noexcept {
 			return ::Dice::hash::dice_hash(this->entries_);
 		}
+
+        friend bool operator==(const TriplePattern &triple1, const TriplePattern &triple2) {
+            return (triple1.subject() == triple2.subject() &&
+                    triple1.predicate() == triple2.predicate() &&
+                    triple1.object() == triple2.object());
+        }
 	};
 }// namespace Dice::sparql
 
