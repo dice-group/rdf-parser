@@ -23,10 +23,6 @@ set_property(TARGET tests PROPERTY CXX_STANDARD 20)
 file(COPY datasets DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 #download some files for the file parsers
-#download_file(https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg)
-#file(ARCHIVE_EXTRACT INPUT in_file.zip)
-
-
 
 function(download_file url filename  )
 
@@ -36,4 +32,14 @@ function(download_file url filename  )
                 )
     endif()
 endfunction(download_file)
+
+download_file( https://hobbitdata.informatik.uni-leipzig.de/ISWC2020_Tentris/swdf.zip tests/swdf.zip)
+
+execute_process(
+        COMMAND ${CMAKE_COMMAND} -E tar xkf ${CMAKE_BINARY_DIR}/tests/swdf.zip
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/tests/datasets/
+)
+
+
+
 
