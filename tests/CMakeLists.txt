@@ -1,19 +1,24 @@
-cmake_minimum_required(VERSION 3.12)
+include(FetchContent)
+FetchContent_Declare(
+        googletest
+        GIT_REPOSITORY https://github.com/google/googletest.git
+        GIT_TAG        release-1.8.1
+        GIT_SHALLOW    TRUE
+)
+set(BUILD_GMOCK OFF CACHE BOOL "" FORCE)
+set(INSTALL_GTEST OFF CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(googletest)
+add_library(GTest::GTest ALIAS gtest)
+add_library(GTest::Main ALIAS gtest_main)
 
-set(CMAKE_CXX_STANDARD 20)
-
-
-include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-conan_basic_setup()
-
-
-
-# add the exectutable for all tests
+include(GoogleTest)
+# add the executable for all tests
 add_executable(tests Tests.cpp)
 
 target_link_libraries(tests
+        GTest::GTest
+        GTest::Main
         rdf-parser
-        ${CONAN_LIBS}
         )
 
 set_property(TARGET tests PROPERTY CXX_STANDARD 20)
@@ -25,7 +30,6 @@ file(COPY datasets DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 #download some files for the file parsers
 
 function(download_file url filename  )
-
     if(NOT EXISTS ${filename})
         file(DOWNLOAD ${url} ${filename}
                 TIMEOUT 60  # seconds
@@ -33,12 +37,15 @@ function(download_file url filename  )
     endif()
 endfunction(download_file)
 
-download_file( https://hobbitdata.informatik.uni-leipzig.de/ISWC2020_Tentris/swdf.zip tests/swdf.zip)
+download_file(https://hobbitdata.informatik.uni-leipzig.de/ISWC2020_Tentris/swdf.zip
+        ${CMAKE_BINARY_DIR}/tests/swdf.zip)
 
-execute_process(
-        COMMAND ${CMAKE_COMMAND} -E tar xkf ${CMAKE_BINARY_DIR}/tests/swdf.zip
-        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/tests/datasets/
-)
+if (NOT EXISTS ${CMAKE_BINARY_DIR}/tests/swdf.zip)
+    execute_process(
+            COMMAND ${CMAKE_COMMAND} -E unzip ${CMAKE_BINARY_DIR}/tests/swdf.zip
+            WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/tests/datasets/
+    )
+endif ()
 
 
 
