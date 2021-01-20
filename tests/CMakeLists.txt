@@ -40,9 +40,9 @@ endfunction(download_file)
 download_file(https://hobbitdata.informatik.uni-leipzig.de/ISWC2020_Tentris/swdf.zip
         ${CMAKE_BINARY_DIR}/tests/swdf.zip)
 
-if (NOT EXISTS ${CMAKE_BINARY_DIR}/tests/swdf.zip)
+if (NOT EXISTS ${CMAKE_BINARY_DIR}/tests/swdf.nt)
     execute_process(
-            COMMAND ${CMAKE_COMMAND} -E unzip ${CMAKE_BINARY_DIR}/tests/swdf.zip
+            COMMAND ${CMAKE_COMMAND} -E tar xkf ${CMAKE_BINARY_DIR}/tests/swdf.zip
             WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/tests/datasets/
     )
 endif ()
