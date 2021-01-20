@@ -35,10 +35,8 @@ namespace Dice::rdf_parser::Turtle::parsers {
 	private:
 		// TODO: we don't need the smart pointers for the members
 
-		boost::lockfree::spsc_queue<
-				Triple,
-				boost::lockfree::capacity<internal::Turtle::Configurations::RdfConcurrentStreamParser_QueueCapacity>>
-				parsedTerms;
+		boost::lockfree::spsc_queue<Triple>
+				parsedTerms{internal::Turtle::Configurations::RdfConcurrentStreamParser_QueueCapacity};
 		size_t upperThreshold;
 		size_t lowerThreshold;
 
