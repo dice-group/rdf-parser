@@ -5,18 +5,9 @@
 namespace Dice::tests::rdf_parser::turtle_parser_concurrent_tests {
 		using namespace Dice::rdf_parser::Turtle::parsers;
 
-	TEST(TurtleParserFilesTests, ntripleFile1) {
-		TurtleFileParser parser{"../datasets/g.nt"};
-		long i = 0;
-		for (const auto &item : parser) {
-			if (item.hash())
-				i++;
-		}
-		ASSERT_TRUE(i > 0);
-	}
-
-	TEST(TurtleParserFilesTests, ntripleFile1_concurrent) {
-		TurtleFileParser parser{"../datasets/g.nt"};
+	TEST(TurtleParserFilesTests, parseSWDF) {
+		std::filesystem::current_path(std::filesystem::canonical("/proc/self/exe").parent_path());
+		TurtleFileParser parser{"../tests/datasets/swdf.nt"};
 		long i = 0;
 		for (const auto &item : parser) {
 			if (item.hash())

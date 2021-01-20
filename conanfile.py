@@ -25,10 +25,6 @@ class RDFParser(ConanFile):
             cmake_file = load(os.path.join(self.recipe_folder, "CMakeLists.txt"))
             self.version = re.search("project\(rdf-parser VERSION (.*)\)", cmake_file).group(1)
 
-    def requirements(self):
-        if self.options.with_tests:
-            self.requires("gtest/1.8.1")
-
     def package(self):
         cmake = CMake(self)
         if self.options.with_tests:

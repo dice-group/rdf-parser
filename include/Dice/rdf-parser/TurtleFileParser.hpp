@@ -35,10 +35,8 @@ namespace Dice::rdf_parser::Turtle::parsers {
 	private:
 		// TODO: we don't need the smart pointers for the members
 
-				boost::lockfree::spsc_queue<
-						Triple,
-						boost::lockfree::capacity<internal::Turtle::Configurations::RdfConcurrentStreamParser_QueueCapacity>>
-				parsedTerms;
+		boost::lockfree::spsc_queue<Triple>
+				parsedTerms{internal::Turtle::Configurations::RdfConcurrentStreamParser_QueueCapacity};
 		size_t upperThreshold;
 		size_t lowerThreshold;
 
@@ -96,7 +94,7 @@ namespace Dice::rdf_parser::Turtle::parsers {
 								  internal::Turtle::Configurations::RdfConcurrentStreamParser_BufferSize))} {}
 
 
-		void nextTriple_impl()  {
+		void nextTriple_impl() {
 			parsedTerms.pop(this->current_triple);
 			if (parsedTerms.read_available() < lowerThreshold) {
 				{
@@ -107,7 +105,7 @@ namespace Dice::rdf_parser::Turtle::parsers {
 			}
 		}
 
-		bool hasNextTriple_impl() const  {
+		bool hasNextTriple_impl() const {
 			if (parsedTerms.read_available() != 0) {
 				return true;
 			} else {
@@ -126,18 +124,17 @@ namespace Dice::rdf_parser::Turtle::parsers {
 					else if (*parsingIsDone) {
 						return false;
 					} else {
-                        throw internal::Exceptions::InternalError();
+						throw internal::Exceptions::InternalError();
 					}
 				}
 			};
 		};
 
 
-		Iterator begin_impl() {
-			return Iterator(this);
-		}
+		internal::Turtle::Parsers::Iterator<TurtleFileParser, false> begin_impl() {
+			return internal::Turtle::Parsers::Iterator<TurtleFileParser, false>(this);
+		};
 	};
 }// namespace Dice::rdf_parser::Turtle::parsers
-
 
 #endif//RDF_PARSER_TURTLEPEGTLCONCURRENTSTREAMPARSER_HPP

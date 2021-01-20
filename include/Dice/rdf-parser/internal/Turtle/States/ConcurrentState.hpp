@@ -42,11 +42,11 @@ namespace Dice::rdf_parser::internal::Turtle::States {
 		std::shared_ptr<std::atomic_bool> termsCountIsNotEmpty;
 		std::shared_ptr<std::atomic_bool> parsingIsDone;
 
-		boost::lockfree::spsc_queue<Triple_t, boost::lockfree::capacity<Configurations::RdfConcurrentStreamParser_QueueCapacity>>& parsed_elements;
+		boost::lockfree::spsc_queue<Triple_t>& parsed_elements;
 
 	public:
 		explicit ConcurrentState(
-				boost::lockfree::spsc_queue<Triple_t, boost::lockfree::capacity<Configurations::RdfConcurrentStreamParser_QueueCapacity>>& parsingQueue,
+				boost::lockfree::spsc_queue<Triple_t>& parsingQueue,
                 size_t upperThreshold,
 				std::shared_ptr<std::condition_variable> cv, std::shared_ptr<std::mutex> m,
 				std::shared_ptr<std::condition_variable> cv2, std::shared_ptr<std::mutex> m2,
