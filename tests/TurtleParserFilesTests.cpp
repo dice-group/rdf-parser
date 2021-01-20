@@ -6,6 +6,7 @@ namespace Dice::tests::rdf_parser::turtle_parser_concurrent_tests {
 		using namespace Dice::rdf_parser::Turtle::parsers;
 
 	TEST(TurtleParserFilesTests, parseSWDF) {
+		std::filesystem::current_path(std::filesystem::canonical("/proc/self/exe").parent_path());
 		TurtleFileParser parser{"../tests/datasets/swdf.nt"};
 		long i = 0;
 		for (const auto &item : parser) {
