@@ -75,31 +75,27 @@ while(it)
 
 ### Parsers types
 There are four types of parsers which can be used:
-- `TurtleStringParser`: It can be used to pars Rdf Strings immediately. It accepts one parameter which is the string of the document to be parsed.
-- `TurtleFileParser`:It can be used to parse a whole document file that contains a Rdf. It can process very big files with low memory usage by parsing chunk by chunk. It also uses a separated thread for parsing and writes the results in a concurrent queue.
+- `TurtleStringParser`: It can be used to parse Rdf Strings immediately. It accepts one parameter which is the string of the document to be parsed.
+- `TurtleFileParser`: It can be used to parse a whole document file that contains a Rdf. It can process very big files with low memory usage by parsing chunk by chunk. It also uses a separated thread for parsing and writes the results in a concurrent queue.
 Therefore, the already parsed triples can be accessed during the parsing process. It accepts one parameter which is the name of the file.
 
 - `TriplesBlockStringParser`: It is used for parsing Sparql's TripleBlocks Strings immediately. It accepts one parameter which is the string of the document to be parsed. And another
-optional parameter which is a std::unordered_map (or robin_hood::unordered_map which is more opimized) contains the prefixes.
+optional parameter which is either a std::unordered_map (or robin_hood::unordered_map which is more opimized) contains the prefixes.
   
 ### Examples
 
-1-Here we create a full example for parsing a turtle file. we use here the `TurtleFileParser`. We assuming there is an turtle file at `datasets/dataset1.ttl`. The file is parsed and the triples are printed to `std::out`.
-
+1-Here we create a full example for parsing a turtle file. we use here the `TurtleFileParser`. We are assuming there is an turtle file at `datasets/dataset1.ttl`. The file is parsed and the triples are printed to `std::out`.
+Dice::rdf_parser::Turtle::parsers
  ```c++
-#include <Dice/rdf-parser/TurtleFileParser.hpp>
 
-namespace {
-    using namespace Dice::rdf_parser::Turtle::parsers;
-    using namespace Dice::rdf
-}
+#include <Dice/rdf-parser/TurtleFileParser.hpp>
 
 int main()
 {
-TurtleFileParser parser("datasets/dataset1.ttl");
+Dice::rdf_parser::Turtle::parsers::TurtleFileParser parser("datasets/dataset1.ttl");
  auto it=Parser.begin();
  while (it){
-         Triple triple= *it;
+         Dice::rdf::Triple triple= *it;
          std::cout << triple.subject().getIdentifier() << " "
                    << triple.predicate().getIdentifier() << " "
                    << triple.object().getIdentifier()
@@ -114,10 +110,6 @@ TurtleFileParser parser("datasets/dataset1.ttl");
 ```c++
 #include <Dice/rdf-parser/internal/Turtle/Parsers/TriplesBlockStringParser.hpp>
 #include<unordered_map>
-namespace {
-   using namespace Dice::rdf_parser::Turtle::parsers;
-   using namespace Dice::rdf
-}
 
 int main()
 {
@@ -127,7 +119,7 @@ prefixes.emplace(std::pair<std::string,std::string>("wde","http://www.wikidata.o
 prefixes.emplace(std::pair<std::string,std::string>("wdt","http://www.wikidata.org/prop/direct/"));
 
 // create the parser with 2 parameters: the query and the prefixes map
-TriplesBlockStringParser parser("?var1 <http://www.wikidata.org/prop/P463> _:b0 . _:b0 <http://www.wikidata.org/prop/statement/P463> wde:Q202479 ; <http://www.wikidata.org/prop/qualifier/P580> ?var2 .",prefixes) ;
+Dice::rdf_parser::internal::Turtle::Parsers::TriplesBlockStringParser parser("?var1 <http://www.wikidata.org/prop/P463> _:b0 . _:b0 <http://www.wikidata.org/prop/statement/P463> wde:Q202479 ; <http://www.wikidata.org/prop/qualifier/P580> ?var2 .",prefixes) ;
 
 //get an iterator 
 auto it= parser.begin();
@@ -135,9 +127,9 @@ auto it= parser.begin();
 while (it)
 {
     TriplePatternElement triplePatternElement=*it;
-    VarOrTerm subject=TriplePatternElement.subject();
-    VarOrTerm subject=TriplePatternElement.predicate();
-    VarOrTerm subject=TriplePatternElement.object();
+    Dice::sparql::VarOrTerm subject=TriplePatternElement.subject();
+    Dice::sparql::VarOrTerm subject=TriplePatternElement.predicate();
+    Dice::sparql::VarOrTerm subject=TriplePatternElement.object();
     it++;
 }
 }
