@@ -63,5 +63,7 @@ RUN ./bin/tests
 WORKDIR /rdf-parser/build_gcc
 RUN ./bin/tests
 
-#RUN conan create . "rdf-parser/test1@dice-group/stable" --build missing --profile gcc10
-#RUN conan create . "rdf-parser/test2dice-group/stable" --build missing --profile gcc10 -o rdf-parser:with_tests=True
+WORKDIR /rdf-parser/
+
+#RUN conan create . "rdf-parser/test1@dice-group/stable" --build missing
+#RUN conan create . "rdf-parser/test2dice-group/stable" --build missing --profile clang11
