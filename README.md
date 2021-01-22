@@ -77,8 +77,7 @@ There are four types of parsers which can be used:
 - `TurtleFileParser`: It can be used to parse a whole document file that contains a Rdf. It can process very big files with low memory usage by parsing chunk by chunk. It also uses a separated thread for parsing and writes the results in a concurrent queue.
 Therefore, the already parsed triples can be accessed during the parsing process. It accepts one parameter which is the name of the file.
 
-- `TriplesBlockStringParser`: It is used for parsing Sparql's TripleBlocks Strings immediately. It accepts one parameter which is the string of the document to be parsed. And another
-optional parameter which is either a std::unordered_map (or robin_hood::unordered_map which is more opimized) contains the prefixes.
+- `TriplesBlockStringParser`: It is used for parsing Sparql's TripleBlocks Strings immediately. It accepts one parameter which is the string of the document to be parsed. And another optional parameter which is a robin_hood::unordered_map contains the prefixes.
   
 ### Examples
 
