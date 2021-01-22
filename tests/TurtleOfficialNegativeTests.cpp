@@ -1,505 +1,585 @@
 #include <gtest/gtest.h>
-#include <Dice/rdf_parser/Parser/Turtle/Parsers/StringParser.hpp>
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_base_01) {
+#include <Dice/rdf-parser/TurtleStringParser.hpp>
 
-    StringParser parser("@base .");
-}
+namespace Dice::tests::rdf_parser::turtle_official_negative_tests {
+	using namespace Dice::rdf_parser;
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_base_02) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_base_01) {
 
-    StringParser parser(
-            "@BASE <http://www.w3.org/2013/TurtleTests/> .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable("@base ."), false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_base_03) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_base_02) {
 
-    StringParser parser(
-            "BASE <http://www.w3.org/2013/TurtleTests/> .\n"
-            "<s> <p> <o> .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "@BASE <http://www.w3.org/2013/TurtleTests/> ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_blank_label_dot_end) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_base_03) {
 
-    StringParser parser(
-            "_:b1. :p :o .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "BASE <http://www.w3.org/2013/TurtleTests/> .\n"
+						  "<s> <p> <o> ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_esc_01) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_blank_label_dot_end) {
 
-    StringParser parser(
-            "<http://www.w3.org/2013/TurtleTests/s> <http://www.w3.org/2013/TurtleTests/p> \"a\\zb\" .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "_:b1. :p :o ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_esc_02) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_esc_01) {
 
-    StringParser parser(
-            "<http://www.w3.org/2013/TurtleTests/s> <http://www.w3.org/2013/TurtleTests/p> \"\\uWXYZ\" .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "<http://www.w3.org/2013/TurtleTests/s> <http://www.w3.org/2013/TurtleTests/p> \"a\\zb\" ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_esc_03) {
+	TEST(TurtleOfficialNegativeTests, DISABLED_turtle_syntax_bad_esc_02) {
 
-    StringParser parser(
-            "<http://www.w3.org/2013/TurtleTests/s> <http://www.w3.org/2013/TurtleTests/p> \"\\U0000WXYZ\" .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "<http://www.w3.org/2013/TurtleTests/s> <http://www.w3.org/2013/TurtleTests/p> \"\\uWXYZ\" ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_esc_04) {
+	TEST(TurtleOfficialNegativeTests, DISABLED_turtle_syntax_bad_esc_03) {
 
-    StringParser parser(
-            "<http://www.w3.org/2013/TurtleTests/s> <http://www.w3.org/2013/TurtleTests/p> \"\\U0000WXYZ\" .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "<http://www.w3.org/2013/TurtleTests/s> <http://www.w3.org/2013/TurtleTests/p> \"\\U0000WXYZ\" ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_kw_01) {
+	TEST(TurtleOfficialNegativeTests, DISABLED_turtle_syntax_bad_esc_04) {
 
-    StringParser parser("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-                          ":s A :C .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "<http://www.w3.org/2013/TurtleTests/s> <http://www.w3.org/2013/TurtleTests/p> \"\\U0000WXYZ\" ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_kw_02) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_kw_01) {
 
-    StringParser parser("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-                          "a :p :o .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
+												 ":s A :C ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_kw_03) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_kw_02) {
 
-    StringParser parser("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-                          ":s :p a .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
+												 "a :p :o ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_kw_04) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_kw_03) {
 
-    StringParser parser("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-                          "true :p :o .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
+												 ":s :p a ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_kw_05) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_kw_04) {
 
-    StringParser parser("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-                          ":s true :o .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
+												 "true :p :o ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_lang_01) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_kw_05) {
 
-    StringParser parser(
-            "<http://www.w3.org/2013/TurtleTests/s> <http://www.w3.org/2013/TurtleTests/p> \"string\"@1 .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
+												 ":s true :o ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_LITERAL2_with_langtag_and_datatype) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_lang_01) {
 
-    StringParser parser(
-            "<http://example.org/resource> <http://example.org#pred> \"value\"@en^^<http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral> .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "<http://www.w3.org/2013/TurtleTests/s> <http://www.w3.org/2013/TurtleTests/p> \"string\"@1 ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_ln_dash_start) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_LITERAL2_with_langtag_and_datatype) {
 
-    StringParser parser("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-                          ":s :p :-o .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "<http://example.org/resource> <http://example.org#pred> \"value\"@en^^<http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral> ."),
+				  false);
+	}
+
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_ln_dash_start) {
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_ln_escape) {
+		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
+												 ":s :p :-o ."),
+				  false);
+	}
 
-    StringParser parser("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-                          ":s :p :o%2 .");
-}
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_ln_escape) {
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_ln_escape_start) {
+		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
+												 ":s :p :o%2 ."),
+				  false);
+	}
+
+	TEST(TurtleOfficialNegativeTests, DISABLED_turtle_syntax_bad_ln_escape_start) {
+
+		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
+												 ":s :p :%2o ."),
+				  false);
+	}
+
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_missing_ns_dot_end) {
 
-    StringParser parser("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-                          ":s :p :%2o .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable("valid:s valid:p invalid.:o ."), false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_missing_ns_dot_end) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_missing_ns_dot_start) {
+
+		ASSERT_EQ(TurtleStringParser::isParsable(".undefined:s .undefined:p .undefined:o ."), false);
+	}
 
-    StringParser parser("valid:s valid:p invalid.:o .");
-}
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_n3_extras_01) {
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_missing_ns_dot_start) {
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
+						  "\n"
+						  "{ :a :q :c . } :p :z .\n"
+						  ""),
+				  false);
+	}
 
-    StringParser parser(".undefined:s .undefined:p .undefined:o .");
-}
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_n3_extras_02) {
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_n3_extras_01) {
+		ASSERT_EQ(TurtleStringParser::isParsable("# = is not Turtle\n"
+												 "@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
+												 "\n"
+												 ":a = :b ."),
+				  false);
+	}
 
-    StringParser parser(
-            "@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-            "\n"
-            "{ :a :q :c . } :p :z .\n"
-            "");
-}
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_n3_extras_03) {
+
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
+						  "@prefix ns: <http://www.w3.org/2013/TurtleTests/p#> .\n"
+						  "\n"
+						  ":x.\n"
+						  "  ns:p.\n"
+						  "    ns:q :p :z ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_n3_extras_02) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_n3_extras_04) {
 
-    StringParser parser("# = is not Turtle\n"
-                          "@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-                          "\n"
-                          ":a = :b .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
+						  "@prefix ns: <http://www.w3.org/2013/TurtleTests/p#> .\n"
+						  "\n"
+						  ":x^ns:p :p :z ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_n3_extras_03) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_n3_extras_05) {
 
-    StringParser parser(
-            "@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-            "@prefix ns: <http://www.w3.org/2013/TurtleTests/p#> .\n"
-            "\n"
-            ":x.\n"
-            "  ns:p.\n"
-            "    ns:q :p :z .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
+						  "\n"
+						  ":z is :p of :x ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_n3_extras_04) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_n3_extras_06) {
 
-    StringParser parser(
-            "@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-            "@prefix ns: <http://www.w3.org/2013/TurtleTests/p#> .\n"
-            "\n"
-            ":x^ns:p :p :z .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
+						  "\n"
+						  ":a.:b.:c ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_n3_extras_05) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_n3_extras_07) {
 
-    StringParser parser(
-            "@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-            "\n"
-            ":z is :p of :x .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "@keywords a .\n"
+						  "x a Item ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_n3_extras_06) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_n3_extras_08) {
 
-    StringParser parser(
-            "@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-            "\n"
-            ":a.:b.:c .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "@keywords a .\n"
+						  "x a Item ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_n3_extras_07) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_n3_extras_09) {
 
-    StringParser parser(
-            "@keywords a .\n"
-            "x a Item .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
+						  ":s => :o ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_n3_extras_08) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_n3_extras_10) {
 
-    StringParser parser(
-            "@keywords a .\n"
-            "x a Item .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
+						  ":s <= :o ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_n3_extras_09) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_n3_extras_11) {
 
-    StringParser parser(
-            "@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-            ":s => :o .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
+						  "@forSome :x ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_n3_extras_10) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_n3_extras_12) {
 
-    StringParser parser(
-            "@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-            ":s <= :o .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
+						  "@forAll :x ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_n3_extras_11) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_n3_extras_13) {
 
-    StringParser parser(
-            "@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-            "@forSome :x .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "@keywords .\n"
+						  "x @a Item ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_n3_extras_12) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_ns_dot_end) {
 
-    StringParser parser(
-            "@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-            "@forAll :x .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable("@prefix eg. : <http://www.w3.org/2013/TurtleTests/> .\n"
+												 "eg.:s eg.:p eg.:o ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_n3_extras_13) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_ns_dot_start) {
 
-    StringParser parser(
-            "@keywords .\n"
-            "x @a Item .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable("@prefix .eg : <http://www.w3.org/2013/TurtleTests/> .\n"
+												 ".eg:s .eg:p .eg:o ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_ns_dot_end) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_num_01) {
 
-    StringParser parser("@prefix eg. : <http://www.w3.org/2013/TurtleTests/> .\n"
-                          "eg.:s eg.:p eg.:o .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "<http://www.w3.org/2013/TurtleTests/s> <http://www.w3.org/2013/TurtleTests/p> 123.abc ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_ns_dot_start) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_num_02) {
 
-    StringParser parser("@prefix .eg : <http://www.w3.org/2013/TurtleTests/> .\n"
-                          ".eg:s .eg:p .eg:o .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "<http://www.w3.org/2013/TurtleTests/s> <http://www.w3.org/2013/TurtleTests/p> 123e ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_num_01) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_num_03) {
 
-    StringParser parser(
-            "<http://www.w3.org/2013/TurtleTests/s> <http://www.w3.org/2013/TurtleTests/p> 123.abc .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "<http://www.w3.org/2013/TurtleTests/s> <http://www.w3.org/2013/TurtleTests/p> 123abc ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_num_02) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_num_04) {
 
-    StringParser parser(
-            "<http://www.w3.org/2013/TurtleTests/s> <http://www.w3.org/2013/TurtleTests/p> 123e .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "<http://www.w3.org/2013/TurtleTests/s> <http://www.w3.org/2013/TurtleTests/p> 0x123 ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_num_03) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_num_05) {
 
-    StringParser parser(
-            "<http://www.w3.org/2013/TurtleTests/s> <http://www.w3.org/2013/TurtleTests/p> 123abc .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "<http://www.w3.org/2013/TurtleTests/s> <http://www.w3.org/2013/TurtleTests/p> +-1 ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_num_04) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_number_dot_in_anon) {
 
-    StringParser parser(
-            "<http://www.w3.org/2013/TurtleTests/s> <http://www.w3.org/2013/TurtleTests/p> 0x123 .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
+												 "\n"
+												 ":s\n"
+												 "\t:p [\n"
+												 "\t\t:p1 27.\n"
+												 "\t] ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_num_05) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_pname_01) {
 
-    StringParser parser(
-            "<http://www.w3.org/2013/TurtleTests/s> <http://www.w3.org/2013/TurtleTests/p> +-1 .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
+						  ":a~b :p :o ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_number_dot_in_anon) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_pname_02) {
 
-    StringParser parser("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-                          "\n"
-                          ":s\n"
-                          "\t:p [\n"
-                          "\t\t:p1 27.\n"
-                          "\t] .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
+						  ":a%2 :p :o ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_pname_01) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_pname_03) {
 
-    StringParser parser(
-            "@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-            ":a~b :p :o .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
+						  ":a\\u0039 :p :o ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_pname_02) {
+	TEST(TurtleOfficialNegativeTests, DISABLED_turtle_syntax_bad_prefix_01) {
 
-    StringParser parser(
-            "@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-            ":a%2 :p :o .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  ":s <http://www.w3.org/2013/TurtleTests/p> \"x\" ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_pname_03) {
+	TEST(TurtleOfficialNegativeTests, DISABLED_turtle_syntax_bad_prefix_02) {
 
-    StringParser parser(
-            "@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-            ":a\\u0039 :p :o .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n"
+						  "<http://www.w3.org/2013/TurtleTests/s> rdf:type :C ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_prefix_01) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_prefix_03) {
 
-    StringParser parser(
-            ":s <http://www.w3.org/2013/TurtleTests/p> \"x\" .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "@prefix ex: ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_prefix_02) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_prefix_04) {
 
-    StringParser parser(
-            "@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n"
-            "<http://www.w3.org/2013/TurtleTests/s> rdf:type :C .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "@prefix <http://www.w3.org/2013/TurtleTests/> ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_prefix_03) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_prefix_05) {
 
-    StringParser parser(
-            "@prefix ex: .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "@prefix x <http://www.w3.org/2013/TurtleTests/> ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_prefix_04) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_string_01) {
 
-    StringParser parser(
-            "@prefix <http://www.w3.org/2013/TurtleTests/> .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
+												 ":s :p \"abc' ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_prefix_05) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_string_02) {
 
-    StringParser parser(
-            "@prefix x <http://www.w3.org/2013/TurtleTests/> .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
+												 ":s :p 'abc\" ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_string_01) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_string_03) {
 
-    StringParser parser("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-                          ":s :p \"abc' .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
+												 ":s :p '''abc' ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_string_02) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_string_04) {
 
-    StringParser parser("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-                          ":s :p 'abc\" .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
+												 ":s :p \"\"\"abc''' ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_string_03) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_string_05) {
 
-    StringParser parser("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-                          ":s :p '''abc' .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
+						  ":s :p \"\"\"abc\n"
+						  "def"),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_string_04) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_string_06) {
 
-    StringParser parser("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-                          ":s :p \"\"\"abc''' .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
+						  ":s :p \"\"\"abc\"\"\"\"@en ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_string_05) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_string_07) {
 
-    StringParser parser(
-            "@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-            ":s :p \"\"\"abc\n"
-            "def");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
+						  ":s :p '''abc''''@en ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_string_06) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_struct_01) {
 
-    StringParser parser(
-            "@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-            ":s :p \"\"\"abc\"\"\"\"@en .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "{ <http://www.w3.org/2013/TurtleTests/s> <http://www.w3.org/2013/TurtleTests/p> <http://www.w3.org/2013/TurtleTests/o> }"),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_string_07) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_struct_02) {
 
-    StringParser parser(
-            "@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-            ":s :p '''abc''''@en .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "<http://www.w3.org/2013/TurtleTests/s> = <http://www.w3.org/2013/TurtleTests/o> ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_struct_01) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_struct_03) {
 
-    StringParser parser(
-            "{ <http://www.w3.org/2013/TurtleTests/s> <http://www.w3.org/2013/TurtleTests/p> <http://www.w3.org/2013/TurtleTests/o> }");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "<http://www.w3.org/2013/TurtleTests/s> <http://www.w3.org/2013/TurtleTests/p> <http://www.w3.org/2013/TurtleTests/o> <http://www.w3.org/2013/TurtleTests/g> ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_struct_02) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_struct_04) {
 
-    StringParser parser(
-            "<http://www.w3.org/2013/TurtleTests/s> = <http://www.w3.org/2013/TurtleTests/o> .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "\"hello\" <http://www.w3.org/2013/TurtleTests/p> <http://www.w3.org/2013/TurtleTests/o> ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_struct_03) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_struct_05) {
 
-    StringParser parser(
-            "<http://www.w3.org/2013/TurtleTests/s> <http://www.w3.org/2013/TurtleTests/p> <http://www.w3.org/2013/TurtleTests/o> <http://www.w3.org/2013/TurtleTests/g> .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "<http://www.w3.org/2013/TurtleTests/s> \"hello\" <http://www.w3.org/2013/TurtleTests/o> ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_struct_04) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_struct_06) {
 
-    StringParser parser(
-            "\"hello\" <http://www.w3.org/2013/TurtleTests/p> <http://www.w3.org/2013/TurtleTests/o> .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "<http://www.w3.org/2013/TurtleTests/s> [] <http://www.w3.org/2013/TurtleTests/o> ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_struct_05) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_struct_07) {
 
-    StringParser parser(
-            "<http://www.w3.org/2013/TurtleTests/s> \"hello\" <http://www.w3.org/2013/TurtleTests/o> .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "<http://www.w3.org/2013/TurtleTests/s> _:p <http://www.w3.org/2013/TurtleTests/o> ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_struct_06) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_struct_08) {
 
-    StringParser parser(
-            "<http://www.w3.org/2013/TurtleTests/s> [] <http://www.w3.org/2013/TurtleTests/o> .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "<http://www.w3.org/2013/TurtleTests/s> <http://www.w3.org/2013/TurtleTests/p> <http://www.w3.org/2013/TurtleTests/o>"),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_struct_07) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_struct_09) {
 
-    StringParser parser(
-            "<http://www.w3.org/2013/TurtleTests/s> _:p <http://www.w3.org/2013/TurtleTests/o> .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "<http://www.w3.org/2013/TurtleTests/s> <http://www.w3.org/2013/TurtleTests/p> <http://www.w3.org/2013/TurtleTests/o> . ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_struct_08) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_struct_10) {
 
-    StringParser parser(
-            "<http://www.w3.org/2013/TurtleTests/s> <http://www.w3.org/2013/TurtleTests/p> <http://www.w3.org/2013/TurtleTests/o>");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "<http://www.w3.org/2013/TurtleTests/s> <http://www.w3.org/2013/TurtleTests/p> <http://www.w3.org/2013/TurtleTests/o> . .\n"
+						  "<http://www.w3.org/2013/TurtleTests/s1> <http://www.w3.org/2013/TurtleTests/p1> <http://www.w3.org/2013/TurtleTests/o1> ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_struct_09) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_struct_11) {
 
-    StringParser parser(
-            "<http://www.w3.org/2013/TurtleTests/s> <http://www.w3.org/2013/TurtleTests/p> <http://www.w3.org/2013/TurtleTests/o> . .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "<http://www.w3.org/2013/TurtleTests/s> <http://www.w3.org/2013/TurtleTests/p> <http://www.w3.org/2013/TurtleTests/o> ;"),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_struct_10) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_struct_12) {
 
-    StringParser parser(
-            "<http://www.w3.org/2013/TurtleTests/s> <http://www.w3.org/2013/TurtleTests/p> <http://www.w3.org/2013/TurtleTests/o> . .\n"
-            "<http://www.w3.org/2013/TurtleTests/s1> <http://www.w3.org/2013/TurtleTests/p1> <http://www.w3.org/2013/TurtleTests/o1> .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "<http://www.w3.org/2013/TurtleTests/s> <http://www.w3.org/2013/TurtleTests/p> "),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_struct_11) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_struct_13) {
 
-    StringParser parser(
-            "<http://www.w3.org/2013/TurtleTests/s> <http://www.w3.org/2013/TurtleTests/p> <http://www.w3.org/2013/TurtleTests/o> ;");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "<http://www.w3.org/2013/TurtleTests/s> <http://www.w3.org/2013/TurtleTests/p> "),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_struct_12) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_struct_14) {
 
-    StringParser parser(
-            "<http://www.w3.org/2013/TurtleTests/s> <http://www.w3.org/2013/TurtleTests/p> ");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "\"abc\" <http://www.w3.org/2013/TurtleTests/p> <http://www.w3.org/2013/TurtleTests/p>  ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_struct_13) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_struct_15) {
 
-    StringParser parser(
-            "<http://www.w3.org/2013/TurtleTests/s> <http://www.w3.org/2013/TurtleTests/p> ");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "<http://www.w3.org/2013/TurtleTests/s> \"abc\" <http://www.w3.org/2013/TurtleTests/p>  ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_struct_14) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_struct_16) {
 
-    StringParser parser(
-            "\"abc\" <http://www.w3.org/2013/TurtleTests/p> <http://www.w3.org/2013/TurtleTests/p>  .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "<http://www.w3.org/2013/TurtleTests/s> [] <http://www.w3.org/2013/TurtleTests/p>  ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_struct_15) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_struct_17) {
 
-    StringParser parser(
-            "<http://www.w3.org/2013/TurtleTests/s> \"abc\" <http://www.w3.org/2013/TurtleTests/p>  .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "<http://www.w3.org/2013/TurtleTests/s> _:a <http://www.w3.org/2013/TurtleTests/p>  ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_struct_16) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_uri_01) {
 
-    StringParser parser(
-            "<http://www.w3.org/2013/TurtleTests/s> [] <http://www.w3.org/2013/TurtleTests/p>  .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "<http://www.w3.org/2013/TurtleTests/ space> <http://www.w3.org/2013/TurtleTests/p> <http://www.w3.org/2013/TurtleTests/o> ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_struct_17) {
+	TEST(TurtleOfficialNegativeTests, DISABLED_turtle_syntax_bad_uri_02) {
 
-    StringParser parser(
-            "<http://www.w3.org/2013/TurtleTests/s> _:a <http://www.w3.org/2013/TurtleTests/p>  .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "<http://www.w3.org/2013/TurtleTests/\\u00ZZ11> <http://www.w3.org/2013/TurtleTests/p> <http://www.w3.org/2013/TurtleTests/o> ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_uri_01) {
+	TEST(TurtleOfficialNegativeTests, DISABLED_turtle_syntax_bad_uri_03) {
 
-    StringParser parser(
-            "<http://www.w3.org/2013/TurtleTests/ space> <http://www.w3.org/2013/TurtleTests/p> <http://www.w3.org/2013/TurtleTests/o> .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "<http://www.w3.org/2013/TurtleTests/\\U00ZZ1111> <http://www.w3.org/2013/TurtleTests/p> <http://www.w3.org/2013/TurtleTests/o> ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_uri_02) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_uri_04) {
 
-    StringParser parser(
-            "<http://www.w3.org/2013/TurtleTests/\\u00ZZ11> <http://www.w3.org/2013/TurtleTests/p> <http://www.w3.org/2013/TurtleTests/o> .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "<http://www.w3.org/2013/TurtleTests/\\n> <http://www.w3.org/2013/TurtleTests/p> <http://www.w3.org/2013/TurtleTests/o> ."),
+				  false);
+	}
 
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_uri_03) {
+	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_uri_05) {
 
-    StringParser parser(
-            "<http://www.w3.org/2013/TurtleTests/\\U00ZZ1111> <http://www.w3.org/2013/TurtleTests/p> <http://www.w3.org/2013/TurtleTests/o> .");
-}
-
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_uri_04) {
-
-    StringParser parser(
-            "<http://www.w3.org/2013/TurtleTests/\\n> <http://www.w3.org/2013/TurtleTests/p> <http://www.w3.org/2013/TurtleTests/o> .");
-}
-
-TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_uri_05) {
-
-    StringParser parser(
-            "<http://www.w3.org/2013/TurtleTests/\\/> <http://www.w3.org/2013/TurtleTests/p> <http://www.w3.org/2013/TurtleTests/o> .");
-}
+		ASSERT_EQ(TurtleStringParser::isParsable(
+						  "<http://www.w3.org/2013/TurtleTests/\\/> <http://www.w3.org/2013/TurtleTests/p> <http://www.w3.org/2013/TurtleTests/o> ."),
+				  false);
+	}
+}// namespace Dice::tests::rdf_parser::turtle_official_negative_tests
