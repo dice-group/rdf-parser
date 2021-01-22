@@ -30,7 +30,7 @@ make -j
 
 ### conan 
 
-recipe : rdf-parser/0.12.0@dice-group/stable
+recipe : rdf-parser/0.13.0@dice-group/stable
 ```
 conan remote add dice "https://api.bintray.com/conan/dice-group/tentris"
 
