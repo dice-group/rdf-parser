@@ -23,6 +23,8 @@ target_link_libraries(tests
 
 set_property(TARGET tests PROPERTY CXX_STANDARD 20)
 
+gtest_discover_tests(tests)
+
 
 # copy files for testing to the binary folder
 file(COPY datasets DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
