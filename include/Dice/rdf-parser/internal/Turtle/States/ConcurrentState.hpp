@@ -34,9 +34,9 @@ namespace Dice::rdf_parser::internal::Turtle::States {
 	private:
 		//Defines  threshold for triples in the Queue(should be assigned by the constructor)
         size_t upperThreshold;
-		std::shared_ptr<std::condition_variable> cv;
+		std::condition_variable& cv;
 		std::shared_ptr<std::mutex> m;
-		std::shared_ptr<std::condition_variable> cv2;
+		std::condition_variable &cv2;
 		std::shared_ptr<std::mutex> m2;
 		std::shared_ptr<std::atomic_bool> termCountWithinThresholds;
 		std::shared_ptr<std::atomic_bool> termsCountIsNotEmpty;
@@ -48,15 +48,15 @@ namespace Dice::rdf_parser::internal::Turtle::States {
 		explicit ConcurrentState(
 				boost::lockfree::spsc_queue<Triple_t>& parsingQueue,
                 size_t upperThreshold,
-				std::shared_ptr<std::condition_variable> cv, std::shared_ptr<std::mutex> m,
-				std::shared_ptr<std::condition_variable> cv2, std::shared_ptr<std::mutex> m2,
+				std::condition_variable &cv, std::shared_ptr<std::mutex> m,
+				std::condition_variable &cv2, std::shared_ptr<std::mutex> m2,
 				std::shared_ptr<std::atomic_bool> termCountWithinThresholds,
 				std::shared_ptr<std::atomic_bool> termsCountIsNotEmpty,
 				std::shared_ptr<std::atomic_bool> parsingIsDone)
 			: parsed_elements(parsingQueue),
 			  upperThreshold(upperThreshold),
-			  cv(std::move(cv)), m(std::move(m)),
-			  cv2(std::move(cv2)), m2(std::move(m2)),
+			  cv(cv), m(std::move(m)),
+			  cv2(cv2), m2(std::move(m2)),
 			  termCountWithinThresholds(std::move(termCountWithinThresholds)),
 			  termsCountIsNotEmpty(std::move(termsCountIsNotEmpty)),
 			  parsingIsDone(std::move(parsingIsDone)) {}
@@ -66,7 +66,7 @@ namespace Dice::rdf_parser::internal::Turtle::States {
 				std::unique_lock<std::mutex> lk(*m);
 				*termCountWithinThresholds = false;
 				//set the parsing thread to sleep
-				cv->wait(lk, [&] { return termCountWithinThresholds->load(); });
+				cv.wait(lk, [&] { return termCountWithinThresholds->load(); });
 				//the parsing thread wake from sleeping
 			}
 		}
@@ -78,7 +78,7 @@ namespace Dice::rdf_parser::internal::Turtle::States {
 					*termsCountIsNotEmpty = true;
 				}
 				this->parsed_elements.push(std::move(triple));
-				cv2->notify_one();
+				cv2.notify_one();
 			} else {
 				this->parsed_elements.push(std::move(triple));
 			}
@@ -91,7 +91,7 @@ namespace Dice::rdf_parser::internal::Turtle::States {
 					std::lock_guard<std::mutex> lk(*m2);
 					*termsCountIsNotEmpty = true;
 				}
-				cv2->notify_one();
+				cv2.notify_one();
 			}
 			*parsingIsDone = true;
 		}

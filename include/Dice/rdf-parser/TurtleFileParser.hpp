@@ -41,9 +41,9 @@ namespace Dice::rdf_parser::Turtle::parsers {
 		size_t lowerThreshold;
 
 		std::ifstream stream;
-		std::shared_ptr<std::condition_variable> cv;
+		std::condition_variable cv;
 		std::shared_ptr<std::mutex> m;
-		std::shared_ptr<std::condition_variable> cv2;
+		std::condition_variable cv2;
 		std::shared_ptr<std::mutex> m2;
 		std::shared_ptr<std::atomic_bool> termCountWithinThresholds;
 		std::shared_ptr<std::atomic_bool> termsCountIsNotEmpty;
@@ -90,9 +90,9 @@ namespace Dice::rdf_parser::Turtle::parsers {
 			: stream{filename},
 			  upperThreshold(queue_capacity),
 			  lowerThreshold(queue_capacity_lower_threshold),
-			  cv{std::make_shared<std::condition_variable>()},
+			  cv{},
 			  m{std::make_shared<std::mutex>()},
-			  cv2{std::make_shared<std::condition_variable>()},
+			  cv2{},
 			  m2{std::make_shared<std::mutex>()},
 			  termCountWithinThresholds{std::make_shared<std::atomic_bool>(false)},
 			  termsCountIsNotEmpty{std::make_shared<std::atomic_bool>(false)},
@@ -113,11 +113,11 @@ namespace Dice::rdf_parser::Turtle::parsers {
 					std::lock_guard<std::mutex> lk(*m);
 					*termCountWithinThresholds = true;
 				}
-				cv->notify_one();
+				cv.notify_one();
 			}
 		}
 
-		bool hasNextTriple_impl() const {
+		bool hasNextTriple_impl() {
 			if (parsedTerms.read_available() != 0) {
 				return true;
 			} else {
@@ -128,7 +128,7 @@ namespace Dice::rdf_parser::Turtle::parsers {
 				} else {
 					std::unique_lock<std::mutex> lk(*m2);
 					*termsCountIsNotEmpty = false;
-					cv2->wait(lk, [&] { return termsCountIsNotEmpty->load(); });
+					cv2.wait(lk, [&] { return termsCountIsNotEmpty->load(); });
 
 					if (parsedTerms.read_available() != 0)
 						return true;
