@@ -30,6 +30,14 @@ namespace Dice::tests::rdf_parser::term_tests {
 		ASSERT_EQ(term.type(), Term::NodeType::URIRef_);
 	}
 
+	TEST(TermTests, TripleEqual) {
+		Triple triple1{parse_term("<http://example.com/x>"), parse_term("<http://example.com/x>"), parse_term("<http://example.com/x>")};
+		Triple triple2{parse_term("<http://example.com/x>"), parse_term("<http://example.com/x>"), parse_term("<http://example.com/x>")};
+		Triple triple3{parse_term("<http://example.com/not>"), parse_term("<http://example.com/x>"), parse_term("<http://example.com/x>")};
+		ASSERT_EQ(triple1, triple2);
+		ASSERT_NE(triple1, triple3);
+	}
+
 	TEST(TermTests, parseTriple) {
 		Triple triple{parse_term("<http://example.com/x>"), parse_term("<http://example.com/x>"), parse_term("<http://example.com/x>")};
 		for (const auto &term : triple) {

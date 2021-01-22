@@ -22,9 +22,9 @@ namespace Dice::hash {
 }// namespace Dice::hash
 
 namespace Dice::sparql {
-	class TriplePattern : public ::Dice::rdf::internal::AbstractTriple<VarOrTerm> {
+	class TriplePattern : public ::Dice::rdf::internal::AbstractTriple<VarOrTerm, TriplePattern> {
 
-		using super_t = ::Dice::rdf::internal::AbstractTriple<VarOrTerm>;
+		using super_t = ::Dice::rdf::internal::AbstractTriple<VarOrTerm, TriplePattern>;
 
 	public:
 		TriplePattern() = default;
@@ -36,11 +36,6 @@ namespace Dice::sparql {
 			return ::Dice::hash::dice_hash(this->entries_);
 		}
 
-        friend bool operator==(const TriplePattern &triple1, const TriplePattern &triple2) {
-            return (triple1.subject() == triple2.subject() &&
-                    triple1.predicate() == triple2.predicate() &&
-                    triple1.object() == triple2.object());
-        }
 	};
 }// namespace Dice::sparql
 
