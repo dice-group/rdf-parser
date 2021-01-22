@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include <sparql-parser/internal/TriplesBlockStringParser.hpp>
+#include <Dice/sparql-parser/internal/TriplesBlockStringParser.hpp>
 
 namespace Dice::tests::rdf_parser::sparql_triple_block_parsing_tests {
 

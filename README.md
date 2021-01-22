@@ -106,7 +106,7 @@ Dice::rdf_parser::Turtle::parsers::TurtleFileParser parser("datasets/dataset1.tt
 2-Here we create a full example for parsing The tripleBlock part of SparqlQuery Using the TriplesBlockStringParser.
 
 ```c++
-#include <Dice/rdf-parser/internal/Turtle/Parsers/TriplesBlockStringParser.hpp>
+#include <Dice/sparql-parser/internal/TriplesBlockStringParser.hpp>
 #include<unordered_map>
 
 int main()
