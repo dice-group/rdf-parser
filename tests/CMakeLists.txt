@@ -2,8 +2,8 @@ include(FetchContent)
 FetchContent_Declare(
         googletest
         GIT_REPOSITORY https://github.com/google/googletest.git
-        GIT_TAG        release-1.8.1
-        GIT_SHALLOW    TRUE
+        GIT_TAG release-1.8.1
+        GIT_SHALLOW TRUE
 )
 set(BUILD_GMOCK OFF CACHE BOOL "" FORCE)
 set(INSTALL_GTEST OFF CACHE BOOL "" FORCE)
@@ -31,12 +31,12 @@ file(COPY datasets DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 #download some files for the file parsers
 
-function(download_file url filename  )
-    if(NOT EXISTS ${filename})
+function(download_file url filename)
+    if (NOT EXISTS ${filename})
         file(DOWNLOAD ${url} ${filename}
                 TIMEOUT 60  # seconds
                 )
-    endif()
+    endif ()
 endfunction(download_file)
 
 download_file(https://hobbitdata.informatik.uni-leipzig.de/ISWC2020_Tentris/swdf.zip

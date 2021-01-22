@@ -14,20 +14,20 @@ set(rdf-parser_INSTALL_CMAKE_DIR "share/rdf-parser/cmake" CACHE STRING "The inst
 
 # define a header-only library
 add_library(rdf-parser INTERFACE)
-add_library(Dice::rdf-parser ALIAS rdf-parser )
+add_library(Dice::rdf-parser ALIAS rdf-parser)
 
 target_include_directories(rdf-parser INTERFACE
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:${rdf-parser_INSTALL_CMAKE_DIR}>
         )
-target_link_libraries(rdf-parser INTERFACE  ${CONAN_LIBS})
+target_link_libraries(rdf-parser INTERFACE ${CONAN_LIBS})
 
 # testing
 option(RDF_PARSER_BUILD_TESTS "Build rdf-parser tests." OFF)
-if(RDF_PARSER_BUILD_TESTS)
+if (RDF_PARSER_BUILD_TESTS)
     enable_testing()
     add_subdirectory(tests)
-endif()
+endif ()
 
 # require C++20
 target_compile_features(rdf-parser INTERFACE cxx_std_20)
