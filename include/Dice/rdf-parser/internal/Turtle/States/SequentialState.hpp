@@ -29,7 +29,7 @@ namespace Dice::rdf_parser::internal::Turtle::States {
 		using Triple_t = std::conditional_t<sparqlQuery, TriplePattern, Triple>;
 
 	private:
-		std::queue<Triple_t>& parsed_elements;
+		std::queue<Triple_t> &parsed_elements;
 
 	public:
 		explicit SequentialState(std::queue<Triple_t> &parsingQueue) : parsed_elements(parsingQueue){};
@@ -44,6 +44,6 @@ namespace Dice::rdf_parser::internal::Turtle::States {
 		void setParsingIsDone_impl() {
 		}
 	};
-}// namespace Dice::rdf_parser::Turtle::States
+}// namespace Dice::rdf_parser::internal::Turtle::States
 
 #endif//RDF_PARSER_SEQUENTIALSTATE_HPP

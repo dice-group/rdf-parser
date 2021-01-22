@@ -35,14 +35,14 @@ namespace Dice::rdf_parser::internal::Turtle::Parsers {
          * process to the next parsed triple.
          */
 		void nextTriple() {
-             static_cast<Derived *>(this)->nextTriple_impl();
+			static_cast<Derived *>(this)->nextTriple_impl();
 		}
 
 		/**
          * check whether there is a further triple
          */
 		[[nodiscard]] virtual bool hasNextTriple() {
-            return static_cast<Derived *>(this)->hasNextTriple_impl();
+			return static_cast<Derived *>(this)->hasNextTriple_impl();
 		}
 
 		/**

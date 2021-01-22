@@ -22,5 +22,5 @@ namespace Dice::rdf_parser::internal::util {
 
 		ScopedThread &operator=(ScopedThread const &) = delete;
 	};
-}// namespace Dice::rdf_parser::util
+}// namespace Dice::rdf_parser::internal::util
 #endif//PEGTL_RDF_PARSER_SCOPED_THREAD_HPP

@@ -29,7 +29,7 @@ namespace Dice::rdf_parser::internal::Turtle::Parsers {
 		/**
          * a queue for storing parsed triples .
          */
-		 std::queue<Triple_t> parsedTerms;
+		std::queue<Triple_t> parsedTerms;
 
 	protected:
 		/**
@@ -54,27 +54,27 @@ namespace Dice::rdf_parser::internal::Turtle::Parsers {
         * @param text the string to parse
         * @param prefix_map defines prefixes to be added before parsing
         */
-        BaseStringParser(std::string text, const robin_hood::unordered_map<std::string, std::string> &prefix_map) {
-            try {
-                tao::pegtl::string_input input(text, "the text");
-                States::SequentialState<sparqlQuery> state(parsedTerms);
-                for (auto pair : prefix_map)
-                    state.addPrefix(pair.first, pair.second);
-                tao::pegtl::parse<Grammar::grammar<sparqlQuery>, Actions::action>(input, state);
+		BaseStringParser(std::string text, const robin_hood::unordered_map<std::string, std::string> &prefix_map) {
+			try {
+				tao::pegtl::string_input input(text, "the text");
+				States::SequentialState<sparqlQuery> state(parsedTerms);
+				for (auto pair : prefix_map)
+					state.addPrefix(pair.first, pair.second);
+				tao::pegtl::parse<Grammar::grammar<sparqlQuery>, Actions::action>(input, state);
 
-            } catch (std::exception &e) {
-                throw exception::RDFParsingException();
-            }
-        }
+			} catch (std::exception &e) {
+				throw exception::RDFParsingException();
+			}
+		}
 
 	public:
-		[[nodiscard]] bool hasNextTriple_impl() const  {
+		[[nodiscard]] bool hasNextTriple_impl() const {
 			return not parsedTerms.empty();
 		}
 
 		~BaseStringParser() override = default;
 
-		void nextTriple_impl()  {
+		void nextTriple_impl() {
 			this->current_triple = parsedTerms.front();
 			parsedTerms.pop();
 		}
@@ -84,7 +84,7 @@ namespace Dice::rdf_parser::internal::Turtle::Parsers {
 			return Iterator<BaseStringParser, sparqlQuery>(this);
 		}
 	};
-}// namespace Dice::rdf_parser::Turtle::parsers
+}// namespace Dice::rdf_parser::internal::Turtle::Parsers
 
 
 #endif//RDF_PARSER_BASESTRINGPARSER_HPP

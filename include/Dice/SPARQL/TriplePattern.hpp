@@ -35,7 +35,6 @@ namespace Dice::sparql {
 		[[nodiscard]] size_t hash() const noexcept {
 			return ::Dice::hash::dice_hash(this->entries_);
 		}
-
 	};
 }// namespace Dice::sparql
 

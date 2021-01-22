@@ -2,14 +2,12 @@
 #define RDF_PARSER_BASICSTATE_HPP
 
 
-
 #include <memory>
 #include <optional>
 #include <string>
 
 #include <robin_hood.h>
 
-#include "Dice/RDF/Triple.hpp"
 #include "Dice/RDF/Term.hpp"
 #include "Dice/RDF/Triple.hpp"
 #include "Dice/SPARQL/TriplePattern.hpp"
@@ -29,7 +27,7 @@ namespace Dice::rdf_parser::internal::Turtle::States {
 	template<bool sparqlQuery = false>
 	class BasicState {
 	public:
-		BasicState() : element_{std::make_shared<Element_t>()}{
+		BasicState() : element_{std::make_shared<Element_t>()} {
 		}
 
 		using Term = Dice::rdf::Term;
@@ -65,7 +63,7 @@ namespace Dice::rdf_parser::internal::Turtle::States {
 
 
 		inline void addPrefix(std::string prefix, std::string value) {
-			prefix_map.emplace(std::pair<std::string,std::string>(std::move(prefix), std::move(value)));
+			prefix_map.emplace(std::pair<std::string, std::string>(std::move(prefix), std::move(value)));
 		}
 
 		inline void setLan_tag(std::string lan_tag) { this->lang_tag_ = std::move(lan_tag); }
@@ -140,7 +138,7 @@ namespace Dice::rdf_parser::internal::Turtle::States {
 			}
 		}
 	};
-}// namespace Dice::rdf_parser::Turtle::States
+}// namespace Dice::rdf_parser::internal::Turtle::States
 
 
 #endif//RDF_PARSER_BASICSTATE_HPP

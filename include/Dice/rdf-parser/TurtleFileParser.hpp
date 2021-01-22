@@ -16,11 +16,11 @@
 #include <utility>
 
 #include "Dice/rdf-parser/exception/RDFParsingExecption.hpp"
-#include "Dice/rdf-parser/internal/exception//InternalError.hpp"
 #include "Dice/rdf-parser/internal/Turtle/Actions/Actions.hpp"
 #include "Dice/rdf-parser/internal/Turtle/Configurations.hpp"
 #include "Dice/rdf-parser/internal/Turtle/Parsers/AbstractParser.hpp"
 #include "Dice/rdf-parser/internal/Turtle/States/ConcurrentState.hpp"
+#include "Dice/rdf-parser/internal/exception//InternalError.hpp"
 #include "Dice/rdf-parser/internal/util/ScopedThread.hpp"
 
 namespace Dice::rdf_parser::Turtle::parsers {
@@ -85,8 +85,7 @@ namespace Dice::rdf_parser::Turtle::parsers {
 		 */
 		explicit TurtleFileParser(const std::string &filename,
 								  const size_t queue_capacity = internal::Turtle::Configurations::RdfConcurrentStreamParser_QueueCapacity,
-								  const size_t queue_capacity_lower_threshold = internal::Turtle::Configurations::RdfConcurrentStreamParser_QueueCapacity / 10
-								  )
+								  const size_t queue_capacity_lower_threshold = internal::Turtle::Configurations::RdfConcurrentStreamParser_QueueCapacity / 10)
 			: stream{filename},
 			  upperThreshold(queue_capacity),
 			  lowerThreshold(queue_capacity_lower_threshold),
@@ -100,7 +99,7 @@ namespace Dice::rdf_parser::Turtle::parsers {
 			  parsingThread{std::make_unique<internal::util::ScopedThread>(
 					  std::thread(&TurtleFileParser::startParsing, this, filename,
 								  internal::Turtle::Configurations::RdfConcurrentStreamParser_BufferSize))} {
-			if (queue_capacity < queue_capacity_lower_threshold){
+			if (queue_capacity < queue_capacity_lower_threshold) {
 				throw std::logic_error{"queue_capacity_lower_threshold must not be larger than queue_capacity."};
 			}
 		}
