@@ -38,9 +38,9 @@ namespace Dice::rdf_parser::internal::Turtle::States {
 		std::mutex & m;
 		std::condition_variable &cv2;
 		std::mutex & m2;
-		std::shared_ptr<std::atomic_bool> termCountWithinThresholds;
-		std::shared_ptr<std::atomic_bool> termsCountIsNotEmpty;
-		std::shared_ptr<std::atomic_bool> parsingIsDone;
+		std::atomic_bool &termCountWithinThresholds;
+		std::atomic_bool &termsCountIsNotEmpty;
+		std::atomic_bool &parsingIsDone;
 
 		boost::lockfree::spsc_queue<Triple_t>& parsed_elements;
 
@@ -50,32 +50,32 @@ namespace Dice::rdf_parser::internal::Turtle::States {
                 size_t upperThreshold,
 				std::condition_variable &cv, std::mutex &m,
 				std::condition_variable &cv2, std::mutex &m2,
-				std::shared_ptr<std::atomic_bool> termCountWithinThresholds,
-				std::shared_ptr<std::atomic_bool> termsCountIsNotEmpty,
-				std::shared_ptr<std::atomic_bool> parsingIsDone)
+				std::atomic_bool &termCountWithinThresholds,
+				std::atomic_bool &termsCountIsNotEmpty,
+				std::atomic_bool &parsingIsDone)
 			: parsed_elements(parsingQueue),
 			  upperThreshold(upperThreshold),
 			  cv(cv), m(m),
 			  cv2(cv2), m2(m2),
-			  termCountWithinThresholds(std::move(termCountWithinThresholds)),
-			  termsCountIsNotEmpty(std::move(termsCountIsNotEmpty)),
-			  parsingIsDone(std::move(parsingIsDone)) {}
+			  termCountWithinThresholds(termCountWithinThresholds),
+			  termsCountIsNotEmpty(termsCountIsNotEmpty),
+			  parsingIsDone(parsingIsDone) {}
 
 		inline void syncWithMainThread_impl() {
 			if (this->parsed_elements.read_available() > upperThreshold) {
 				std::unique_lock<std::mutex> lk(m);
-				*termCountWithinThresholds = false;
+				termCountWithinThresholds = false;
 				//set the parsing thread to sleep
-				cv.wait(lk, [&] { return termCountWithinThresholds->load(); });
+				cv.wait(lk, [&] { return termCountWithinThresholds.load(); });
 				//the parsing thread wake from sleeping
 			}
 		}
 
 		inline void insertTriple_impl(Triple_t triple) {
-			if (not *termsCountIsNotEmpty) {
+			if (not termsCountIsNotEmpty) {
 				{
 					std::lock_guard<std::mutex> lk(m2);
-					*termsCountIsNotEmpty = true;
+					termsCountIsNotEmpty = true;
 				}
 				this->parsed_elements.push(std::move(triple));
 				cv2.notify_one();
@@ -86,14 +86,14 @@ namespace Dice::rdf_parser::internal::Turtle::States {
 
 
 		void setParsingIsDone_impl() {
-			if (not *termsCountIsNotEmpty) {
+			if (not termsCountIsNotEmpty) {
 				{
 					std::lock_guard<std::mutex> lk(m2);
-					*termsCountIsNotEmpty = true;
+					termsCountIsNotEmpty = true;
 				}
 				cv2.notify_one();
 			}
-			*parsingIsDone = true;
+			parsingIsDone = true;
 		}
 	};
 

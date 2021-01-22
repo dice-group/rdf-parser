@@ -45,9 +45,9 @@ namespace Dice::rdf_parser::Turtle::parsers {
 		std::mutex m;
 		std::condition_variable cv2;
 		std::mutex m2;
-		std::shared_ptr<std::atomic_bool> termCountWithinThresholds;
-		std::shared_ptr<std::atomic_bool> termsCountIsNotEmpty;
-		std::shared_ptr<std::atomic_bool> parsingIsDone;
+		std::atomic_bool termCountWithinThresholds;
+		std::atomic_bool termsCountIsNotEmpty;
+		std::atomic_bool parsingIsDone;
 		std::unique_ptr<internal::util::ScopedThread> parsingThread;
 
 	public:
@@ -94,9 +94,9 @@ namespace Dice::rdf_parser::Turtle::parsers {
 			  m{},
 			  cv2{},
 			  m2{},
-			  termCountWithinThresholds{std::make_shared<std::atomic_bool>(false)},
-			  termsCountIsNotEmpty{std::make_shared<std::atomic_bool>(false)},
-			  parsingIsDone{std::make_shared<std::atomic_bool>(false)},
+			  termCountWithinThresholds{false},
+			  termsCountIsNotEmpty{false},
+			  parsingIsDone{false},
 			  parsingThread{std::make_unique<internal::util::ScopedThread>(
 					  std::thread(&TurtleFileParser::startParsing, this, filename,
 								  internal::Turtle::Configurations::RdfConcurrentStreamParser_BufferSize))} {
@@ -111,7 +111,7 @@ namespace Dice::rdf_parser::Turtle::parsers {
 			if (parsedTerms.read_available() < lowerThreshold) {
 				{
 					std::lock_guard<std::mutex> lk(m);
-					*termCountWithinThresholds = true;
+					termCountWithinThresholds = true;
 				}
 				cv.notify_one();
 			}
@@ -123,17 +123,17 @@ namespace Dice::rdf_parser::Turtle::parsers {
 			} else {
 
 				//check if the parsing is done
-				if (*parsingIsDone) {
+				if (parsingIsDone) {
 					return false;
 				} else {
 					std::unique_lock<std::mutex> lk(m2);
-					*termsCountIsNotEmpty = false;
-					cv2.wait(lk, [&] { return termsCountIsNotEmpty->load(); });
+					termsCountIsNotEmpty = false;
+					cv2.wait(lk, [&] { return termsCountIsNotEmpty.load(); });
 
 					if (parsedTerms.read_available() != 0)
 						return true;
 
-					else if (*parsingIsDone) {
+					else if (parsingIsDone) {
 						return false;
 					} else {
 						throw internal::exception::InternalError();
