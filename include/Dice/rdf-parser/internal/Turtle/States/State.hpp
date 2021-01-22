@@ -35,7 +35,7 @@ namespace Dice::rdf_parser::internal::Turtle::States {
 		using Triple_t = std::conditional_t<sparqlQuery, TriplePattern, Triple>;
 
 	protected:
-		State() {}
+		State() = default;
 
 		/**
              * Blank Node Property List

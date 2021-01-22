@@ -29,8 +29,7 @@ namespace Dice::rdf_parser::internal::Turtle::States {
 	template<bool sparqlQuery = false>
 	class BasicState {
 	public:
-		BasicState() {
-			element_ = std::make_shared<Element_t>();
+		BasicState() : element_{std::make_shared<Element_t>()}{
 		}
 
 		using Term = Dice::rdf::Term;
@@ -44,7 +43,7 @@ namespace Dice::rdf_parser::internal::Turtle::States {
 		//variables to deal with type and lan tags in literals
 		bool type_tag_found = false;
 		bool lang_tag_found = false;
-		bool iri_is_IRIREF;
+		bool iri_is_IRIREF = false;
 		std::string lang_tag_;
 		std::string type_tag_;
 		std::string literal_string_;

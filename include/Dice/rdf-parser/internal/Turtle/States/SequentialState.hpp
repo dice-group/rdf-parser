@@ -32,7 +32,7 @@ namespace Dice::rdf_parser::internal::Turtle::States {
 		std::queue<Triple_t>& parsed_elements;
 
 	public:
-		SequentialState(std::queue<Triple_t> &parsingQueue) : parsed_elements(parsingQueue){};
+		explicit SequentialState(std::queue<Triple_t> &parsingQueue) : parsed_elements(parsingQueue){};
 
 		inline void syncWithMainThread_impl() {
 		}
