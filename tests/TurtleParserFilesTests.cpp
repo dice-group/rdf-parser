@@ -1,19 +1,18 @@
 #include <gtest/gtest.h>
-#include <Dice/rdf_parser/TurtleParser.hpp>
 
-namespace {
-    using namespace rdf_parser::Turtle;
-    using namespace rdf_parser::store::rdf;
-}
+#include <Dice/rdf-parser/TurtleFileParser.hpp>
 
+namespace Dice::tests::rdf_parser::turtle_parser_concurrent_tests {
+	using namespace Dice::rdf_parser::Turtle::parsers;
 
-TEST(TurtleParserFilesTests,ntripleFile1) {
-    TurtleParser<> parser("../datasets/g.nt");
-    ASSERT_EQ(parser.isContentParsable(), true);
-}
-
-TEST(TurtleParserFilesTests,turtleFile1) {
-    TurtleParser<> parser("datasets/dbpedia_2GB_subset.ttl");
-    ASSERT_EQ(parser.isContentParsable(), true);
-
-}
+	TEST(TurtleParserFilesTests, parseSWDF) {
+		std::filesystem::current_path(std::filesystem::canonical("/proc/self/exe").parent_path());
+		TurtleFileParser parser{"../tests/datasets/swdf.nt"};
+		long i = 0;
+		for (const auto &item : parser) {
+			if (item.hash())
+				i++;
+		}
+		ASSERT_TRUE(i > 0);
+	}
+}// namespace Dice::tests::rdf_parser::turtle_parser_concurrent_tests
