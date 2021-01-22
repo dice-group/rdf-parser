@@ -1,7 +1,7 @@
 #ifndef RDF_PARSER_INTERNALERROR_HPP
 #define RDF_PARSER_INTERNALERROR_HPP
 
-namespace Dice::rdf_parser::internal::Exceptions
+namespace Dice::rdf_parser::internal::exception
 {
     class InternalError : public std::exception {
     public:
