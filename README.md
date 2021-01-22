@@ -5,7 +5,7 @@ This is the RDF parser used by [Tentris](https://github.com/dice-group/tentris).
 
 It has buffered streaming support so that you can load files that are too big to fit in main memory. 
 
-Currently it is not fully supporting comments.it fails to parse comments in some scenarios .
+Currently it is not fully supporting comments. It fails to parse comments in some scenarios.
 
 ## how to build
 ### prerequisites
@@ -30,7 +30,7 @@ make -j
 
 ### conan 
 
-recipe : rdf-parser/0.11@dice-group/stable
+recipe : rdf-parser/0.12.0@dice-group/stable
 ```
 conan remote add dice "https://api.bintray.com/conan/dice-group/tentris"
 
@@ -65,11 +65,9 @@ auto iterator=parser.begin();
 We can iterate over the triples and used the triples:
 
 ```c++
-while(it)
-{
- Triple triple= *it;
- //do something
- it++;
+for(const Triple &triple : parser) {
+    // do something with triple
+    std::cout << triple.subject().getIdentifier() << " " << triple.predicate().getIdentifier() << " " << triple.object().getIdentifier() << std::endl;
 }
 ```
 
@@ -114,12 +112,12 @@ Dice::rdf_parser::Turtle::parsers::TurtleFileParser parser("datasets/dataset1.tt
 int main()
 {
 //create a map of prefixes
-std::unordered_map<std::string,std::string> prefixes;
-prefixes.emplace(std::pair<std::string,std::string>("wde","http://www.wikidata.org/entity/"));
-prefixes.emplace(std::pair<std::string,std::string>("wdt","http://www.wikidata.org/prop/direct/"));
+robin_hood::unordered_map<std::string,std::string> prefixes;
+prefixes.emplace("wde","http://www.wikidata.org/entity/");
+prefixes.emplace("wdt","http://www.wikidata.org/prop/direct/");
 
 // create the parser with 2 parameters: the query and the prefixes map
-Dice::rdf_parser::internal::Turtle::Parsers::TriplesBlockStringParser parser("?var1 <http://www.wikidata.org/prop/P463> _:b0 . _:b0 <http://www.wikidata.org/prop/statement/P463> wde:Q202479 ; <http://www.wikidata.org/prop/qualifier/P580> ?var2 .",prefixes) ;
+Dice::sparql_parser::internal::TriplesBlockStringParser parser("?var1 <http://www.wikidata.org/prop/P463> _:b0 . _:b0 <http://www.wikidata.org/prop/statement/P463> wde:Q202479 ; <http://www.wikidata.org/prop/qualifier/P580> ?var2 .", prefixes) ;
 
 //get an iterator 
 auto it= parser.begin();
