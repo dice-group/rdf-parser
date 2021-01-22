@@ -48,7 +48,7 @@ namespace Dice::rdf_parser::Turtle::parsers {
 		std::shared_ptr<std::atomic_bool> termCountWithinThresholds;
 		std::shared_ptr<std::atomic_bool> termsCountIsNotEmpty;
 		std::shared_ptr<std::atomic_bool> parsingIsDone;
-		std::unique_ptr<util::ScopedThread> parsingThread;
+		std::unique_ptr<internal::util::ScopedThread> parsingThread;
 
 	public:
 		using Iterator = internal::Turtle::Parsers::Iterator<TurtleFileParser, false>;
@@ -77,11 +77,19 @@ namespace Dice::rdf_parser::Turtle::parsers {
 			stream.close();
 		}
 
-
-		explicit TurtleFileParser(const std::string &filename)
+		/**
+		 *
+		 * @param filename name of the file to be parsed
+		 * @param queue_capacity maximum number of entries which are cached. When the capacity is reached processing stops.
+		 * @param queue_capacity_lower_threshold after queue_capacity was reach, when queue reached this length, processing starts again.
+		 */
+		explicit TurtleFileParser(const std::string &filename,
+								  const size_t queue_capacity = internal::Turtle::Configurations::RdfConcurrentStreamParser_QueueCapacity,
+								  const size_t queue_capacity_lower_threshold = internal::Turtle::Configurations::RdfConcurrentStreamParser_QueueCapacity / 10
+								  )
 			: stream{filename},
-			  upperThreshold(internal::Turtle::Configurations::RdfConcurrentStreamParser_QueueCapacity),
-			  lowerThreshold(internal::Turtle::Configurations::RdfConcurrentStreamParser_QueueCapacity / 10),
+			  upperThreshold(queue_capacity),
+			  lowerThreshold(queue_capacity_lower_threshold),
 			  cv{std::make_shared<std::condition_variable>()},
 			  m{std::make_shared<std::mutex>()},
 			  cv2{std::make_shared<std::condition_variable>()},
@@ -89,9 +97,13 @@ namespace Dice::rdf_parser::Turtle::parsers {
 			  termCountWithinThresholds{std::make_shared<std::atomic_bool>(false)},
 			  termsCountIsNotEmpty{std::make_shared<std::atomic_bool>(false)},
 			  parsingIsDone{std::make_shared<std::atomic_bool>(false)},
-			  parsingThread{std::make_unique<util::ScopedThread>(
+			  parsingThread{std::make_unique<internal::util::ScopedThread>(
 					  std::thread(&TurtleFileParser::startParsing, this, filename,
-								  internal::Turtle::Configurations::RdfConcurrentStreamParser_BufferSize))} {}
+								  internal::Turtle::Configurations::RdfConcurrentStreamParser_BufferSize))} {
+			if (queue_capacity < queue_capacity_lower_threshold){
+				throw std::logic_error{"queue_capacity_lower_threshold must not be larger than queue_capacity."};
+			}
+		}
 
 
 		void nextTriple_impl() {

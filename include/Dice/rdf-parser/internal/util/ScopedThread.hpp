@@ -1,11 +1,10 @@
-
 #ifndef PEGTL_RDF_PARSER_SCOPED_THREAD_HPP
 #define PEGTL_RDF_PARSER_SCOPED_THREAD_HPP
 
 #include <thread>
 #include <utility>
 
-namespace Dice::rdf_parser::util {
+namespace Dice::rdf_parser::internal::util {
 
 	class ScopedThread {
 		std::thread t;

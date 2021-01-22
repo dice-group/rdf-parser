@@ -54,19 +54,6 @@ namespace Dice::rdf_parser::internal::Turtle::Parsers {
         * @param text the string to parse
         * @param prefix_map defines prefixes to be added before parsing
         */
-		BaseStringParser(std::string text, const std::unordered_map<std::string, std::string> &prefix_map) {
-			try {
-				tao::pegtl::string_input input(text, "the text");
-				States::SequentialState<sparqlQuery> state(parsedTerms);
-				for (auto pair : prefix_map)
-					state.addPrefix(pair.first, pair.second);
-				tao::pegtl::parse<Grammar::grammar<sparqlQuery>, Actions::action>(input, state);
-
-			} catch (std::exception &e) {
-                throw exception::RDFParsingException();
-			}
-		}
-
         BaseStringParser(std::string text, const robin_hood::unordered_map<std::string, std::string> &prefix_map) {
             try {
                 tao::pegtl::string_input input(text, "the text");

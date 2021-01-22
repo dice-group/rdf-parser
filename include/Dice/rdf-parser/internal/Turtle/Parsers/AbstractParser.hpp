@@ -25,7 +25,7 @@ namespace Dice::rdf_parser::internal::Turtle::Parsers {
 	protected:
 		using element_type = Triple_t;
 
-		explicit AbstractParser(){};
+		explicit AbstractParser() = default;
 
 		element_type current_triple;
 
