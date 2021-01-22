@@ -49,7 +49,7 @@ namespace Dice::tests::rdf_parser::term_tests {
 
 	TEST(TermTests, parseIRI) {
 		TurtleStringParser parser("@prefix pref: <http://example.com/> . "
-							   "<http://example.com/x> a pref:x.");
+								  "<http://example.com/x> a pref:x.");
 		auto iterator = parser.begin();
 		ASSERT_TRUE(bool(iterator));
 		const Triple &triple = *iterator;
@@ -61,9 +61,9 @@ namespace Dice::tests::rdf_parser::term_tests {
 
 	TEST(TermTests, parseStringTerm) {
 		TurtleStringParser parser("@prefix xsd: <http://www.w3.org/2001/XMLSchema#> . "
-							   "<http://example.com/x> a \"text\". "
-							   "<http://example.com/x> a \"text\"^^<http://www.w3.org/2001/XMLSchema#string>. "
-							   "<http://example.com/x> a \"text\"^^xsd:string. ");
+								  "<http://example.com/x> a \"text\". "
+								  "<http://example.com/x> a \"text\"^^<http://www.w3.org/2001/XMLSchema#string>. "
+								  "<http://example.com/x> a \"text\"^^xsd:string. ");
 		auto iterator = parser.begin();
 		ASSERT_TRUE(bool(iterator));
 		Triple plain = *iterator;
@@ -81,10 +81,10 @@ namespace Dice::tests::rdf_parser::term_tests {
 
 	TEST(TermTests, parseNumbers) {
 		TurtleStringParser parser("@prefix : <http://example.org/elements> .                                                                              \n"
-							   "<http://en.wikipedia.org/wiki/Helium>   "
-							   ":atomicNumber 2 ;"
-							   " :atomicMass 4.002602 ;"
-							   " :specificGravity 1.663E-4 . ");
+								  "<http://en.wikipedia.org/wiki/Helium>   "
+								  ":atomicNumber 2 ;"
+								  " :atomicMass 4.002602 ;"
+								  " :specificGravity 1.663E-4 . ");
 		auto iterator = parser.begin();
 		ASSERT_TRUE(bool(iterator));
 		Triple integerNumber = *iterator;

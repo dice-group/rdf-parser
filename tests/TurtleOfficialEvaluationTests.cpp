@@ -34,7 +34,7 @@ namespace Dice::tests::rdf_parser::turtle_official_evaluation_tests {
 				"<http://a.example/s> <http://a.example/p> [ <http://a.example/p2> <http://a.example/o2> ] .");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser("<http://a.example/s> <http://a.example/p> _:b1 .\n"
-									   "_:b1 <http://a.example/p2> <http://a.example/o2> .");
+										  "_:b1 <http://a.example/p2> <http://a.example/o2> .");
 		//ASSERT_TRUE(turtle_state.parsed_terms==nTriples_state.parsed_terms);
 	}
 
@@ -43,7 +43,7 @@ namespace Dice::tests::rdf_parser::turtle_official_evaluation_tests {
 				"[ <http://a.example/p> <http://a.example/o> ] <http://a.example/p2> <http://a.example/o2> .");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser("_:b1 <http://a.example/p> <http://a.example/o> .\n"
-									   "_:b1 <http://a.example/p2> <http://a.example/o2> .");
+										  "_:b1 <http://a.example/p2> <http://a.example/o2> .");
 
 		//ASSERT_TRUE(turtle_state.parsed_terms==nTriples_state.parsed_terms);
 	}
@@ -52,8 +52,8 @@ namespace Dice::tests::rdf_parser::turtle_official_evaluation_tests {
 		TurtleStringParser turtleParser("[ <http://a.example/p1> (1) ] .");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser("_:b1 <http://a.example/p1> _:el1 .\n"
-									   "_:el1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> \"1\"^^<http://www.w3.org/2001/XMLSchema#integer> .\n"
-									   "_:el1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .");
+										  "_:el1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> \"1\"^^<http://www.w3.org/2001/XMLSchema#integer> .\n"
+										  "_:el1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .");
 		//ASSERT_TRUE(turtle_state.parsed_terms==nTriples_state.parsed_terms);
 	}
 
@@ -62,8 +62,8 @@ namespace Dice::tests::rdf_parser::turtle_official_evaluation_tests {
 				"[ <http://a.example/p1> <http://a.example/o1> ; <http://a.example/p2> <http://a.example/o2> ] <http://a.example/p> <http://a.example/o> .");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser("_:b1 <http://a.example/p1> <http://a.example/o1> .\n"
-									   "_:b1 <http://a.example/p2> <http://a.example/o2> .\n"
-									   "_:b1 <http://a.example/p> <http://a.example/o> .");
+										  "_:b1 <http://a.example/p2> <http://a.example/o2> .\n"
+										  "_:b1 <http://a.example/p> <http://a.example/o> .");
 		//ASSERT_TRUE(turtle_state.parsed_terms==nTriples_state.parsed_terms);
 	}
 
@@ -71,8 +71,8 @@ namespace Dice::tests::rdf_parser::turtle_official_evaluation_tests {
 		TurtleStringParser turtleParser("<http://a.example/s> <http://a.example/p> (1) .");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser("<http://a.example/s> <http://a.example/p> _:el1 .\n"
-									   "_:el1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> \"1\"^^<http://www.w3.org/2001/XMLSchema#integer> .\n"
-									   "_:el1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .");
+										  "_:el1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> \"1\"^^<http://www.w3.org/2001/XMLSchema#integer> .\n"
+										  "_:el1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .");
 		//ASSERT_TRUE(turtle_state.parsed_terms==nTriples_state.parsed_terms);
 	}
 
@@ -89,8 +89,8 @@ namespace Dice::tests::rdf_parser::turtle_official_evaluation_tests {
 	TEST(TurtleOfficialEvaluationTests, comment_following_PNAME_NS) {
 
 		TurtleStringParser turtleParser("@prefix p: <http://a.example/> .\n"
-									 "<http://a.example/s> <http://a.example/p> p:#comment\n"
-									 ".");
+										"<http://a.example/s> <http://a.example/p> p:#comment\n"
+										".");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser("<http://a.example/s> <http://a.example/p> <http://a.example/> .");
 	}
@@ -117,19 +117,19 @@ namespace Dice::tests::rdf_parser::turtle_official_evaluation_tests {
 		TurtleStringParser turtleParser("<http://a.example/s> <http://a.example/p> ((1) 2) .");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser("<http://a.example/s> <http://a.example/p> _:outerEl1 .\n"
-									   "_:outerEl1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:innerEl1 .\n"
-									   "_:innerEl1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> \"1\"^^<http://www.w3.org/2001/XMLSchema#integer> .\n"
-									   "_:innerEl1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .\n"
-									   "_:outerEl1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:outerEl2 .\n"
-									   "_:outerEl2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> \"2\"^^<http://www.w3.org/2001/XMLSchema#integer> .\n"
-									   "_:outerEl2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .");
+										  "_:outerEl1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:innerEl1 .\n"
+										  "_:innerEl1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> \"1\"^^<http://www.w3.org/2001/XMLSchema#integer> .\n"
+										  "_:innerEl1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .\n"
+										  "_:outerEl1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:outerEl2 .\n"
+										  "_:outerEl2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> \"2\"^^<http://www.w3.org/2001/XMLSchema#integer> .\n"
+										  "_:outerEl2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .");
 		//ASSERT_TRUE(turtle_state.parsed_terms==nTriples_state.parsed_terms);
 	}
 
 	TEST(TurtleOfficialEvaluationTests, HYPHEN_MINUS_in_localName) {
 
 		TurtleStringParser turtleParser("@prefix p: <http://a.example/>.\n"
-									 "p:s- <http://a.example/p> <http://a.example/o> .");
+										"p:s- <http://a.example/p> <http://a.example/o> .");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser("<http://a.example/s-> <http://a.example/p> <http://a.example/o> .");
 	}
@@ -169,8 +169,8 @@ namespace Dice::tests::rdf_parser::turtle_official_evaluation_tests {
 	TEST(TurtleOfficialEvaluationTests, langtagged_LONG_with_subtag) {
 
 		TurtleStringParser turtleParser("# Test long literal with lang tag\n"
-									 "@prefix :  <http://example.org/ex#> .\n"
-									 ":a :b \"\"\"Cheers\"\"\"@en-UK .");
+										"@prefix :  <http://example.org/ex#> .\n"
+										":a :b \"\"\"Cheers\"\"\"@en-UK .");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser("<http://example.org/ex#a> <http://example.org/ex#b> \"Cheers\"@en-UK .");
 	}
@@ -194,12 +194,12 @@ namespace Dice::tests::rdf_parser::turtle_official_evaluation_tests {
 		TurtleStringParser turtleParser("<http://a.example/s> <http://a.example/p> (1 (2)) .");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser("<http://a.example/s> <http://a.example/p> _:outerEl1 .\n"
-									   "_:outerEl1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> \"1\"^^<http://www.w3.org/2001/XMLSchema#integer> .\n"
-									   "_:outerEl1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:outerEl2 .\n"
-									   "_:outerEl2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:innerEl1 .\n"
-									   "_:innerEl1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> \"2\"^^<http://www.w3.org/2001/XMLSchema#integer> .\n"
-									   "_:innerEl1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .\n"
-									   "_:outerEl2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .");
+										  "_:outerEl1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> \"1\"^^<http://www.w3.org/2001/XMLSchema#integer> .\n"
+										  "_:outerEl1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:outerEl2 .\n"
+										  "_:outerEl2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:innerEl1 .\n"
+										  "_:innerEl1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> \"2\"^^<http://www.w3.org/2001/XMLSchema#integer> .\n"
+										  "_:innerEl1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .\n"
+										  "_:outerEl2 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .");
 	}
 
 	TEST(TurtleOfficialEvaluationTests, LITERAL1) {
@@ -280,8 +280,8 @@ namespace Dice::tests::rdf_parser::turtle_official_evaluation_tests {
 	TEST(TurtleOfficialEvaluationTests, LITERAL_LONG2_with_REVERSE_SOLIDUS) {
 
 		TurtleStringParser turtleParser("@prefix : <http://example.org/ns#> .\n"
-									 "\n"
-									 ":s :p1 \"\"\"test-\\\\\"\"\" .");
+										"\n"
+										":s :p1 \"\"\"test-\\\\\"\"\" .");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser("<http://example.org/ns#s> <http://example.org/ns#p1> \"test-\\\\\" .");
 	}
@@ -304,7 +304,7 @@ namespace Dice::tests::rdf_parser::turtle_official_evaluation_tests {
 	TEST(TurtleOfficialEvaluationTests, literal_with_CARRIAGE_RETURN) {
 
 		TurtleStringParser turtleParser("<http://a.example/s> <http://a.example/p> '''\n"
-									 "''' .");
+										"''' .");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser("<http://a.example/s> <http://a.example/p> \"\\r\" .");
 	}
@@ -326,7 +326,7 @@ namespace Dice::tests::rdf_parser::turtle_official_evaluation_tests {
 	TEST(TurtleOfficialEvaluationTests, literal_with_LINE_FEED) {
 
 		TurtleStringParser turtleParser("<http://a.example/s> <http://a.example/p> '''\n"
-									 "''' .");
+										"''' .");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser("<http://a.example/s> <http://a.example/p> \"\\n\" .");
 	}
@@ -348,7 +348,7 @@ namespace Dice::tests::rdf_parser::turtle_official_evaluation_tests {
 	TEST(TurtleOfficialEvaluationTests, localName_with_assigned_nfc_bmp_PN_CHARS_BASE_character_boundaries) {
 
 		TurtleStringParser turtleParser("@prefix p: <http://a.example/> .\n"
-									 "<http://a.example/s> <http://a.example/p> p:AZazÀÖØöø˿Ͱͽ΄῾\u200C\u200D⁰↉Ⰰ⿕、ퟻ﨎ﷇﷰ\uFFEF .");
+										"<http://a.example/s> <http://a.example/p> p:AZazÀÖØöø˿Ͱͽ΄῾\u200C\u200D⁰↉Ⰰ⿕、ퟻ﨎ﷇﷰ\uFFEF .");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser(
 				"<http://a.example/s> <http://a.example/p> <http://a.example/AZaz\\u00C0\\u00D6\\u00D8\\u00F6\\u00F8\\u02FF\\u0370\\u037D\\u0384\\u1FFE\\u200C\\u200D\\u2070\\u2189\\u2C00\\u2FD5\\u3001\\uD7FB\\uFA0E\\uFDC7\\uFDF0\\uFFEF> .");
@@ -366,7 +366,7 @@ namespace Dice::tests::rdf_parser::turtle_official_evaluation_tests {
 	TEST(TurtleOfficialEvaluationTests, localname_with_COLON) {
 
 		TurtleStringParser turtleParser("@prefix p: <http://a.example/>.\n"
-									 "p:s: <http://a.example/p> <http://a.example/o> .");
+										"p:s: <http://a.example/p> <http://a.example/o> .");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser("<http://a.example/s:> <http://a.example/p> <http://a.example/o> .");
 	}
@@ -374,7 +374,7 @@ namespace Dice::tests::rdf_parser::turtle_official_evaluation_tests {
 	TEST(TurtleOfficialEvaluationTests, localName_with_leading_digit) {
 
 		TurtleStringParser turtleParser("@prefix p: <http://a.example/>.\n"
-									 "p:0 <http://a.example/p> <http://a.example/o> .");
+										"p:0 <http://a.example/p> <http://a.example/o> .");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser("<http://a.example/0> <http://a.example/p> <http://a.example/o> .");
 	}
@@ -382,7 +382,7 @@ namespace Dice::tests::rdf_parser::turtle_official_evaluation_tests {
 	TEST(TurtleOfficialEvaluationTests, localName_with_leading_underscore) {
 
 		TurtleStringParser turtleParser("@prefix p: <http://a.example/>.\n"
-									 "p:_ <http://a.example/p> <http://a.example/o> .");
+										"p:_ <http://a.example/p> <http://a.example/o> .");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser("<http://a.example/_> <http://a.example/p> <http://a.example/o> .");
 	}
@@ -401,7 +401,7 @@ TEST(TurtleOfficialEvaluationTests, localName_with_nfc_PN_CHARS_BASE_character_b
 	TEST(TurtleOfficialEvaluationTests, localName_with_non_leading_extras) {
 
 		TurtleStringParser turtleParser("@prefix p: <http://a.example/>.\n"
-									 "p:a·̀ͯ‿.⁀ <http://a.example/p> <http://a.example/o> .");
+										"p:a·̀ͯ‿.⁀ <http://a.example/p> <http://a.example/o> .");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser(
 				"<http://a.example/a\\u00b7\\u0300\\u036f\\u203f\\u002e\\u2040> <http://a.example/p> <http://a.example/o> .");
@@ -421,8 +421,8 @@ TEST(TurtleOfficialEvaluationTests, localName_with_nfc_PN_CHARS_BASE_character_b
 				"[ <http://a.example/p1> [ <http://a.example/p2> <http://a.example/o2> ] ; <http://a.example/p> <http://a.example/o> ].");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser("_:b1 <http://a.example/p1> _:b2 .\n"
-									   "_:b2 <http://a.example/p2> <http://a.example/o2> .\n"
-									   "_:b1 <http://a.example/p> <http://a.example/o> .");
+										  "_:b2 <http://a.example/p2> <http://a.example/o2> .\n"
+										  "_:b1 <http://a.example/p> <http://a.example/o> .");
 	}
 
 	TEST(TurtleOfficialEvaluationTests, nested_collection) {
@@ -430,17 +430,17 @@ TEST(TurtleOfficialEvaluationTests, localName_with_nfc_PN_CHARS_BASE_character_b
 		TurtleStringParser turtleParser("<http://a.example/s> <http://a.example/p> ((1)) .");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser("<http://a.example/s> <http://a.example/p> _:outerEl1 .\n"
-									   "_:outerEl1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:innerEl1 .\n"
-									   "_:innerEl1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> \"1\"^^<http://www.w3.org/2001/XMLSchema#integer> .\n"
-									   "_:innerEl1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .\n"
-									   "_:outerEl1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .");
+										  "_:outerEl1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:innerEl1 .\n"
+										  "_:innerEl1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> \"1\"^^<http://www.w3.org/2001/XMLSchema#integer> .\n"
+										  "_:innerEl1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .\n"
+										  "_:outerEl1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .");
 	}
 
 	TEST(TurtleOfficialEvaluationTests, number_sign_following_localName) {
 
 		TurtleStringParser turtleParser("@prefix p: <http://a.example/> .\n"
-									 "<http://a.example/s> <http://a.example/p> p:o\\#numbersign\n"
-									 ".");
+										"<http://a.example/s> <http://a.example/p> p:o\\#numbersign\n"
+										".");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser(
 				"<http://a.example/s> <http://a.example/p> <http://a.example/o#numbersign> .");
@@ -449,8 +449,8 @@ TEST(TurtleOfficialEvaluationTests, localName_with_nfc_PN_CHARS_BASE_character_b
 	TEST(TurtleOfficialEvaluationTests, number_sign_following_PNAME_NS) {
 
 		TurtleStringParser turtleParser("@prefix p: <http://a.example/>.\n"
-									 "<http://a.example/s> <http://a.example/p> p:\\#numbersign\n"
-									 ".");
+										"<http://a.example/s> <http://a.example/p> p:\\#numbersign\n"
+										".");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser(
 				"<http://a.example/s> <http://a.example/p> <http://a.example/#numbersign> .");
@@ -470,13 +470,13 @@ TEST(TurtleOfficialEvaluationTests, localName_with_nfc_PN_CHARS_BASE_character_b
 				"<http://a.example/s> <http://a.example/p> <http://a.example/o1>, <http://a.example/o2> .");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser("<http://a.example/s> <http://a.example/p> <http://a.example/o1> .\n"
-									   "<http://a.example/s> <http://a.example/p> <http://a.example/o2> .");
+										  "<http://a.example/s> <http://a.example/p> <http://a.example/o2> .");
 	}
 
 	TEST(TurtleOfficialEvaluationTests, percent_escaped_localName) {
 
 		TurtleStringParser turtleParser("@prefix p: <http://a.example/>.\n"
-									 "p:%25 <http://a.example/p> <http://a.example/o> .");
+										"p:%25 <http://a.example/p> <http://a.example/o> .");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser("<http://a.example/%25> <http://a.example/p> <http://a.example/o> .");
 	}
@@ -495,14 +495,14 @@ TEST(TurtleOfficialEvaluationTests, localName_with_nfc_PN_CHARS_BASE_character_b
 				"<http://a.example/s> <http://a.example/p1> <http://a.example/o1>; <http://a.example/p2> <http://a.example/o2> .");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser("<http://a.example/s> <http://a.example/p1> <http://a.example/o1> .\n"
-									   "<http://a.example/s> <http://a.example/p2> <http://a.example/o2> .");
+										  "<http://a.example/s> <http://a.example/p2> <http://a.example/o2> .");
 	}
 
 	TEST(TurtleOfficialEvaluationTests, prefix_reassigned_and_used) {
 
 		TurtleStringParser turtleParser("@prefix p: <http://a.example/>.\n"
-									 "@prefix p: <http://b.example/>.\n"
-									 "p:s <http://a.example/p> <http://a.example/o> .");
+										"@prefix p: <http://b.example/>.\n"
+										"p:s <http://a.example/p> <http://a.example/o> .");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser("<http://b.example/s> <http://a.example/p> <http://a.example/o> .");
 	}
@@ -517,7 +517,7 @@ TEST(TurtleOfficialEvaluationTests, localName_with_nfc_PN_CHARS_BASE_character_b
 	TEST(TurtleOfficialEvaluationTests, reserved_escaped_localName) {
 
 		TurtleStringParser turtleParser("@prefix p: <http://a.example/>.\n"
-									 "p:\\_\\~\\.\\-\\!\\$\\&\\'\\(\\)\\*\\+\\,\\;\\=\\/\\?\\#\\@\\%00 <http://a.example/p> <http://a.example/o> .");
+										"p:\\_\\~\\.\\-\\!\\$\\&\\'\\(\\)\\*\\+\\,\\;\\=\\/\\?\\#\\@\\%00 <http://a.example/p> <http://a.example/o> .");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser(
 				"<http://a.example/_~.-!$&'()*+,;=/?#@%00> <http://a.example/p> <http://a.example/o> .");
@@ -535,9 +535,9 @@ TEST(TurtleOfficialEvaluationTests, localName_with_nfc_PN_CHARS_BASE_character_b
 	TEST(TurtleOfficialEvaluationTests, turtle_eval_struct_02) {
 
 		TurtleStringParser turtleParser("<http://www.w3.org/2013/TurtleTests/s> \n"
-									 "      <http://www.w3.org/2013/TurtleTests/p1> <http://www.w3.org/2013/TurtleTests/o1> ;\n"
-									 "      <http://www.w3.org/2013/TurtleTests/p2> <http://www.w3.org/2013/TurtleTests/o2> ; \n"
-									 "      .");
+										"      <http://www.w3.org/2013/TurtleTests/p1> <http://www.w3.org/2013/TurtleTests/o1> ;\n"
+										"      <http://www.w3.org/2013/TurtleTests/p2> <http://www.w3.org/2013/TurtleTests/o2> ; \n"
+										"      .");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser(
 				"<http://www.w3.org/2013/TurtleTests/s> <http://www.w3.org/2013/TurtleTests/p1> <http://www.w3.org/2013/TurtleTests/o1> .\n"
@@ -547,7 +547,7 @@ TEST(TurtleOfficialEvaluationTests, localName_with_nfc_PN_CHARS_BASE_character_b
 	TEST(TurtleOfficialEvaluationTests, turtle_subm_01) {
 
 		TurtleStringParser turtleParser("@prefix : <#> .\n"
-									 "[] :x :y .");
+										"[] :x :y .");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser(
 				"_:genid1 <http://www.w3.org/2013/TurtleTests/turtle-subm-01.ttl#x> <http://www.w3.org/2013/TurtleTests/turtle-subm-01.ttl#y> .");
@@ -556,12 +556,12 @@ TEST(TurtleOfficialEvaluationTests, localName_with_nfc_PN_CHARS_BASE_character_b
 	TEST(TurtleOfficialEvaluationTests, turtle_subm_02) {
 
 		TurtleStringParser turtleParser("# Test @prefix and qnames\n"
-									 "@prefix :  <http://example.org/base1#> .\n"
-									 "@prefix a: <http://example.org/base2#> .\n"
-									 "@prefix b: <http://example.org/base3#> .\n"
-									 ":a :b :c .\n"
-									 "a:a a:b a:c .\n"
-									 ":a a:a b:a .");
+										"@prefix :  <http://example.org/base1#> .\n"
+										"@prefix a: <http://example.org/base2#> .\n"
+										"@prefix b: <http://example.org/base3#> .\n"
+										":a :b :c .\n"
+										"a:a a:b a:c .\n"
+										":a a:a b:a .");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser(
 				"<http://example.org/base1#a> <http://example.org/base1#b> <http://example.org/base1#c> .\n"
@@ -572,10 +572,10 @@ TEST(TurtleOfficialEvaluationTests, localName_with_nfc_PN_CHARS_BASE_character_b
 	TEST(TurtleOfficialEvaluationTests, turtle_subm_03) {
 
 		TurtleStringParser turtleParser("# Test , operator\n"
-									 "@prefix : <http://example.org/base#> .\n"
-									 ":a :b :c,\n"
-									 "      :d,\n"
-									 "      :e .");
+										"@prefix : <http://example.org/base#> .\n"
+										":a :b :c,\n"
+										"      :d,\n"
+										"      :e .");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser(
 				"<http://example.org/base#a> <http://example.org/base#b> <http://example.org/base#c> .\n"
@@ -586,10 +586,10 @@ TEST(TurtleOfficialEvaluationTests, localName_with_nfc_PN_CHARS_BASE_character_b
 	TEST(TurtleOfficialEvaluationTests, turtle_subm_04) {
 
 		TurtleStringParser turtleParser("# Test ; operator\n"
-									 "@prefix : <http://example.org/base#> .\n"
-									 ":a :b :c ;\n"
-									 "   :d :e ;\n"
-									 "   :f :g .");
+										"@prefix : <http://example.org/base#> .\n"
+										":a :b :c ;\n"
+										"   :d :e ;\n"
+										"   :f :g .");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser(
 				"<http://example.org/base#a> <http://example.org/base#b> <http://example.org/base#c> .\n"
@@ -600,32 +600,32 @@ TEST(TurtleOfficialEvaluationTests, localName_with_nfc_PN_CHARS_BASE_character_b
 	TEST(TurtleOfficialEvaluationTests, turtle_subm_05) {
 
 		TurtleStringParser turtleParser("# Test empty [] operator; not allowed as predicate\n"
-									 "@prefix : <http://example.org/base#> .\n"
-									 "[] :a :b .\n"
-									 ":c :d [] .");
+										"@prefix : <http://example.org/base#> .\n"
+										"[] :a :b .\n"
+										":c :d [] .");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser("_:genid1 <http://example.org/base#a> <http://example.org/base#b> .\n"
-									   "<http://example.org/base#c> <http://example.org/base#d> _:genid2 .");
+										  "<http://example.org/base#c> <http://example.org/base#d> _:genid2 .");
 	}
 
 	TEST(TurtleOfficialEvaluationTests, turtle_subm_06) {
 
 		TurtleStringParser turtleParser("# Test non empty [] operator; not allowed as predicate\n"
-									 "@prefix : <http://example.org/base#> .\n"
-									 "[ :a :b ] :c :d .\n"
-									 ":e :f [ :g :h ] .");
+										"@prefix : <http://example.org/base#> .\n"
+										"[ :a :b ] :c :d .\n"
+										":e :f [ :g :h ] .");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser("_:genid1 <http://example.org/base#a> <http://example.org/base#b> .\n"
-									   "_:genid1 <http://example.org/base#c> <http://example.org/base#d> .\n"
-									   "_:genid2 <http://example.org/base#g> <http://example.org/base#h> .\n"
-									   "<http://example.org/base#e> <http://example.org/base#f> _:genid2 .");
+										  "_:genid1 <http://example.org/base#c> <http://example.org/base#d> .\n"
+										  "_:genid2 <http://example.org/base#g> <http://example.org/base#h> .\n"
+										  "<http://example.org/base#e> <http://example.org/base#f> _:genid2 .");
 	}
 
 	TEST(TurtleOfficialEvaluationTests, turtle_subm_07) {
 
 		TurtleStringParser turtleParser("# 'a' only allowed as a predicate\n"
-									 "@prefix : <http://example.org/base#> .\n"
-									 ":a a :b .");
+										"@prefix : <http://example.org/base#> .\n"
+										":a a :b .");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser(
 				"<http://example.org/base#a> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://example.org/base#b> .");
@@ -634,8 +634,8 @@ TEST(TurtleOfficialEvaluationTests, localName_with_nfc_PN_CHARS_BASE_character_b
 	TEST(TurtleOfficialEvaluationTests, turtle_subm_08) {
 
 		TurtleStringParser turtleParser("@prefix : <http://example.org/stuff/1.0/> .\n"
-									 ":a :b ( \"apple\" \"banana\" ) .\n"
-									 "");
+										":a :b ( \"apple\" \"banana\" ) .\n"
+										"");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser(
 				"_:genid1 <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> \"banana\" .\n"
@@ -648,8 +648,8 @@ TEST(TurtleOfficialEvaluationTests, localName_with_nfc_PN_CHARS_BASE_character_b
 	TEST(TurtleOfficialEvaluationTests, turtle_subm_09) {
 
 		TurtleStringParser turtleParser("@prefix : <http://example.org/stuff/1.0/> .\n"
-									 ":a :b ( ) .\n"
-									 "");
+										":a :b ( ) .\n"
+										"");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser(
 				"<http://example.org/stuff/1.0/a> <http://example.org/stuff/1.0/b> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .");
@@ -658,15 +658,15 @@ TEST(TurtleOfficialEvaluationTests, localName_with_nfc_PN_CHARS_BASE_character_b
 	TEST(TurtleOfficialEvaluationTests, turtle_subm_10) {
 
 		TurtleStringParser turtleParser("# Test integer datatyped literals using an OWL cardinality constraint\n"
-									 "@prefix owl: <http://www.w3.org/2002/07/owl#> .\n"
-									 "\n"
-									 "# based on examples in the OWL Reference\n"
-									 "\n"
-									 "_:hasParent a owl:ObjectProperty .\n"
-									 "\n"
-									 "[] a owl:Restriction ;\n"
-									 "  owl:onProperty _:hasParent ;\n"
-									 "  owl:maxCardinality 2 .");
+										"@prefix owl: <http://www.w3.org/2002/07/owl#> .\n"
+										"\n"
+										"# based on examples in the OWL Reference\n"
+										"\n"
+										"_:hasParent a owl:ObjectProperty .\n"
+										"\n"
+										"[] a owl:Restriction ;\n"
+										"  owl:onProperty _:hasParent ;\n"
+										"  owl:maxCardinality 2 .");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser(
 				"_:hasParent <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2002/07/owl#ObjectProperty> .\n"
@@ -678,10 +678,10 @@ TEST(TurtleOfficialEvaluationTests, localName_with_nfc_PN_CHARS_BASE_character_b
 	TEST(TurtleOfficialEvaluationTests, turtle_subm_11) {
 
 		TurtleStringParser turtleParser("<http://example.org/res1> <http://example.org/prop1> 000000 .\n"
-									 "<http://example.org/res2> <http://example.org/prop2> 0 .\n"
-									 "<http://example.org/res3> <http://example.org/prop3> 000001 .\n"
-									 "<http://example.org/res4> <http://example.org/prop4> 2 .\n"
-									 "<http://example.org/res5> <http://example.org/prop5> 4 .");
+										"<http://example.org/res2> <http://example.org/prop2> 0 .\n"
+										"<http://example.org/res3> <http://example.org/prop3> 000001 .\n"
+										"<http://example.org/res4> <http://example.org/prop4> 2 .\n"
+										"<http://example.org/res5> <http://example.org/prop5> 4 .");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser(
 				"<http://example.org/res1> <http://example.org/prop1> \"000000\"^^<http://www.w3.org/2001/XMLSchema#integer> .\n"
@@ -694,15 +694,15 @@ TEST(TurtleOfficialEvaluationTests, localName_with_nfc_PN_CHARS_BASE_character_b
 	TEST(TurtleOfficialEvaluationTests, turtle_subm_12) {
 
 		TurtleStringParser turtleParser("# Tests for - and _ in names, qnames\n"
-									 "@prefix ex1: <http://example.org/ex1#> .\n"
-									 "@prefix ex-2: <http://example.org/ex2#> .\n"
-									 "@prefix ex3_: <http://example.org/ex3#> .\n"
-									 "@prefix ex4-: <http://example.org/ex4#> .\n"
-									 "\n"
-									 "ex1:foo-bar ex1:foo_bar \"a\" .\n"
-									 "ex-2:foo-bar ex-2:foo_bar \"b\" .\n"
-									 "ex3_:foo-bar ex3_:foo_bar \"c\" .\n"
-									 "ex4-:foo-bar ex4-:foo_bar \"d\" .");
+										"@prefix ex1: <http://example.org/ex1#> .\n"
+										"@prefix ex-2: <http://example.org/ex2#> .\n"
+										"@prefix ex3_: <http://example.org/ex3#> .\n"
+										"@prefix ex4-: <http://example.org/ex4#> .\n"
+										"\n"
+										"ex1:foo-bar ex1:foo_bar \"a\" .\n"
+										"ex-2:foo-bar ex-2:foo_bar \"b\" .\n"
+										"ex3_:foo-bar ex3_:foo_bar \"c\" .\n"
+										"ex4-:foo-bar ex4-:foo_bar \"d\" .");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser(
 				"<http://example.org/ex1#foo-bar> <http://example.org/ex1#foo_bar> \"a\" .\n"
@@ -714,14 +714,14 @@ TEST(TurtleOfficialEvaluationTests, localName_with_nfc_PN_CHARS_BASE_character_b
 	TEST(TurtleOfficialEvaluationTests, turtle_subm_13) {
 
 		TurtleStringParser turtleParser("# Tests for rdf:_<numbers> and other qnames starting with _\n"
-									 "@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n"
-									 "@prefix ex:  <http://example.org/ex#> .\n"
-									 "@prefix :    <http://example.org/myprop#> .\n"
-									 "\n"
-									 "ex:foo rdf:_1 \"1\" .\n"
-									 "ex:foo rdf:_2 \"2\" .\n"
-									 "ex:foo :_abc \"def\" .\n"
-									 "ex:foo :_345 \"678\" .");
+										"@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n"
+										"@prefix ex:  <http://example.org/ex#> .\n"
+										"@prefix :    <http://example.org/myprop#> .\n"
+										"\n"
+										"ex:foo rdf:_1 \"1\" .\n"
+										"ex:foo rdf:_2 \"2\" .\n"
+										"ex:foo :_abc \"def\" .\n"
+										"ex:foo :_345 \"678\" .");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser(
 				"<http://example.org/ex#foo> <http://www.w3.org/1999/02/22-rdf-syntax-ns#_1> \"1\" .\n"
@@ -733,25 +733,25 @@ TEST(TurtleOfficialEvaluationTests, localName_with_nfc_PN_CHARS_BASE_character_b
 	TEST(TurtleOfficialEvaluationTests, turtle_subm_14) {
 
 		TurtleStringParser turtleParser("# Test for : allowed\n"
-									 "@prefix :    <http://example.org/ron> .\n"
-									 "\n"
-									 "[] : [] .\n"
-									 "\n"
-									 ": : : .\n"
-									 "");
+										"@prefix :    <http://example.org/ron> .\n"
+										"\n"
+										"[] : [] .\n"
+										"\n"
+										": : : .\n"
+										"");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser("_:genid1 <http://example.org/ron> _:genid2 .\n"
-									   "<http://example.org/ron> <http://example.org/ron> <http://example.org/ron> .");
+										  "<http://example.org/ron> <http://example.org/ron> <http://example.org/ron> .");
 	}
 
 	TEST(TurtleOfficialEvaluationTests, turtle_subm_15) {
 
 		TurtleStringParser turtleParser("# Test long literal\n"
-									 "@prefix :  <http://example.org/ex#> .\n"
-									 ":a :b \"\"\"a long\n"
-									 "\tliteral\n"
-									 "with\n"
-									 "newlines\"\"\" .");
+										"@prefix :  <http://example.org/ex#> .\n"
+										":a :b \"\"\"a long\n"
+										"\tliteral\n"
+										"with\n"
+										"newlines\"\"\" .");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser(
 				"<http://example.org/ex#a> <http://example.org/ex#b> \"a long\\n\\tliteral\\nwith\\nnewlines\" .");
@@ -760,25 +760,25 @@ TEST(TurtleOfficialEvaluationTests, localName_with_nfc_PN_CHARS_BASE_character_b
 	TEST(TurtleOfficialEvaluationTests, turtle_subm_16) {
 
 		TurtleStringParser turtleParser("@prefix : <http://example.org/foo#> .\n"
-									 "\n"
-									 "## \\U00015678 is a not a legal codepoint\n"
-									 "## :a :b \"\"\"\\nthis \\ris a \\U00015678long\\t\n"
-									 "## literal\\uABCD\n"
-									 "## \"\"\" .\n"
-									 "## \n"
-									 "## :d :e \"\"\"\\tThis \\uABCDis\\r \\U00015678another\\n\n"
-									 "## one\n"
-									 "## \"\"\" .\n"
-									 "\n"
-									 "# \\U00015678 is a not a legal codepoint\n"
-									 "# \\U00012451 in Cuneiform numeric ban 3\n"
-									 ":a :b \"\"\"\\nthis \\ris a \\U00012451long\\t\n"
-									 "literal\\uABCD\n"
-									 "\"\"\" .\n"
-									 "\n"
-									 ":d :e \"\"\"\\tThis \\uABCDis\\r \\U00012451another\\n\n"
-									 "one\n"
-									 "\"\"\" .");
+										"\n"
+										"## \\U00015678 is a not a legal codepoint\n"
+										"## :a :b \"\"\"\\nthis \\ris a \\U00015678long\\t\n"
+										"## literal\\uABCD\n"
+										"## \"\"\" .\n"
+										"## \n"
+										"## :d :e \"\"\"\\tThis \\uABCDis\\r \\U00015678another\\n\n"
+										"## one\n"
+										"## \"\"\" .\n"
+										"\n"
+										"# \\U00015678 is a not a legal codepoint\n"
+										"# \\U00012451 in Cuneiform numeric ban 3\n"
+										":a :b \"\"\"\\nthis \\ris a \\U00012451long\\t\n"
+										"literal\\uABCD\n"
+										"\"\"\" .\n"
+										"\n"
+										":d :e \"\"\"\\tThis \\uABCDis\\r \\U00012451another\\n\n"
+										"one\n"
+										"\"\"\" .");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser(
 				"<http://example.org/foo#a> <http://example.org/foo#b> \"\\nthis \\ris a \\U00012451long\\t\\nliteral\\uABCD\\n\" .\n"
@@ -788,9 +788,9 @@ TEST(TurtleOfficialEvaluationTests, localName_with_nfc_PN_CHARS_BASE_character_b
 	TEST(TurtleOfficialEvaluationTests, turtle_subm_17) {
 
 		TurtleStringParser turtleParser("@prefix : <http://example.org/#> .\n"
-									 "\n"
-									 ":a :b  1.0 .\n"
-									 "");
+										"\n"
+										":a :b  1.0 .\n"
+										"");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser(
 				"<http://example.org/#a> <http://example.org/#b> \"1.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> .");
@@ -799,22 +799,22 @@ TEST(TurtleOfficialEvaluationTests, localName_with_nfc_PN_CHARS_BASE_character_b
 	TEST(TurtleOfficialEvaluationTests, turtle_subm_18) {
 
 		TurtleStringParser turtleParser("@prefix : <http://example.org/#> .\n"
-									 "\n"
-									 ":a :b \"\" .\n"
-									 "\n"
-									 ":c :d \"\"\"\"\"\" .\n"
-									 "");
+										"\n"
+										":a :b \"\" .\n"
+										"\n"
+										":c :d \"\"\"\"\"\" .\n"
+										"");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser("<http://example.org/#a> <http://example.org/#b> \"\" .\n"
-									   "<http://example.org/#c> <http://example.org/#d> \"\" .");
+										  "<http://example.org/#c> <http://example.org/#d> \"\" .");
 	}
 
 	TEST(TurtleOfficialEvaluationTests, turtle_subm_19) {
 
 		TurtleStringParser turtleParser("@prefix : <http://example.org#> .\n"
-									 ":a :b 1.0 .\n"
-									 ":c :d 1 .\n"
-									 ":e :f 1.0e0 .");
+										":a :b 1.0 .\n"
+										":c :d 1 .\n"
+										":e :f 1.0e0 .");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser(
 				"<http://example.org#a> <http://example.org#b> \"1.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> .\n"
@@ -825,9 +825,9 @@ TEST(TurtleOfficialEvaluationTests, localName_with_nfc_PN_CHARS_BASE_character_b
 	TEST(TurtleOfficialEvaluationTests, turtle_subm_20) {
 
 		TurtleStringParser turtleParser("@prefix : <http://example.org#> .\n"
-									 ":a :b -1.0 .\n"
-									 ":c :d -1 .\n"
-									 ":e :f -1.0e0 .");
+										":a :b -1.0 .\n"
+										":c :d -1 .\n"
+										":e :f -1.0e0 .");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser(
 				"<http://example.org#a> <http://example.org#b> \"-1.0\"^^<http://www.w3.org/2001/XMLSchema#decimal> .\n"
@@ -838,8 +838,8 @@ TEST(TurtleOfficialEvaluationTests, localName_with_nfc_PN_CHARS_BASE_character_b
 	TEST(TurtleOfficialEvaluationTests, turtle_subm_21) {
 
 		TurtleStringParser turtleParser("# Test long literal\n"
-									 "@prefix :  <http://example.org/ex#> .\n"
-									 ":a :b \"\"\"John said: \"Hello World!\\\"\"\"\" .");
+										"@prefix :  <http://example.org/ex#> .\n"
+										":a :b \"\"\"John said: \"Hello World!\\\"\"\"\" .");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser(
 				"<http://example.org/ex#a> <http://example.org/ex#b> \"John said: \\\"Hello World!\\\"\" .");
@@ -848,8 +848,8 @@ TEST(TurtleOfficialEvaluationTests, localName_with_nfc_PN_CHARS_BASE_character_b
 	TEST(TurtleOfficialEvaluationTests, turtle_subm_22) {
 
 		TurtleStringParser turtleParser("@prefix : <http://example.org#> .\n"
-									 ":a :b true .\n"
-									 ":c :d false .");
+										":a :b true .\n"
+										":c :d false .");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser(
 				"<http://example.org#a> <http://example.org#b> \"true\"^^<http://www.w3.org/2001/XMLSchema#boolean> .\n"
@@ -859,19 +859,19 @@ TEST(TurtleOfficialEvaluationTests, localName_with_nfc_PN_CHARS_BASE_character_b
 	TEST(TurtleOfficialEvaluationTests, DISABLED_turtle_subm_23) {
 
 		TurtleStringParser turtleParser("# comment test\n"
-									 "@prefix : <http://example.org/#> .\n"
-									 ":a :b :c . # end of line comment\n"
-									 ":d # ignore me\n"
-									 "  :e # and me\n"
-									 "      :f # and me\n"
-									 "        .\n"
-									 ":g :h #ignore me\n"
-									 "     :i,  # and me\n"
-									 "     :j . # and me\n"
-									 "\n"
-									 ":k :l :m ; #ignore me\n"
-									 "   :n :o ; # and me\n"
-									 "   :p :q . # and me");
+										"@prefix : <http://example.org/#> .\n"
+										":a :b :c . # end of line comment\n"
+										":d # ignore me\n"
+										"  :e # and me\n"
+										"      :f # and me\n"
+										"        .\n"
+										":g :h #ignore me\n"
+										"     :i,  # and me\n"
+										"     :j . # and me\n"
+										"\n"
+										":k :l :m ; #ignore me\n"
+										"   :n :o ; # and me\n"
+										"   :p :q . # and me");
 		//bool a = turtleParser.isContentParsable();
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser(
@@ -887,9 +887,9 @@ TEST(TurtleOfficialEvaluationTests, localName_with_nfc_PN_CHARS_BASE_character_b
 	TEST(TurtleOfficialEvaluationTests, DISABLED_turtle_subm_24) {
 
 		TurtleStringParser turtleParser("# comment line with no final newline test\n"
-									 "@prefix : <http://example.org/#> .\n"
-									 ":a :b :c .\n"
-									 "#foo");
+										"@prefix : <http://example.org/#> .\n"
+										":a :b :c .\n"
+										"#foo");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser(
 				"<http://example.org/#a> <http://example.org/#b> <http://example.org/#c> .");
@@ -898,10 +898,10 @@ TEST(TurtleOfficialEvaluationTests, localName_with_nfc_PN_CHARS_BASE_character_b
 	TEST(TurtleOfficialEvaluationTests, turtle_subm_25) {
 
 		TurtleStringParser turtleParser("@prefix foo: <http://example.org/foo#>  .\n"
-									 "@prefix foo: <http://example.org/bar#>  .\n"
-									 "\n"
-									 "foo:blah foo:blah foo:blah .\n"
-									 "");
+										"@prefix foo: <http://example.org/bar#>  .\n"
+										"\n"
+										"foo:blah foo:blah foo:blah .\n"
+										"");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser(
 				"<http://example.org/bar#blah> <http://example.org/bar#blah> <http://example.org/bar#blah> .");
@@ -985,9 +985,9 @@ TEST(TurtleOfficialEvaluationTests, localName_with_nfc_PN_CHARS_BASE_character_b
 	TEST(TurtleOfficialEvaluationTests, two_LITERAL_LONG2s) {
 
 		TurtleStringParser turtleParser("# Test long literal twice to ensure it does not over-quote\n"
-									 "@prefix :  <http://example.org/ex#> .\n"
-									 ":a :b \"\"\"first long literal\"\"\" .\n"
-									 ":c :d \"\"\"second long literal\"\"\" .");
+										"@prefix :  <http://example.org/ex#> .\n"
+										":a :b \"\"\"first long literal\"\"\" .\n"
+										":c :d \"\"\"second long literal\"\"\" .");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser(
 				"<http://example.org/ex#a> <http://example.org/ex#b> \"first long literal\" .\n"
@@ -997,7 +997,7 @@ TEST(TurtleOfficialEvaluationTests, localName_with_nfc_PN_CHARS_BASE_character_b
 	TEST(TurtleOfficialEvaluationTests, underscore_in_localName) {
 
 		TurtleStringParser turtleParser("@prefix p: <http://a.example/>.\n"
-									 "p:s_ <http://a.example/p> <http://a.example/o> .");
+										"p:s_ <http://a.example/p> <http://a.example/o> .");
 		auto it = turtleParser.begin();
 		TurtleStringParser nTriplesParser("<http://a.example/s_> <http://a.example/p> <http://a.example/o> .");
 	}

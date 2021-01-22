@@ -3,7 +3,7 @@
 #include <Dice/rdf-parser/TurtleFileParser.hpp>
 
 namespace Dice::tests::rdf_parser::turtle_parser_concurrent_tests {
-		using namespace Dice::rdf_parser::Turtle::parsers;
+	using namespace Dice::rdf_parser::Turtle::parsers;
 
 	TEST(TurtleParserFilesTests, parseSWDF) {
 		std::filesystem::current_path(std::filesystem::canonical("/proc/self/exe").parent_path());

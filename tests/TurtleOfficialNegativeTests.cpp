@@ -63,35 +63,35 @@ namespace Dice::tests::rdf_parser::turtle_official_negative_tests {
 	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_kw_01) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-											  ":s A :C ."),
+												 ":s A :C ."),
 				  false);
 	}
 
 	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_kw_02) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-											  "a :p :o ."),
+												 "a :p :o ."),
 				  false);
 	}
 
 	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_kw_03) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-											  ":s :p a ."),
+												 ":s :p a ."),
 				  false);
 	}
 
 	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_kw_04) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-											  "true :p :o ."),
+												 "true :p :o ."),
 				  false);
 	}
 
 	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_kw_05) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-											  ":s true :o ."),
+												 ":s true :o ."),
 				  false);
 	}
 
@@ -112,21 +112,21 @@ namespace Dice::tests::rdf_parser::turtle_official_negative_tests {
 	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_ln_dash_start) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-											  ":s :p :-o ."),
+												 ":s :p :-o ."),
 				  false);
 	}
 
 	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_ln_escape) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-											  ":s :p :o%2 ."),
+												 ":s :p :o%2 ."),
 				  false);
 	}
 
 	TEST(TurtleOfficialNegativeTests, DISABLED_turtle_syntax_bad_ln_escape_start) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-											  ":s :p :%2o ."),
+												 ":s :p :%2o ."),
 				  false);
 	}
 
@@ -153,9 +153,9 @@ namespace Dice::tests::rdf_parser::turtle_official_negative_tests {
 	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_n3_extras_02) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("# = is not Turtle\n"
-											  "@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-											  "\n"
-											  ":a = :b ."),
+												 "@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
+												 "\n"
+												 ":a = :b ."),
 				  false);
 	}
 
@@ -258,14 +258,14 @@ namespace Dice::tests::rdf_parser::turtle_official_negative_tests {
 	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_ns_dot_end) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix eg. : <http://www.w3.org/2013/TurtleTests/> .\n"
-											  "eg.:s eg.:p eg.:o ."),
+												 "eg.:s eg.:p eg.:o ."),
 				  false);
 	}
 
 	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_ns_dot_start) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix .eg : <http://www.w3.org/2013/TurtleTests/> .\n"
-											  ".eg:s .eg:p .eg:o ."),
+												 ".eg:s .eg:p .eg:o ."),
 				  false);
 	}
 
@@ -307,11 +307,11 @@ namespace Dice::tests::rdf_parser::turtle_official_negative_tests {
 	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_number_dot_in_anon) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-											  "\n"
-											  ":s\n"
-											  "\t:p [\n"
-											  "\t\t:p1 27.\n"
-											  "\t] ."),
+												 "\n"
+												 ":s\n"
+												 "\t:p [\n"
+												 "\t\t:p1 27.\n"
+												 "\t] ."),
 				  false);
 	}
 
@@ -378,28 +378,28 @@ namespace Dice::tests::rdf_parser::turtle_official_negative_tests {
 	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_string_01) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-											  ":s :p \"abc' ."),
+												 ":s :p \"abc' ."),
 				  false);
 	}
 
 	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_string_02) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-											  ":s :p 'abc\" ."),
+												 ":s :p 'abc\" ."),
 				  false);
 	}
 
 	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_string_03) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-											  ":s :p '''abc' ."),
+												 ":s :p '''abc' ."),
 				  false);
 	}
 
 	TEST(TurtleOfficialNegativeTests, turtle_syntax_bad_string_04) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-											  ":s :p \"\"\"abc''' ."),
+												 ":s :p \"\"\"abc''' ."),
 				  false);
 	}
 

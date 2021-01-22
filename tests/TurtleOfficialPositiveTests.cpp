@@ -24,15 +24,15 @@ namespace Dice::tests::rdf_parser::turtle_official_positive_tests {
 	TEST(TurtleOfficialPositiveTests, comment_following_localName) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix p: <http://a.example/> .\n"
-											  "<http://a.example/s> <http://a.example/p> p:o#comment\n"
-											  "."),
+												 "<http://a.example/s> <http://a.example/p> p:o#comment\n"
+												 "."),
 				  true);
 	}
 
 	TEST(TurtleOfficialPositiveTests, default_namespace_IRI) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://a.example/>.\n"
-											  ":s <http://a.example/p> <http://a.example/o> ."),
+												 ":s <http://a.example/p> <http://a.example/o> ."),
 				  true);
 	}
 
@@ -184,28 +184,28 @@ TEST(TurtleOfficialPositiveTests, LITERAL_LONG1_with_UTF8_boundaries) {
 	TEST(TurtleOfficialPositiveTests, old_style_base) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@base <http://a.example/>.\n"
-											  "<s> <http://a.example/p> <http://a.example/o> ."),
+												 "<s> <http://a.example/p> <http://a.example/o> ."),
 				  true);
 	}
 
 	TEST(TurtleOfficialPositiveTests, old_style_prefix) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix p: <http://a.example/>.\n"
-											  "p:s <http://a.example/p> <http://a.example/o> ."),
+												 "p:s <http://a.example/p> <http://a.example/o> ."),
 				  true);
 	}
 
 	TEST(TurtleOfficialPositiveTests, prefix_only_IRI) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix p: <http://a.example/s>.\n"
-											  "p: <http://a.example/p> <http://a.example/o> ."),
+												 "p: <http://a.example/p> <http://a.example/o> ."),
 				  true);
 	}
 
 	TEST(TurtleOfficialPositiveTests, prefix_with_non_leading_extras) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix a·̀ͯ‿.⁀: <http://a.example/>.\n"
-											  "a·̀ͯ‿.⁀:s <http://a.example/p> <http://a.example/o> ."),
+												 "a·̀ͯ‿.⁀:s <http://a.example/p> <http://a.example/o> ."),
 				  true);
 	}
 
@@ -221,21 +221,21 @@ TEST(TurtleOfficialPositiveTests, prefix_with_PN_CHARS_BASE_character_boundaries
 	TEST(TurtleOfficialPositiveTests, prefixed_IRI_object) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix p: <http://a.example/>.\n"
-											  "<http://a.example/s> <http://a.example/p> p:o ."),
+												 "<http://a.example/s> <http://a.example/p> p:o ."),
 				  true);
 	}
 
 	TEST(TurtleOfficialPositiveTests, prefixed_IRI_predicate) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix p: <http://a.example/>.\n"
-											  "<http://a.example/s> p:p <http://a.example/o> ."),
+												 "<http://a.example/s> p:p <http://a.example/o> ."),
 				  true);
 	}
 
 	TEST(TurtleOfficialPositiveTests, prefixed_name_datatype) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .\n"
-											  "<http://a.example/s> <http://a.example/p> \"1\"^^xsd:integer ."),
+												 "<http://a.example/s> <http://a.example/p> \"1\"^^xsd:integer ."),
 				  true);
 	}
 
@@ -254,14 +254,14 @@ TEST(TurtleOfficialPositiveTests, prefix_with_PN_CHARS_BASE_character_boundaries
 	TEST(TurtleOfficialPositiveTests, SPARQL_style_base) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("BASE <http://a.example/>\n"
-											  "<s> <http://a.example/p> <http://a.example/o> ."),
+												 "<s> <http://a.example/p> <http://a.example/o> ."),
 				  true);
 	}
 
 	TEST(TurtleOfficialPositiveTests, SPARQL_style_prefix) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("PREFIX p: <http://a.example/>\n"
-											  "p:s <http://a.example/p> <http://a.example/o> ."),
+												 "p:s <http://a.example/p> <http://a.example/o> ."),
 				  true);
 	}
 
@@ -278,122 +278,122 @@ TEST(TurtleOfficialPositiveTests, prefix_with_PN_CHARS_BASE_character_boundaries
 	TEST(TurtleOfficialPositiveTests, turtle_syntax_base_03) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@base <http://www.w3.org/2013/TurtleTests/> .\n"
-											  "<s> <p> <o> ."),
+												 "<s> <p> <o> ."),
 				  true);
 	}
 
 	TEST(TurtleOfficialPositiveTests, turtle_syntax_base_04) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("base <http://www.w3.org/2013/TurtleTests/>\n"
-											  "<s> <p> <o> ."),
+												 "<s> <p> <o> ."),
 				  true);
 	}
 
 	TEST(TurtleOfficialPositiveTests, DISABLED_turtle_syntax_blank_label) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-											  "_:0b :p :o . # Starts with digit\n"
-											  "_:_b :p :o . # Starts with underscore\n"
-											  "_:b.0 :p :o . # Contains dot, ends with digit"),
+												 "_:0b :p :o . # Starts with digit\n"
+												 "_:_b :p :o . # Starts with underscore\n"
+												 "_:b.0 :p :o . # Contains dot, ends with digit"),
 				  true);
 	}
 
 	TEST(TurtleOfficialPositiveTests, DISABLED_turtle_syntax_blank_label_TEST) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-											  "_:0b :p :o . # Starts with digit\n"
-											  "_:_b :p :o . # Starts with underscore\n"
-											  "_:b.0 :p :o . # Contains dot, ends with digit"),
+												 "_:0b :p :o . # Starts with digit\n"
+												 "_:_b :p :o . # Starts with underscore\n"
+												 "_:b.0 :p :o . # Contains dot, ends with digit"),
 				  true);
 	}
 
 	TEST(TurtleOfficialPositiveTests, turtle_syntax_bnode_01) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-											  "[] :p :o ."),
+												 "[] :p :o ."),
 				  true);
 	}
 
 	TEST(TurtleOfficialPositiveTests, turtle_syntax_bnode_02) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-											  ":s :p [] ."),
+												 ":s :p [] ."),
 				  true);
 	}
 
 	TEST(TurtleOfficialPositiveTests, turtle_syntax_bnode_03) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-											  ":s :p [ :q :o ] ."),
+												 ":s :p [ :q :o ] ."),
 				  true);
 	}
 
 	TEST(TurtleOfficialPositiveTests, turtle_syntax_bnode_04) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-											  ":s :p [ :q1 :o1 ; :q2 :o2 ] ."),
+												 ":s :p [ :q1 :o1 ; :q2 :o2 ] ."),
 				  true);
 	}
 
 	TEST(TurtleOfficialPositiveTests, turtle_syntax_bnode_05) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-											  "[ :q1 :o1 ; :q2 :o2 ] :p :o ."),
+												 "[ :q1 :o1 ; :q2 :o2 ] :p :o ."),
 				  true);
 	}
 
 	TEST(TurtleOfficialPositiveTests, turtle_syntax_bnode_06) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-											  "_:a  :p :o ."),
+												 "_:a  :p :o ."),
 				  true);
 	}
 
 	TEST(TurtleOfficialPositiveTests, turtle_syntax_bnode_07) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-											  ":s  :p _:a .\n"
-											  "_:a  :p :o ."),
+												 ":s  :p _:a .\n"
+												 "_:a  :p :o ."),
 				  true);
 	}
 
 	TEST(TurtleOfficialPositiveTests, turtle_syntax_bnode_08) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-											  "[ :p  :o ] ."),
+												 "[ :p  :o ] ."),
 				  true);
 	}
 
 	TEST(TurtleOfficialPositiveTests, turtle_syntax_bnode_09) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-											  "[ :p  :o1,:2 ] .\n"
-											  ":s :p :o  ."),
+												 "[ :p  :o1,:2 ] .\n"
+												 ":s :p :o  ."),
 				  true);
 	}
 
 	TEST(TurtleOfficialPositiveTests, turtle_syntax_bnode_10) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-											  "\n"
-											  ":s1 :p :o .\n"
-											  "[ :p1  :o1 ; :p2 :o2 ] .\n"
-											  ":s2 :p :o ."),
+												 "\n"
+												 ":s1 :p :o .\n"
+												 "[ :p1  :o1 ; :p2 :o2 ] .\n"
+												 ":s2 :p :o ."),
 				  true);
 	}
 
 	TEST(TurtleOfficialPositiveTests, turtle_syntax_datatypes_01) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .\n"
-											  "<s> <p> \"123\"^^xsd:byte ."),
+												 "<s> <p> \"123\"^^xsd:byte ."),
 				  true);
 	}
 
 	TEST(TurtleOfficialPositiveTests, turtle_syntax_datatypes_02) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .\n"
-											  "@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .\n"
-											  "<s> <p> \"123\"^^xsd:string ."),
+												 "@prefix xsd:     <http://www.w3.org/2001/XMLSchema#> .\n"
+												 "<s> <p> \"123\"^^xsd:string ."),
 				  true);
 	}
 
@@ -410,7 +410,7 @@ TEST(TurtleOfficialPositiveTests, prefix_with_PN_CHARS_BASE_character_boundaries
 	TEST(TurtleOfficialPositiveTests, DISABLED_turtle_syntax_file_03) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("#One comment, one empty line.\n"
-											  ""),
+												 ""),
 				  true);
 	}
 
@@ -427,69 +427,69 @@ TEST(TurtleOfficialPositiveTests, prefix_with_PN_CHARS_BASE_character_boundaries
 	TEST(TurtleOfficialPositiveTests, turtle_syntax_kw_03) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-											  ":s a :C ."),
+												 ":s a :C ."),
 				  true);
 	}
 
 	TEST(TurtleOfficialPositiveTests, turtle_syntax_lists_01) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-											  ":s :p () ."),
+												 ":s :p () ."),
 				  true);
 	}
 
 	TEST(TurtleOfficialPositiveTests, turtle_syntax_lists_02) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-											  ":s :p (1 \"2\" :o) ."),
+												 ":s :p (1 \"2\" :o) ."),
 				  true);
 	}
 
 	TEST(TurtleOfficialPositiveTests, turtle_syntax_lists_03) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-											  "(1) :p (1) ."),
+												 "(1) :p (1) ."),
 				  true);
 	}
 
 	TEST(TurtleOfficialPositiveTests, turtle_syntax_lists_04) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-											  "(()) :p (()) ."),
+												 "(()) :p (()) ."),
 				  true);
 	}
 
 	TEST(TurtleOfficialPositiveTests, turtle_syntax_lists_05) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-											  "(1 2 (1 2)) :p (( \"a\") \"b\" :o) ."),
+												 "(1 2 (1 2)) :p (( \"a\") \"b\" :o) ."),
 				  true);
 	}
 
 	TEST(TurtleOfficialPositiveTests, turtle_syntax_ln_colons) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-											  ":s:1 :p:1 :o:1 .\n"
-											  ":s::2 :p::2 :o::2 .\n"
-											  ":3:s :3:p :3 .\n"
-											  "::s ::p ::o .\n"
-											  "::s: ::p: ::o: ."),
+												 ":s:1 :p:1 :o:1 .\n"
+												 ":s::2 :p::2 :o::2 .\n"
+												 ":3:s :3:p :3 .\n"
+												 "::s ::p ::o .\n"
+												 "::s: ::p: ::o: ."),
 				  true);
 	}
 
 	TEST(TurtleOfficialPositiveTests, turtle_syntax_ln_dots) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-											  ":s.1 :p.1 :o.1 .\n"
-											  ":s..2 :p..2 :o..2.\n"
-											  ":3.s :3.p :3."),
+												 ":s.1 :p.1 :o.1 .\n"
+												 ":s..2 :p..2 :o..2.\n"
+												 ":3.s :3.p :3."),
 				  true);
 	}
 
 	TEST(TurtleOfficialPositiveTests, turtle_syntax_ns_dots) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix e.g: <http://www.w3.org/2013/TurtleTests/> .\n"
-											  "e.g:s e.g:p e.g:o ."),
+												 "e.g:s e.g:p e.g:o ."),
 				  true);
 	}
 
@@ -511,35 +511,35 @@ TEST(TurtleOfficialPositiveTests, prefix_with_PN_CHARS_BASE_character_boundaries
 	TEST(TurtleOfficialPositiveTests, turtle_syntax_number_04) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("# This is a decimal.\n"
-											  "<s> <p> 123.0 . "),
+												 "<s> <p> 123.0 . "),
 				  true);
 	}
 
 	TEST(TurtleOfficialPositiveTests, turtle_syntax_number_05) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("# This is a decimal.\n"
-											  "<s> <p> .1 . "),
+												 "<s> <p> .1 . "),
 				  true);
 	}
 
 	TEST(TurtleOfficialPositiveTests, turtle_syntax_number_06) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("# This is a decimal.\n"
-											  "<s> <p> -123.0 . "),
+												 "<s> <p> -123.0 . "),
 				  true);
 	}
 
 	TEST(TurtleOfficialPositiveTests, turtle_syntax_number_07) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("# This is a decimal.\n"
-											  "<s> <p> +123.0 . "),
+												 "<s> <p> +123.0 . "),
 				  true);
 	}
 
 	TEST(TurtleOfficialPositiveTests, turtle_syntax_number_08) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("# This is an integer\n"
-											  "<s> <p> 123."),
+												 "<s> <p> 123."),
 				  true);
 	}
 
@@ -561,21 +561,21 @@ TEST(TurtleOfficialPositiveTests, prefix_with_PN_CHARS_BASE_character_boundaries
 	TEST(TurtleOfficialPositiveTests, turtle_syntax_pname_esc_01) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-											  ":s :p :\\~\\.\\-\\!\\$\\&\\'\\(\\)\\*\\+\\,\\;\\=\\/\\?\\#\\@\\_\\%AA ."),
+												 ":s :p :\\~\\.\\-\\!\\$\\&\\'\\(\\)\\*\\+\\,\\;\\=\\/\\?\\#\\@\\_\\%AA ."),
 				  true);
 	}
 
 	TEST(TurtleOfficialPositiveTests, turtle_syntax_pname_esc_02) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-											  ":s :p :0123\\~\\.\\-\\!\\$\\&\\'\\(\\)\\*\\+\\,\\;\\=\\/\\?\\#\\@\\_\\%AA123 ."),
+												 ":s :p :0123\\~\\.\\-\\!\\$\\&\\'\\(\\)\\*\\+\\,\\;\\=\\/\\?\\#\\@\\_\\%AA123 ."),
 				  true);
 	}
 
 	TEST(TurtleOfficialPositiveTests, turtle_syntax_pname_esc_03) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-											  ":xyz\\~ :abc\\.:  : ."),
+												 ":xyz\\~ :abc\\.:  : ."),
 				  true);
 	}
 
@@ -592,55 +592,55 @@ TEST(TurtleOfficialPositiveTests, prefix_with_PN_CHARS_BASE_character_boundaries
 	TEST(TurtleOfficialPositiveTests, turtle_syntax_prefix_03) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("PREFIX : <http://www.w3.org/2013/TurtleTests/>\n"
-											  ":s :p :123 ."),
+												 ":s :p :123 ."),
 				  true);
 	}
 
 	TEST(TurtleOfficialPositiveTests, turtle_syntax_prefix_04) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-											  ":s :p :%20 ."),
+												 ":s :p :%20 ."),
 				  true);
 	}
 
 	TEST(TurtleOfficialPositiveTests, turtle_syntax_prefix_05) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-											  ": : : ."),
+												 ": : : ."),
 				  true);
 	}
 
 	TEST(TurtleOfficialPositiveTests, turtle_syntax_prefix_06) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("# colon is a legal pname character\n"
-											  "@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-											  "@prefix x: <http://www.w3.org/2013/TurtleTests/> .\n"
-											  ":a:b:c  x:d:e:f :::: ."),
+												 "@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
+												 "@prefix x: <http://www.w3.org/2013/TurtleTests/> .\n"
+												 ":a:b:c  x:d:e:f :::: ."),
 				  true);
 	}
 
 	TEST(TurtleOfficialPositiveTests, turtle_syntax_prefix_07) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("# dash is a legal pname character\n"
-											  "@prefix x: <http://www.w3.org/2013/TurtleTests/> .\n"
-											  "x:a-b-c  x:p x:o ."),
+												 "@prefix x: <http://www.w3.org/2013/TurtleTests/> .\n"
+												 "x:a-b-c  x:p x:o ."),
 				  true);
 	}
 
 	TEST(TurtleOfficialPositiveTests, turtle_syntax_prefix_08) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("# underscore is a legal pname character\n"
-											  "@prefix x: <http://www.w3.org/2013/TurtleTests/> .\n"
-											  "x:_  x:p_1 x:o ."),
+												 "@prefix x: <http://www.w3.org/2013/TurtleTests/> .\n"
+												 "x:_  x:p_1 x:o ."),
 				  true);
 	}
 
 	TEST(TurtleOfficialPositiveTests, turtle_syntax_prefix_09) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("# percents\n"
-											  "@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-											  "@prefix x: <http://www.w3.org/2013/TurtleTests/> .\n"
-											  ":a%3E  x:%25 :a%3Eb ."),
+												 "@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
+												 "@prefix x: <http://www.w3.org/2013/TurtleTests/> .\n"
+												 ":a%3E  x:%25 :a%3Eb ."),
 				  true);
 	}
 
@@ -749,42 +749,42 @@ TEST(TurtleOfficialPositiveTests, prefix_with_PN_CHARS_BASE_character_boundaries
 	TEST(TurtleOfficialPositiveTests, turtle_syntax_struct_01) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-											  ":s :p :o1 , :o2 ."),
+												 ":s :p :o1 , :o2 ."),
 				  true);
 	}
 
 	TEST(TurtleOfficialPositiveTests, turtle_syntax_struct_02) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-											  ":s :p1 :o1 ;\n"
-											  "   :p2 :o2 ."),
+												 ":s :p1 :o1 ;\n"
+												 "   :p2 :o2 ."),
 				  true);
 	}
 
 	TEST(TurtleOfficialPositiveTests, turtle_syntax_struct_03) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-											  ":s :p1 :o1 ;\n"
-											  "   :p2 :o2 ;\n"
-											  "   ."),
+												 ":s :p1 :o1 ;\n"
+												 "   :p2 :o2 ;\n"
+												 "   ."),
 				  true);
 	}
 
 	TEST(TurtleOfficialPositiveTests, turtle_syntax_struct_04) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-											  ":s :p1 :o1 ;;\n"
-											  "   :p2 :o2 \n"
-											  "   ."),
+												 ":s :p1 :o1 ;;\n"
+												 "   :p2 :o2 \n"
+												 "   ."),
 				  true);
 	}
 
 	TEST(TurtleOfficialPositiveTests, turtle_syntax_struct_05) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("@prefix : <http://www.w3.org/2013/TurtleTests/> .\n"
-											  ":s :p1 :o1 ;\n"
-											  "   :p2 :o2 ;;\n"
-											  "   ."),
+												 ":s :p1 :o1 ;\n"
+												 "   :p2 :o2 ;;\n"
+												 "   ."),
 				  true);
 	}
 
@@ -798,22 +798,22 @@ TEST(TurtleOfficialPositiveTests, prefix_with_PN_CHARS_BASE_character_boundaries
 	TEST(TurtleOfficialPositiveTests, turtle_syntax_uri_02) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("# x53 is capital S\n"
-											  "<http://www.w3.org/2013/TurtleTests/\\u0053> <http://www.w3.org/2013/TurtleTests/p> <http://www.w3.org/2013/TurtleTests/o> ."),
+												 "<http://www.w3.org/2013/TurtleTests/\\u0053> <http://www.w3.org/2013/TurtleTests/p> <http://www.w3.org/2013/TurtleTests/o> ."),
 				  true);
 	}
 
 	TEST(TurtleOfficialPositiveTests, turtle_syntax_uri_03) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("# x53 is capital S\n"
-											  "<http://www.w3.org/2013/TurtleTests/\\U00000053> <http://www.w3.org/2013/TurtleTests/p> <http://www.w3.org/2013/TurtleTests/o> ."),
+												 "<http://www.w3.org/2013/TurtleTests/\\U00000053> <http://www.w3.org/2013/TurtleTests/p> <http://www.w3.org/2013/TurtleTests/o> ."),
 				  true);
 	}
 
 	TEST(TurtleOfficialPositiveTests, turtle_syntax_uri_04) {
 
 		ASSERT_EQ(TurtleStringParser::isParsable("# IRI with all chars in it.\n"
-											  "<http://www.w3.org/2013/TurtleTests/s> <http://www.w3.org/2013/TurtleTests/p>\n"
-											  "<scheme:!$%25&'()*+,-./0123456789:/@ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~?#> ."),
+												 "<http://www.w3.org/2013/TurtleTests/s> <http://www.w3.org/2013/TurtleTests/p>\n"
+												 "<scheme:!$%25&'()*+,-./0123456789:/@ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~?#> ."),
 				  true);
 	}
 }// namespace Dice::tests::rdf_parser::turtle_official_positive_tests
