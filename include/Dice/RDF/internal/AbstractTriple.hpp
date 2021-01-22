@@ -5,7 +5,7 @@
 
 namespace Dice::rdf::internal {
 
-	template<typename Element>
+	template<typename Element, typename Derived>
 	class AbstractTriple {
 	protected:
 		typedef std::array<Element, 3> Triple_t;
@@ -37,6 +37,7 @@ namespace Dice::rdf::internal {
 
 		const Element &operator[](std::size_t pos) const { return entries_[pos]; }
 
+
 		void setSubject(Element subject) { entries_[0] = std::move(subject); }
 
 		void setPredicate(Element predicate) { entries_[1] = std::move(predicate); }
@@ -51,6 +52,12 @@ namespace Dice::rdf::internal {
 		const_iterator rbegin() const { return entries_.rbegin(); }
 		reverse_iterator rend() { return entries_.rend(); }
 		const_reverse_iterator rend() const { return entries_.rend(); }
+
+		friend bool operator==(const Derived &triple1, const Derived &triple2) {
+			return (triple1.subject() == triple2.subject() and
+					triple1.predicate() == triple2.predicate() and
+					triple1.object() == triple2.object());
+		}
 	};
 
 }// namespace Dice::rdf::internal

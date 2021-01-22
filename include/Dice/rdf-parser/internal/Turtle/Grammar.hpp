@@ -407,6 +407,6 @@ namespace Dice::rdf_parser::internal::Turtle::Grammar {
 												seq<ignored, eof>>> {};
 
 
-}// namespace Dice::rdf_parser::Turtle::Grammar
+}// namespace Dice::rdf_parser::internal::Turtle::Grammar
 
 #endif//RDF_PARSER_TURTLEPEGTLGRAMMER_HPP

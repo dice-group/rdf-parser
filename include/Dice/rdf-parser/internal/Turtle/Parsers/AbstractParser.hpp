@@ -25,29 +25,31 @@ namespace Dice::rdf_parser::internal::Turtle::Parsers {
 	protected:
 		using element_type = Triple_t;
 
-		explicit AbstractParser() {
-			current_triple = std::make_shared<element_type>();
-		};
-		// TODO: doesn't need to be shared
-		std::shared_ptr<element_type> current_triple;
+		explicit AbstractParser() = default;
+
+		element_type current_triple;
 
 
 	public:
 		/**
          * process to the next parsed triple.
          */
-		virtual void nextTriple() = 0;
+		void nextTriple() {
+			static_cast<Derived *>(this)->nextTriple_impl();
+		}
 
 		/**
          * check whether there is a further triple
          */
-		[[nodiscard]] virtual bool hasNextTriple() const = 0;
+		[[nodiscard]] virtual bool hasNextTriple() {
+			return static_cast<Derived *>(this)->hasNextTriple_impl();
+		}
 
 		/**
          * get the current triple
          */
 		const element_type &getCurrentTriple() {
-			return *current_triple;
+			return current_triple;
 		}
 
 
@@ -55,7 +57,7 @@ namespace Dice::rdf_parser::internal::Turtle::Parsers {
 
 
 		Iterator<Derived, sparqlQuery> begin() {
-			return static_cast<Derived *>(this)->begin_implementation();
+			return static_cast<Derived *>(this)->begin_impl();
 		}
 
 		bool end() { return false; }
@@ -100,7 +102,7 @@ namespace Dice::rdf_parser::internal::Turtle::Parsers {
 	};
 
 
-};// namespace Dice::rdf_parser::Turtle::parsers
+};// namespace Dice::rdf_parser::internal::Turtle::Parsers
 
 
 #endif//RDF_PARSER_ABSTRACTPARSER_HPP

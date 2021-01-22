@@ -10,9 +10,9 @@ For more information about states please check https://github.com/taocpp/PEGTL/b
 #include <queue>
 #include <stack>
 
-#include "Dice/rdf-parser/internal/Turtle/States/BasicState.hpp"
 #include "Dice/RDF/Triple.hpp"
 #include "Dice/SPARQL/TriplePattern.hpp"
+#include "Dice/rdf-parser/internal/Turtle/States/BasicState.hpp"
 
 
 namespace Dice::rdf_parser::internal::Turtle::States {
@@ -35,7 +35,7 @@ namespace Dice::rdf_parser::internal::Turtle::States {
 		using Triple_t = std::conditional_t<sparqlQuery, TriplePattern, Triple>;
 
 	protected:
-		State() {}
+		State() = default;
 
 		/**
              * Blank Node Property List
@@ -194,7 +194,7 @@ namespace Dice::rdf_parser::internal::Turtle::States {
 			return first_BNPL;
 		}
 	};
-}// namespace Dice::rdf_parser::Turtle::States
+}// namespace Dice::rdf_parser::internal::Turtle::States
 
 
 #endif//RDF_PARSER_STATE_HPP

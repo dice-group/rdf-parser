@@ -59,6 +59,6 @@ namespace Dice::rdf_parser {
 
 		~TurtleStringParser() override = default;
 	};
-}// namespace Dice::rdf_parser::Turtle::parsers
+}// namespace Dice::rdf_parser
 
 #endif//RDF_PARSER_TURTLEPEGTLSTRINGPARSER_HPP

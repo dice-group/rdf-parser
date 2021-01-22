@@ -11,9 +11,9 @@ namespace Dice::rdf {
 	/**
 	 * An RDF triple
 	 */
-	class Triple : public internal::AbstractTriple<Term> {
+	class Triple : public internal::AbstractTriple<Term, Triple> {
 
-		using super_t = internal::AbstractTriple<Term>;
+		using super_t = internal::AbstractTriple<Term, Triple>;
 
 	public:
 		Triple() = default;

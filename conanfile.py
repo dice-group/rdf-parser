@@ -14,7 +14,7 @@ class RDFParser(ConanFile):
     default_options = {'with_tests': False}
     topics = ("dice-group", "RDF", "parser", "semantic web", "turtle", "ntriple")
     settings = "build_type", "compiler", "os", "arch"
-    requires = "boost/1.75.0", "taocpp-pegtl/3.1.0", "fmt/7.1.2", "dice-hash/0.1.0@dice-group/stable"
+    requires = "boost/1.75.0", "taocpp-pegtl/3.1.0", "fmt/7.1.2", "dice-hash/0.1.0@dice-group/stable" , "robin-hood-hashing/3.9.1"
     generators = "cmake", "cmake_find_package", "cmake_paths"
     exports = "LICENSE"
     exports_sources = "include/*", "CMakeLists.txt", "cmake/dummy-config.cmake.in"
@@ -24,10 +24,6 @@ class RDFParser(ConanFile):
         if not hasattr(self, 'version') or self.version is None:
             cmake_file = load(os.path.join(self.recipe_folder, "CMakeLists.txt"))
             self.version = re.search("project\(rdf-parser VERSION (.*)\)", cmake_file).group(1)
-
-    def requirements(self):
-        if self.options.with_tests:
-            self.requires("gtest/1.8.1")
 
     def package(self):
         cmake = CMake(self)

@@ -354,6 +354,6 @@ namespace Dice::rdf_parser::internal::Turtle::Actions {
 			;
 		}
 	};
-}// namespace Dice::rdf_parser::Turtle::Actions
+}// namespace Dice::rdf_parser::internal::Turtle::Actions
 
 #endif//RDF_PARSER_BASICACTIONS_HPP

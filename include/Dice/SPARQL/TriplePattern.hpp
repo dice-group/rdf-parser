@@ -22,14 +22,15 @@ namespace Dice::hash {
 }// namespace Dice::hash
 
 namespace Dice::sparql {
-	class TriplePattern : public ::Dice::rdf::internal::AbstractTriple<VarOrTerm> {
+	class TriplePattern : public ::Dice::rdf::internal::AbstractTriple<VarOrTerm, TriplePattern> {
 
-		using super_t = ::Dice::rdf::internal::AbstractTriple<VarOrTerm>;
+		using super_t = ::Dice::rdf::internal::AbstractTriple<VarOrTerm, TriplePattern>;
 
 	public:
 		TriplePattern() = default;
 
 		TriplePattern(VarOrTerm subject, VarOrTerm predicate, VarOrTerm object) : super_t{std::move(subject), std::move(predicate), std::move(object)} {}
+
 
 		[[nodiscard]] size_t hash() const noexcept {
 			return ::Dice::hash::dice_hash(this->entries_);

@@ -2,12 +2,12 @@
 #define RDF_PARSER_BASICSTATE_HPP
 
 
-#include <map>
 #include <memory>
 #include <optional>
 #include <string>
 
-#include "Dice/RDF/Triple.hpp"
+#include <robin_hood.h>
+
 #include "Dice/RDF/Term.hpp"
 #include "Dice/RDF/Triple.hpp"
 #include "Dice/SPARQL/TriplePattern.hpp"
@@ -27,8 +27,7 @@ namespace Dice::rdf_parser::internal::Turtle::States {
 	template<bool sparqlQuery = false>
 	class BasicState {
 	public:
-		BasicState() {
-			element_ = std::make_shared<Element_t>();
+		BasicState() : element_{std::make_shared<Element_t>()} {
 		}
 
 		using Term = Dice::rdf::Term;
@@ -42,7 +41,7 @@ namespace Dice::rdf_parser::internal::Turtle::States {
 		//variables to deal with type and lan tags in literals
 		bool type_tag_found = false;
 		bool lang_tag_found = false;
-		bool iri_is_IRIREF;
+		bool iri_is_IRIREF = false;
 		std::string lang_tag_;
 		std::string type_tag_;
 		std::string literal_string_;
@@ -54,7 +53,7 @@ namespace Dice::rdf_parser::internal::Turtle::States {
 		int latest_BN_label = 1;
 
 		// todo: use something optimized
-		std::map<std::string, std::string> prefix_map;
+		robin_hood::unordered_map<std::string, std::string> prefix_map;
 
 
 	public:
@@ -64,7 +63,7 @@ namespace Dice::rdf_parser::internal::Turtle::States {
 
 
 		inline void addPrefix(std::string prefix, std::string value) {
-			prefix_map.insert(std::pair<std::string, std::string>(std::move(prefix), std::move(value)));
+			prefix_map.emplace(std::pair<std::string, std::string>(std::move(prefix), std::move(value)));
 		}
 
 		inline void setLan_tag(std::string lan_tag) { this->lang_tag_ = std::move(lan_tag); }
@@ -139,7 +138,7 @@ namespace Dice::rdf_parser::internal::Turtle::States {
 			}
 		}
 	};
-}// namespace Dice::rdf_parser::Turtle::States
+}// namespace Dice::rdf_parser::internal::Turtle::States
 
 
 #endif//RDF_PARSER_BASICSTATE_HPP
