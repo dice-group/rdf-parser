@@ -17,7 +17,7 @@ RUN conan user && \
     conan profile update settings.compiler.version=11 clang11 && \
     conan profile update settings.compiler.libcxx=libstdc++11 clang11
 
-RUN conan remote add dice "https://api.bintray.com/conan/dice-group/tentris"
+RUN conan remote add dice "https://conan.dice-research.org/artifactory/api/conan/tentris"
 
 WORKDIR /rdf-parser
 COPY CMakeLists.txt CMakeLists.txt
