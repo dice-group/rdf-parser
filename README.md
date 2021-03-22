@@ -32,7 +32,7 @@ make -j
 
 recipe : rdf-parser/0.12.0@dice-group/stable
 ```
-conan remote add dice "https://api.bintray.com/conan/dice-group/tentris"
+conan remote add dice "https://conan.dice-research.org/artifactory/api/conan/tentris"
 
 ```
 
