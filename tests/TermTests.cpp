@@ -94,8 +94,8 @@ namespace Dice::tests::rdf_parser::term_tests {
 		Triple doubleNumber = *iterator;
 
 		// check if they are correct
-		ASSERT_EQ(integerNumber.object().getIdentifier(), "\"2\"^^<xsd:integer>");
-		ASSERT_EQ(decimalNumber.object().getIdentifier(), "\"4.002602\"^^<xsd:decimal>");
-		ASSERT_EQ(doubleNumber.object().getIdentifier(), "\"1.663E-4\"^^<xsd:double>");
+		ASSERT_EQ(integerNumber.object().getIdentifier(), "\"2\"^^<http://www.w3.org/2001/XMLSchema#integer>");
+		ASSERT_EQ(decimalNumber.object().getIdentifier(), "\"4.002602\"^^<http://www.w3.org/2001/XMLSchema#decimal>");
+		ASSERT_EQ(doubleNumber.object().getIdentifier(), "\"1.663E-4\"^^<http://www.w3.org/2001/XMLSchema#double>");
 	}
 }// namespace Dice::tests::rdf_parser::term_tests
