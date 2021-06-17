@@ -168,7 +168,7 @@ namespace Dice::rdf_parser::internal::Turtle::Actions {
 			s = ss.str();
 
 			state.setLiteral_string(std::move(s));// TODO: is that necessary
-			state.setElement(Literal(state.getLiteral_string(), std::nullopt, "xsd:boolean"));
+			state.setElement(Literal(state.getLiteral_string(), std::nullopt, "http://www.w3.org/2001/XMLSchema#boolean"));
 		}
 	};
 
@@ -176,7 +176,7 @@ namespace Dice::rdf_parser::internal::Turtle::Actions {
 	struct action<Grammar::DOUBLE> {
 		template<typename Input, bool SparqlQuery>
 		static void apply(const Input &in, States::BasicState<SparqlQuery> &state) {
-			state.setType_tag("xsd:double");
+			state.setType_tag("http://www.w3.org/2001/XMLSchema#double");
 		}
 	};
 
@@ -184,7 +184,7 @@ namespace Dice::rdf_parser::internal::Turtle::Actions {
 	struct action<Grammar::DECIMAL> {
 		template<typename Input, bool SparqlQuery>
 		static void apply(const Input &in, States::BasicState<SparqlQuery> &state) {
-			state.setType_tag("xsd:decimal");
+			state.setType_tag("http://www.w3.org/2001/XMLSchema#decimal");
 		}
 	};
 
@@ -192,7 +192,7 @@ namespace Dice::rdf_parser::internal::Turtle::Actions {
 	struct action<Grammar::INTEGER> {
 		template<typename Input, bool SparqlQuery>
 		static void apply(const Input &in, States::BasicState<SparqlQuery> &state) {
-			state.setType_tag("xsd:integer");
+			state.setType_tag("http://www.w3.org/2001/XMLSchema#integer");
 		}
 	};
 
