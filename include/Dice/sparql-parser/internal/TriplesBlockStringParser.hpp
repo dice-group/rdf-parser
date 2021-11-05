@@ -2,9 +2,9 @@
 #define RDF_PARSER_TRIPLESBLOCKSTRINGPARSER_HPP
 
 
-#include <utility>
-
 #include "Dice/rdf-parser/internal/Turtle/Parsers/BaseStringParser.hpp"
+
+#include <utility>
 
 /**
  * TriplesBlockStringParser is responsible for parsing sparql's tripleBlocks from string sources.

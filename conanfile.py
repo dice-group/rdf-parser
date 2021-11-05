@@ -10,11 +10,11 @@ class RDFParser(ConanFile):
     homepage = "https://github.com/dice-group/rdf-parser"
     url = homepage
     license = "AGPL"
-    options = {'with_tests': [False, True]}
-    default_options = {'with_tests': False}
+    options = {}
+    default_options = { }
     topics = ("dice-group", "RDF", "parser", "semantic web", "turtle", "ntriple")
     settings = "build_type", "compiler", "os", "arch"
-    requires = "boost/1.75.0", "taocpp-pegtl/3.1.0", "fmt/7.1.2", "dice-hash/0.1.0@dice-group/stable" , "robin-hood-hashing/3.9.1"
+    requires = "boost/1.77.0", "taocpp-pegtl/3.1.0", "fmt/8.0.1", "dice-hash/0.2.0@dice-group/stable", "robin-hood-hashing/3.11.3"
     generators = "cmake", "cmake_find_package", "cmake_paths"
     exports = "LICENSE"
     exports_sources = "include/*", "CMakeLists.txt", "cmake/dummy-config.cmake.in"
@@ -27,8 +27,6 @@ class RDFParser(ConanFile):
 
     def package(self):
         cmake = CMake(self)
-        if self.options.with_tests:
-            cmake.definitions["RDF_PARSER_BUILD_TESTS"] = "ON"
         cmake.configure()
         cmake.install()
 
