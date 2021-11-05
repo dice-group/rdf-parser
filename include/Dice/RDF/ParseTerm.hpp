@@ -21,7 +21,7 @@ namespace Dice::rdf {
 			parse<Dice::rdf_parser::internal::Turtle::Grammar::term, Dice::rdf_parser::internal::Turtle::Actions::action>(input, state);
 			return std::move(state.getElement());
 		} catch (const std::exception &e) {
-			throw std::logic_error{fmt::format("{} is not a valid term.")};
+			throw std::logic_error{fmt::format("{} is not a valid term.", identifier)};
 		}
 	}
 

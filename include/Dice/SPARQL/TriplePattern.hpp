@@ -11,16 +11,6 @@ namespace Dice::sparql {
 	using VarOrTerm = std::variant<Variable, Dice::rdf::Term>;
 }// namespace Dice::sparql
 
-namespace Dice::hash {
-	template<>
-	inline std::size_t dice_hash(const Dice::sparql::VarOrTerm &v) noexcept {
-		if (std::holds_alternative<Dice::sparql::Variable>(v))
-			return dice_hash(std::get<Dice::sparql::Variable>(v));
-		else
-			return dice_hash(std::get<Dice::rdf::Term>(v));
-	}
-}// namespace Dice::hash
-
 namespace Dice::sparql {
 	class TriplePattern : public ::Dice::rdf::internal::AbstractTriple<VarOrTerm, TriplePattern> {
 
@@ -29,25 +19,25 @@ namespace Dice::sparql {
 	public:
 		TriplePattern() = default;
 
-		TriplePattern(VarOrTerm subject, VarOrTerm predicate, VarOrTerm object) : super_t{std::move(subject), std::move(predicate), std::move(object)} {}
+		TriplePattern(VarOrTerm subject, VarOrTerm predicate, VarOrTerm object) noexcept
+			: super_t{std::move(subject), std::move(predicate), std::move(object)} {}
 
+		[[nodiscard]] size_t hash() const noexcept;
 
-		[[nodiscard]] size_t hash() const noexcept {
-			return ::Dice::hash::dice_hash(this->entries_);
-		}
+		[[nodiscard]] constexpr size_t size() const noexcept { return 3; }
 	};
 }// namespace Dice::sparql
 
-namespace Dice::hash {
-	template<>
-	inline std::size_t dice_hash(const Dice::sparql::TriplePattern &v) noexcept {
-		return v.hash();
-	}
-}// namespace Dice::hash
+template<>
+struct Dice::hash::is_ordered_container<Dice::sparql::TriplePattern> : std::true_type {};
 
+
+std::size_t Dice::sparql::TriplePattern::hash() const noexcept {
+	return Dice::hash::DiceHashxxh3<TriplePattern>()(*this);
+}
 template<>
 struct std::hash<Dice::sparql::TriplePattern> {
-	inline size_t operator()(const Dice::sparql::TriplePattern &v) const {
+	size_t operator()(const Dice::sparql::TriplePattern &v) const noexcept {
 		return v.hash();
 	}
 };

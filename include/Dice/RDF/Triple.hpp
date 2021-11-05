@@ -18,23 +18,24 @@ namespace Dice::rdf {
 	public:
 		Triple() = default;
 
-		Triple(Term subject, Term predicate, Term object) : super_t{std::move(subject), std::move(predicate), std::move(object)} {}
-		[[nodiscard]] size_t hash() const noexcept {
-			return ::Dice::hash::dice_hash(this->entries_);
-		}
+		Triple(Term subject, Term predicate, Term object) noexcept
+			: super_t{std::move(subject), std::move(predicate), std::move(object)} {}
+		[[nodiscard]] size_t hash() const noexcept;
+
+		[[nodiscard]] constexpr size_t size() const noexcept { return 3; }
 	};
 }// namespace Dice::rdf
 
-namespace Dice::hash {
-	template<>
-	inline std::size_t dice_hash(const Dice::rdf::Triple &v) noexcept {
-		return v.hash();
-	}
-}// namespace Dice::hash
+template<>
+struct Dice::hash::is_ordered_container<Dice::rdf::Triple> : std::true_type {};
 
+
+std::size_t Dice::rdf::Triple::hash() const noexcept {
+	return Dice::hash::DiceHashxxh3<Triple>()(*this);
+}
 template<>
 struct std::hash<Dice::rdf::Triple> {
-	inline size_t operator()(const Dice::rdf::Triple &v) const {
+	size_t operator()(const Dice::rdf::Triple &v) const noexcept {
 		return v.hash();
 	}
 };

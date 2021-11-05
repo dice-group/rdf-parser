@@ -26,7 +26,7 @@ namespace Dice::rdf {
          * @param str string to be viewed
          * @return string_view on the string
          */
-		[[nodiscard]] std::string_view string_view(const std::string &str) const {
+		[[nodiscard]] inline std::string_view string_view(const std::string &str) const noexcept {
 			return {str.c_str() + start, count};
 		}
 	};
@@ -66,8 +66,8 @@ namespace Dice::rdf {
          * @param identifier
          * @param node_type
          */
-		Term(std::string identifier, NodeType node_type) : identifier_(std::move(identifier)),
-														   node_type_(node_type) {}
+		Term(std::string identifier, NodeType node_type) noexcept : identifier_(std::move(identifier)),
+																	node_type_(node_type) {}
 
 	public:
 		Term() = default;
@@ -83,102 +83,95 @@ namespace Dice::rdf {
 		Term &operator=(Term &&) = default;
 
 
-		[[nodiscard]] const std::string &getIdentifier() const {
+		[[nodiscard]] const std::string &getIdentifier() const noexcept {
 			return identifier_;
 		}
 
-		[[nodiscard]] inline const NodeType &type() const {
+		[[nodiscard]] inline const NodeType &type() const noexcept {
 			return node_type_;
 		}
 
-		[[nodiscard]] inline bool isLiteral() const {
+		[[nodiscard]] inline bool isLiteral() const noexcept {
 			return node_type_ == NodeType::Literal_;
 		}
 
-		[[nodiscard]] inline bool isBNode() const {
+		[[nodiscard]] inline bool isBNode() const noexcept {
 			return node_type_ == NodeType::BNode_;
 		}
 
-		[[nodiscard]] inline bool isURIRef() const {
+		[[nodiscard]] inline bool isURIRef() const noexcept {
 			return node_type_ == NodeType::URIRef_;
 		}
 
-		[[nodiscard]] inline Literal &castLiteral();
+		[[nodiscard]] inline Literal &castLiteral() noexcept;
 
-		[[nodiscard]] inline BNode &castBNode();
+		[[nodiscard]] inline BNode &castBNode() noexcept;
 
-		[[nodiscard]] inline URIRef &castURIRef();
+		[[nodiscard]] inline URIRef &castURIRef() noexcept;
 
-		[[nodiscard]] inline const Literal &castLiteral() const;
+		[[nodiscard]] inline const Literal &castLiteral() const noexcept;
 
-		[[nodiscard]] inline const BNode &castBNode() const;
+		[[nodiscard]] inline const BNode &castBNode() const noexcept;
 
-		[[nodiscard]] inline const URIRef &castURIRef() const;
+		[[nodiscard]] inline const URIRef &castURIRef() const noexcept;
 
-		[[nodiscard]] inline std::string_view value() const {
+		[[nodiscard]] inline std::string_view value() const noexcept {
 			return value_.string_view(identifier_);
 		}
 
-		inline bool operator==(const Term &rhs) const {
+		inline bool operator==(Term const &rhs) const noexcept {
 			return identifier_ == rhs.identifier_;
 		}
 
-		inline bool operator!=(const Term &rhs) const {
-			return identifier_ != rhs.identifier_;
+		inline auto operator<=>(Term const &rhs) const noexcept {
+			return identifier_ <=> rhs.identifier_;
 		}
 
-		inline bool operator<(const Term &rhs) const {
-			return identifier_ < rhs.identifier_;
-		}
-
-		inline bool operator>(const Term &rhs) const {
-			return identifier_ > rhs.identifier_;
-		}
-
-		friend bool operator==(const Term &lhs, const std::unique_ptr<Term> &rhs) {
+		friend bool operator==(const Term &lhs, const std::unique_ptr<Term> &rhs) noexcept {
 			return lhs == *rhs;
 		}
 
-		friend bool operator==(const std::unique_ptr<Term> &lhs, const Term &rhs) {
+		friend bool operator==(const std::unique_ptr<Term> &lhs, Term const &rhs) noexcept {
 			return *lhs == rhs;
 		}
 
-		friend bool operator==(const std::unique_ptr<Term> &lhs, const std::unique_ptr<Term> &rhs) {
+		friend bool operator==(const std::unique_ptr<Term> &lhs, const std::unique_ptr<Term> &rhs) noexcept {
 			return *lhs == *rhs;
 		}
 
-		friend bool operator==(const Term *lhs, const std::unique_ptr<Term> &rhs) {
+		friend bool operator==(const Term *lhs, const std::unique_ptr<Term> &rhs) noexcept {
 			return *lhs == *rhs;
 		}
 
-		friend bool operator==(const std::unique_ptr<Term> &lhs, const Term *rhs) {
+		friend bool operator==(const std::unique_ptr<Term> &lhs, const Term *rhs) noexcept {
 			return *lhs == *rhs;
 		}
 
-		[[nodiscard]] std::size_t hash() const {
-			return ::Dice::hash::dice_hash(this->identifier_);
-		}
+		[[nodiscard]] std::size_t hash() const noexcept;
 	};
+
 
 	class URIRef : public Term {
 
 	public:
-		explicit URIRef(const std::string &uri) : Term(fmt::format("<{}>", uri), NodeType::URIRef_) {
+		explicit URIRef(const std::string &uri) noexcept
+			: Term(fmt::format("<{}>", uri), NodeType::URIRef_) {
 			this->value_ = {1, uri.size()};
 		};
 
-		[[nodiscard]] inline std::string_view uri() const {
+		[[nodiscard]] inline std::string_view uri() const noexcept {
 			return value();
 		}
 	};
 
 	class BNode : public Term {
 	public:
-		explicit BNode(const std::string &bnode_label) : Term(fmt::format("_:{}", bnode_label), NodeType::BNode_) {
+		explicit BNode(const std::string &bnode_label) noexcept
+			: Term(fmt::format("_:{}", bnode_label), NodeType::BNode_) {
 			this->value_ = {2, bnode_label.size()};
 		};
 
-		[[nodiscard]] inline std::string_view bnodeLabel() const {
+		[[nodiscard]] inline std::string_view bnodeLabel() const noexcept {
 			return value();
 		}
 	};
@@ -186,7 +179,7 @@ namespace Dice::rdf {
 	class Literal : public Term {
 	public:
 		Literal(const std::string &value, const std::optional<std::string> &lang,
-				const std::optional<std::string> &type) {
+				const std::optional<std::string> &type) noexcept {
 			node_type_ = NodeType::Literal_;
 			if (lang) {
 				this->identifier_ = fmt::format("\"{}\"@{}", value, lang.value());
@@ -202,58 +195,63 @@ namespace Dice::rdf {
 			this->value_ = {1, value.size()};
 		}
 
-		[[nodiscard]] inline std::string_view dataType() const {
+		[[nodiscard]] inline std::string_view dataType() const noexcept {
 			return data_type_.string_view(identifier_);
 		}
 
-		[[nodiscard]] inline std::string_view lang() const {
+		[[nodiscard]] inline std::string_view lang() const noexcept {
 			return lang_.string_view(identifier_);
 		}
 
-		[[nodiscard]] inline bool hasDataType() const {
+		[[nodiscard]] inline bool hasDataType() const noexcept {
 			return data_type_.count != 0;
 		}
 
-		[[nodiscard]] inline bool hasLang() const {
+		[[nodiscard]] inline bool hasLang() const noexcept {
 			return lang_.count != 0;
 		}
 	};
 
-	Literal &Term::castLiteral() {
+	Literal &Term::castLiteral() noexcept {
 		return static_cast<Literal &>(*this);
 	}
 
-	BNode &Term::castBNode() {
+	BNode &Term::castBNode() noexcept {
 		return static_cast<BNode &>(*this);
 	}
 
-	URIRef &Term::castURIRef() {
+	URIRef &Term::castURIRef() noexcept {
 		return static_cast<URIRef &>(*this);
 	}
 
-	const Literal &Term::castLiteral() const {
+	const Literal &Term::castLiteral() const noexcept {
 		return static_cast<const Literal &>(*this);
 	}
 
-	const BNode &Term::castBNode() const {
+	const BNode &Term::castBNode() const noexcept {
 		return static_cast<const BNode &>(*this);
 	}
 
-	const URIRef &Term::castURIRef() const {
+	const URIRef &Term::castURIRef() const noexcept {
 		return static_cast<const URIRef &>(*this);
 	}
 };// namespace Dice::rdf
 
 namespace Dice::hash {
-	template<>
-	inline std::size_t dice_hash(const Dice::rdf::Term &v) noexcept {
-		return v.hash();
-	}
+	template<typename Policy>
+	struct dice_hash_overload<Policy, Dice::rdf::Term> {
+		static std::size_t dice_hash(Dice::rdf::Term const &v) noexcept {
+			return dice_hash_templates<Policy>::dice_hash(v.getIdentifier());
+		}
+	};
 }// namespace Dice::hash
 
+std::size_t Dice::rdf::Term::hash() const noexcept {
+	return Dice::hash::DiceHashxxh3<Term>()(*this);
+}
 template<>
 struct std::hash<Dice::rdf::Term> {
-	size_t operator()(const Dice::rdf::Term &v) const {
+	size_t operator()(const Dice::rdf::Term &v) const noexcept {
 		return v.hash();
 	}
 };
@@ -279,7 +277,7 @@ struct fmt::formatter<Dice::rdf::Term> {
 
 	template<typename FormatContext>
 	auto format(const Dice::rdf::Term &p, FormatContext &ctx) {
-		return format_to(ctx.out(), p.getIdentifier());
+		return format_to(ctx.out(), "{}", p.getIdentifier());
 	}
 };
 
